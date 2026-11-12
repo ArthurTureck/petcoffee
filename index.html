@@ -147,6 +147,7 @@ label.f small{font-weight:600;color:var(--muted)}
 .tpan .st button.ic{width:24px;height:24px;font-size:13px}
 .tpan .tot{font-size:12px;color:#d9c9b4;margin-top:8px;display:flex;justify-content:space-between}
 body.timer-hidden .timer{display:none}
+.timer{display:none!important}
 /* projetor */
 body.proj{font-size:18px}
 body.proj aside.side,body.proj .mhead,body.proj .mobnav{display:none!important}
@@ -163,6 +164,21 @@ body.proj .tab{font-size:18px;padding:12px 18px}
 body.proj .tmini .clk{font-size:30px;min-width:92px}
 body.proj .tmini .lab{font-size:16px;max-width:260px}
 body.proj .qnum{font-size:56px}
+.rplan{border:1px solid var(--line);border-radius:14px;background:var(--white);padding:0;overflow:hidden}
+.rplan summary{list-style:none;cursor:pointer;padding:12px 14px;display:flex;gap:10px;align-items:flex-start}
+.rplan summary::-webkit-details-marker{display:none}
+.rplan summary .t{flex:1;font-weight:800;line-height:1.3;min-width:0}
+.rplan summary .chev{transition:transform .2s;color:var(--muted)}
+.rplan[open] summary .chev{transform:rotate(90deg)}
+.rplan .b{padding:0 14px 14px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 16px;font-size:14px}
+.rplan .b div b{display:block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--dcar)}
+.mine{display:inline-block;font-size:11px;font-weight:800;background:var(--sage2);color:var(--sage);border-radius:99px;padding:2px 8px;margin-left:6px;vertical-align:middle}
+.rbox{border:1px solid var(--line);border-radius:14px;background:var(--white);padding:12px 14px;display:flex;flex-direction:column;gap:6px}
+.rbox.new{border-color:var(--car);box-shadow:0 0 0 2px rgba(200,121,58,.15)}
+.rbox .m{font-size:12px;color:var(--muted);font-weight:700;display:flex;flex-wrap:wrap;gap:4px 12px}
+.rbox .txt{white-space:pre-wrap;word-break:break-word}
+.rform textarea.in{min-height:96px}
+@media (max-width:900px){.rplan .b{grid-template-columns:minmax(0,1fr)}.rform .btn{width:100%}}
 @media (max-width:900px){
  .app{grid-template-columns:minmax(0,1fr)}
  aside.side{display:none}
@@ -263,15 +279,15 @@ const SCLS={'Não iniciado':'s-nao','Em andamento':'s-and','Concluído':'s-ok','
 const SCOL={'Não iniciado':'#d8c9b4','Em andamento':'#6f9cc0','Concluído':'#4f6e54','Atrasado':'#b4462f'};
 const TST=['A fazer','Fazendo','Feito'];
 const MT={'Apresentação':'📽️','Planilha':'📊','Documento':'📄','Site':'🌐','Vídeo':'🎬','Imagem':'🖼️','Outro':'📎'};
-const ROUTES=[['quinta','🗓️','Quinta de hoje','Quinta'],['painel','📊','Painel','Painel'],['planos','🎯','Planos de ação','Planos'],['tarefas','✅','Tarefas ESPRO','Tarefas'],['equipe','👥','Equipe e setores','Equipe'],['empresa','☕','A empresa','Empresa'],['materiais','📁','Materiais','Materiais'],['historico','📚','Histórico','Histórico']];
-const MOB=['quinta','painel','planos','tarefas'];
+const ROUTES=[['quinta','🗓️','Quinta de hoje','Quinta'],['painel','📊','Painel','Painel'],['planos','🎯','Planos de ação','Planos'],['responder','📝','Responder','Responder'],['tarefas','✅','Tarefas ESPRO','Tarefas'],['equipe','👥','Equipe e setores','Equipe'],['empresa','☕','A empresa','Empresa'],['materiais','📁','Materiais','Materiais'],['historico','📚','Histórico','Histórico']];
+const MOB=['quinta','planos','responder','painel'];
 const DEF_CFG={clientes:120,ticket:32,dias:26,custos:{'Ingredientes e insumos':32,'Equipe (salários)':30,'Aluguel, água e luz':15,'Cuidados com os animais':8,'Marketing':5}};
 const DEF_BLOCOS=[{k:'abertura',n:'Abertura com o Painel',min:5},{k:'duplas',n:'Trabalho das duplas',min:25},{k:'rodada',n:'Rodada relâmpago',min:15},{k:'fechamento',n:'Fechamento',min:5}];
 const BDESC={abertura:'Painel na tela: o que foi entregue desde a última quinta.',duplas:'Todas as duplas trabalham ao mesmo tempo na entrega de hoje.',rodada:'1 minuto por setor: entrega, ação em andamento e onde travou.',fechamento:'Registrar decisões e combinar a entrega da próxima quinta.'};
 const LOGO='<svg viewBox="0 0 120 120" width="SZ" height="SZ" aria-label="Logo Pet Coffee"><circle cx="60" cy="60" r="58" fill="#c8793a"/><path d="M48 32 C44 26 52 22 48 15 M66 32 C62 26 70 22 66 15" stroke="#fff4e4" stroke-width="4" fill="none" stroke-linecap="round"/><ellipse cx="58" cy="96" rx="36" ry="6" fill="#9a4f1e"/><path d="M84 56 C99 56 99 80 84 80" stroke="#fff4e4" stroke-width="7" fill="none"/><polygon points="31,52 37,35 49,49" fill="#fff4e4"/><polygon points="67,49 79,35 85,52" fill="#fff4e4"/><polygon points="36,48 39,40 45,47" fill="#f2b8b5"/><polygon points="71,47 77,40 80,48" fill="#f2b8b5"/><path d="M30 48 H86 V72 C86 87 76 94 58 94 C40 94 30 87 30 72 Z" fill="#fff4e4"/><g fill="#3b2a20"><ellipse cx="58" cy="78" rx="8" ry="6.5"/><circle cx="49" cy="69" r="3.2"/><circle cx="54.5" cy="64.5" r="3.2"/><circle cx="61.5" cy="64.5" r="3.2"/><circle cx="67" cy="69" r="3.2"/></g></svg>';
 
 /* ===== estado ===== */
-const S={actions:[],tasks:[],team:[],alunos:[],sorteio:null,mats:[],entregas:[],atas:[],kpihist:[],cfg:null,kpis:{},geral:null,ready:false,slow:false,offline:false,canWrite:true,q:null,qTouched:false,tab:null,rod:0,f:{setor:'todos',status:'todos',q:'',tset:'todos'}};
+const S={resps:[],actions:[],tasks:[],team:[],alunos:[],sorteio:null,mats:[],entregas:[],atas:[],kpihist:[],cfg:null,kpis:{},geral:null,ready:false,slow:false,offline:false,canWrite:true,q:null,qTouched:false,tab:null,rod:0,f:{setor:'todos',status:'todos',q:'',tset:'todos'}};
 let db=null,dl=null;
 const $=s=>document.querySelector(s);
 const esc=v=>String(v==null?'':v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -281,7 +297,7 @@ const today=()=>iso(new Date());
 const fdate=s=>{if(!s||!/^\d{4}-\d{2}-\d{2}$/.test(s))return '';const[y,m,d]=s.split('-');return d+'/'+m+'/'+y};
 const fdm=s=>fdate(s).slice(0,5);
 const brl=n=>{const v=Number(n||0);return 'R$ '+v.toLocaleString('pt-BR',{minimumFractionDigits:v%1?2:0,maximumFractionDigits:2})};
-const route=()=>{const h=location.hash.slice(1);return ROUTES.some(r=>r[0]===h)?h:'quinta'};
+const route=()=>{const h=location.hash.slice(1);return ROUTES.some(r=>r[0]===h)?h:(S.canWrite?'quinta':'responder')};
 function toast(m){const t=$('#toast');t.textContent=m;t.style.display='block';clearTimeout(toast.h);toast.h=setTimeout(()=>t.style.display='none',3400)}
 const G=()=>Object.assign({inicio:'2026-11-12',tecAtivo:false},S.geral||{});
 const BLOCOS=()=>{const b=G().blocos;return Array.isArray(b)&&b.length?b:DEF_BLOCOS};
@@ -312,15 +328,47 @@ function banner(){
  return S.user&&!S.user.isAnonymous?`<div style="text-align:right;font-size:12px;color:var(--muted);margin:-4px 0 8px">Editando como ${esc(S.user.email)} • <button data-act="logout" style="background:none;border:0;color:inherit;text-decoration:underline;cursor:pointer;font:inherit;padding:0">sair</button></div>`:'';
 }
 function render(){const ae=document.activeElement;if(ae&&$('#main').contains(ae)&&ae.matches('input,textarea,select')&&ae.dataset.keep!=null){S.pend=true;return}S.pend=false;nav();const r=route();
- const fn={quinta:vQuinta,painel:vPainel,planos:vPlanos,tarefas:vTarefas,equipe:vEquipe,empresa:vEmpresa,materiais:vMateriais,historico:vHistorico}[r];
- $('#main').innerHTML=banner()+fn();renderTimer()}
+ const fn={quinta:vQuinta,painel:vPainel,planos:vPlanos,responder:vResponder,tarefas:vTarefas,equipe:vEquipe,empresa:vEmpresa,materiais:vMateriais,historico:vHistorico}[r];
+ $('#main').innerHTML=banner()+fn()}
+
+/* ===== RESPONDER (alunos) ===== */
+const RS={me:(()=>{try{return localStorage.getItem('pc_me')||''}catch(e){return ''}})()};
+function setMe(id){RS.me=id;try{localStorage.setItem('pc_me',id)}catch(e){}}
+function vResponder(){
+ const me=S.alunos.find(a=>a.id===RS.me);const al=[...S.alunos].sort((a,b)=>String(a.nome).localeCompare(String(b.nome),'pt-BR'));
+ let h=`<div class="top"><div><div class="eyebrow">Para cada aluno</div><h1>Responder 📝</h1><p>Escolha seu nome, veja o que o seu setor precisa fazer e mande o que você fez hoje.</p></div></div>
+ <div class="card" style="margin-bottom:14px"><label class="f">Quem é você?<select class="in" data-in="me"><option value="">Toque para escolher seu nome</option>${al.map(a=>{const s=SK[a.setor];return `<option value="${esc(a.id)}" ${a.id===RS.me?'selected':''}>${esc(a.nome)}${s?' • '+s.e+' '+esc(s.n):''}</option>`}).join('')}</select></label></div>`;
+ if(me){const s=SK[me.setor];
+  if(!s)h+=`<div class="empty" style="margin-bottom:14px">Você ainda não está em um setor. Fale com a organização.</div>`;
+  else{const acts=S.actions.filter(a=>a.setor===s.k).sort((a,b)=>(a.funcao===me.funcao?0:1)-(b.funcao===me.funcao?0:1)||(a.prazo||'9').localeCompare(b.prazo||'9'));
+   const dupla=S.alunos.filter(a=>a.setor===s.k&&a.id!==me.id).map(a=>a.nome).join(', ');
+   h+=`<div class="card" style="margin-bottom:14px;display:flex;gap:14px;align-items:flex-start;flex-wrap:wrap"><div class="emo" style="width:52px;height:52px;font-size:26px">${s.e}</div><div style="flex:1;min-width:0"><div class="eyebrow">Seu setor</div><h2 style="margin:2px 0">${esc(s.n)}</h2><div style="font-size:14px">Sua função: <b>${esc(me.funcao||'—')}</b>${dupla?` • Dupla: <b>${esc(dupla)}</b>`:''}</div>
+    <div style="font-size:13px;margin-top:8px;background:#fff4dc;border-radius:10px;padding:8px 10px;color:#6b4d12"><b>Situação atual:</b> ${esc(s.diag)}</div><div style="font-size:13px;margin-top:6px"><b>Indicador:</b> ${esc(s.ind)} • meta ${metaTxt(s)}</div></div></div>
+   <h2 style="margin:18px 0 10px">Planos de ação do setor</h2><div class="list" style="margin-bottom:18px">${acts.length?acts.map((a,i)=>`<details class="rplan" ${i===0?'open':''}><summary><span class="t">${esc(a.oque)}${a.funcao===me.funcao?'<span class="mine">sua função</span>':''}</span>${stPill(a,false)}<span class="chev">›</span></summary><div class="b">
+    <div><b>Por quê?</b>${esc(a.porque)||'—'}</div><div><b>Como?</b>${esc(a.como)||'—'}</div><div><b>Onde?</b>${esc(a.onde)||'—'}</div><div><b>Quando?</b>${a.prazo?esc(qName(a.prazo)):esc(a.quando)||'—'}</div><div><b>Quem?</b>${esc(pessoa(a.setor,a.funcao)||a.quem)||'—'}</div><div><b>Indicador</b>${esc(a.indicador)||'—'}</div>${a.custo?`<div><b>Custo</b>${brl(a.custo)}</div>`:''}</div></details>`).join(''):'<div class="empty">Ainda não há planos para este setor.</div>'}</div>
+   <form data-form="resp" class="card rform" style="margin-bottom:18px"><h2 style="margin:0 0 12px">Mandar resposta ✉️</h2><div style="display:flex;flex-direction:column;gap:12px">
+    <label class="f">Sobre qual plano?<select class="in" name="acao">${acts.map(a=>`<option value="${esc(a.id)}">${esc(a.oque)}</option>`).join('')}<option value="">Outro assunto</option></select></label>
+    <label class="f">O que você fez hoje? <small>conte com suas palavras</small><textarea class="in" data-keep name="feito" maxlength="1500" required placeholder="Ex.: fiz a lista dos itens do estoque e combinei com a dupla…"></textarea></label>
+    <div class="grid g2"><label class="f">Como está o plano?<select class="in" name="status">${STATUS.filter(x=>x!=='Atrasado').map(x=>`<option ${x==='Em andamento'?'selected':''}>${x}</option>`).join('')}</select></label><label class="f">Valor do indicador <small>se tiver</small><input class="in" data-keep name="valor" maxlength="20" inputmode="decimal" placeholder="${esc(s.ind)}"></label></div>
+    <label class="f">Alguma dúvida ou dificuldade? <small>opcional</small><textarea class="in" data-keep name="duvida" maxlength="800" style="min-height:64px"></textarea></label>
+    <button type="submit" class="btn car">Enviar resposta</button></div></form>`;
+   const mine=S.resps.filter(r=>r.alunoId===me.id).sort((a,b)=>(b.criado||0)-(a.criado||0)).slice(0,5);
+   if(mine.length)h+=`<h2 style="margin:0 0 10px">Suas últimas respostas</h2><div class="list" style="margin-bottom:18px">${mine.map(r=>rBox(r,false)).join('')}</div>`}}
+ if(W()){const L=[...S.resps].sort((a,b)=>(b.criado||0)-(a.criado||0));const nv=L.filter(r=>!r.lida).length;
+  h+=`<h2 style="margin:8px 0 10px">Respostas recebidas ${nv?`<span class="pill s-and">${nv} novas</span>`:''}</h2>${L.length?`<div class="list">${L.map(r=>rBox(r,true)).join('')}</div>`:'<div class="empty">Ainda não chegou nenhuma resposta. Mande o link desta página para a turma.</div>'}`}
+ return h}
+function rBox(r,adm){const s=SK[r.setor];const x=S.actions.find(a=>a.id===r.acao);const can=adm&&x&&r.status&&effStatus(x)!==r.status;
+ return `<div class="rbox ${adm&&!r.lida?'new':''}"><div class="row" style="gap:8px;align-items:flex-start"><b style="flex:1;min-width:0">${adm?esc(r.aluno)+' • ':''}${esc(r.acaoTitulo||'Outro assunto')}</b>${r.status?`<span class="pill ${SCLS[r.status]||'s-nao'}">${esc(r.status)}</span>`:''}</div>
+ <div class="m">${s?`<span>${s.e} ${esc(s.n)}</span>`:''}<span>🗓️ Quinta ${esc(r.quinta)}</span><span>${new Date(r.criado||0).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})}</span>${r.valor?`<span>📈 ${esc(r.valor)}</span>`:''}${!adm?`<span>${r.lida?'✔ lida':'enviada'}</span>`:''}</div>
+ <div class="txt">${esc(r.feito)}</div>${r.duvida?`<div class="txt" style="font-size:13px;background:#fff4dc;border-radius:10px;padding:8px 10px;color:#6b4d12"><b>Dúvida:</b> ${esc(r.duvida)}</div>`:''}
+ ${adm?`<div class="row" style="gap:8px;margin-top:4px;flex-wrap:wrap">${!r.lida?`<button class="btn alt sm" data-act="rLida" data-id="${esc(r.id)}">✔ Marcar como lida</button>`:''}${can?`<button class="btn car sm" data-act="rApply" data-id="${esc(r.id)}">Mudar plano para "${esc(r.status)}"</button>`:''}<span class="sp"></span><button class="btn alt sm" data-act="delAsk" data-coll="resps" data-id="${esc(r.id)}">Excluir</button></div>`:''}</div>`}
 
 /* ===== QUINTA DE HOJE ===== */
 function vQuinta(){
  const n=Q(),date=qDate(n),B=BLOCOS(),tk=S.tab||B[T.i]?.k||'abertura';
- const tabs=B.map((b,i)=>`<button class="tab ${b.k===tk?'on':''} ${i===T.i&&T.run?'live':''}" data-act="qtab" data-v="${b.k}">${i+1}. ${esc(b.n)} <small>${b.min} min</small></button>`).join('');
+ const tabs=B.map((b,i)=>`<button class="tab ${b.k===tk?'on':''}" data-act="qtab" data-v="${b.k}">${i+1}. ${esc(b.n)}</button>`).join('');
  const body={abertura:qAbertura,duplas:qDuplas,rodada:qRodada,fechamento:qFechamento}[tk]||qAbertura;
- return `<div class="top"><div><div class="eyebrow">Aula do projeto • ${B.reduce((s,b)=>s+b.min,0)} minutos</div>
+ return `<div class="top"><div><div class="eyebrow">Aula do projeto</div>
  <div class="qhead"><button class="btn alt sm" data-act="qprev" aria-label="Quinta anterior">◀</button><span class="qnum">Quinta ${n}</span><span style="font-size:18px;color:var(--muted);font-weight:700">${fdate(date)}${date===today()?' • hoje':''}</span><button class="btn alt sm" data-act="qnext" aria-label="Próxima quinta">▶</button>${S.q&&S.q!==curQ()?`<button class="btn alt sm" data-act="qnow">Voltar para a atual</button>`:''}</div></div>
  <div class="row"><button class="btn alt hide-m" data-act="proj">${document.body.classList.contains('proj')?'Sair do modo projetor':'📽️ Modo projetor'}</button>${dl?`<button class="btn alt" data-act="resumo">⬇ Resumo da quinta</button>`:''}</div></div>
  <div class="tabs">${tabs}</div>
@@ -349,7 +397,7 @@ function qRodada(n){
  const raw=S.kpis[s.k],has=raw!==undefined&&raw!==''&&raw!==null&&!isNaN(Number(raw));
  const ata=ataOf(n)||{};
  return `<div class="row rodnav" style="margin-bottom:12px"><button class="btn alt" data-act="rod" data-v="-1">◀ Anterior</button><div class="row rodchips" style="gap:6px;flex:1;justify-content:center">${L.map((x,i)=>`<button class="chip ${i===S.rod?'on':''}" data-act="rodgo" data-v="${i}" title="${esc(x.n)}">${x.e}</button>`).join('')}</div><button class="btn car" data-act="rod" data-v="1">Próximo ▶</button></div>
- <div class="row" style="margin-bottom:12px;gap:8px"><div id="rt" class="pill s-nao" style="font-size:20px;padding:8px 16px;font-family:Fraunces,serif">⏱ ${fmt(RT.left)}</div><button class="btn alt sm" data-act="rtPlay">${RT.run?'❚❚ Pausar':'▶ 1 minuto'}</button><span style="font-size:13px;color:var(--muted)">Reinicia sozinho ao trocar de setor</span><span class="sp"></span><button class="btn alt sm" data-act="iaCopy" data-k="${s.k}">🤖 Contexto para IA</button></div>
+ <div class="row" style="margin-bottom:12px;gap:8px"><span class="sp"></span><button class="btn alt sm" data-act="iaCopy" data-k="${s.k}">🤖 Contexto para IA</button></div>
  <div class="rod"><div class="card"><div class="row" style="margin-bottom:10px"><div class="emo" style="width:52px;height:52px;font-size:26px">${s.e}</div><div style="flex:1"><div class="eyebrow">Setor ${S.rod+1} de ${L.length}</div><h2 style="font-size:28px">${esc(s.n)}</h2>${nomes(s.k)?`<div style="font-weight:800;color:var(--dcar)">👤 ${nomes(s.k)}</div>`:''}</div></div>
  <div style="font-size:13px;margin-top:8px;background:#fff4dc;border-radius:10px;padding:8px 10px;color:#6b4d12"><b>Situação atual:</b> ${esc(s.diag)}</div><div class="eyebrow" style="margin-top:12px">Entrega de hoje</div><div class="ent"><div class="d ${e&&e.descricao?'':'none'}" style="margin:6px 0">${e&&e.descricao?esc(e.descricao):'Nenhuma entrega combinada'}</div>
  ${W()&&e&&e.descricao?`<div class="row"><button class="btn ${e.status==='Entregue'?'ok':'alt'} sm" data-act="entMark" data-k="${s.k}" data-v="Entregue">✅ Entregue</button><button class="btn ${e.status==='Não entregue'?'danger':'alt'} sm" data-act="entMark" data-k="${s.k}" data-v="Não entregue">❌ Não entregue</button></div>`:''}</div>
@@ -413,7 +461,7 @@ function vPainel(){
  const n=Q(),com=L.filter(s=>{const e=entOf(n,s.k);return e&&e.descricao}).length;
  return `<div class="top"><div><div class="eyebrow">Projeto Gestores do Futuro</div><h1>Painel da Pet Coffee 🐾</h1><p>Como a nossa empresa está indo.</p></div>
  <div class="row">${W()?`<button class="btn car hide-m" data-act="newAction">+ Nova ação</button><button class="btn alt" data-act="kpiForm">Atualizar indicadores</button>`:''}</div></div>
- <a href="#quinta" class="card" style="display:flex;gap:14px;align-items:center;text-decoration:none;color:inherit;margin-bottom:16px;background:var(--dark);color:var(--cream);border-color:var(--dark)"><span style="font-size:30px">🗓️</span><div style="flex:1"><b style="font-family:Fraunces,serif;font-size:20px">${esc(qLabel(n))}</b><div style="color:#d9c9b4;font-size:13px">${com} de ${L.length} setores com entrega combinada • aula de ${BLOCOS().reduce((s,b)=>s+b.min,0)} min</div></div><span class="btn car sm">Abrir →</span></a>
+ <a href="#quinta" class="card" style="display:flex;gap:14px;align-items:center;text-decoration:none;color:inherit;margin-bottom:16px;background:var(--dark);color:var(--cream);border-color:var(--dark)"><span style="font-size:30px">🗓️</span><div style="flex:1"><b style="font-family:Fraunces,serif;font-size:20px">${esc(qLabel(n))}</b><div style="color:#d9c9b4;font-size:13px">${com} de ${L.length} setores com entrega combinada</div></div><span class="btn car sm">Abrir →</span></a>
  <div class="grid g4" style="margin-bottom:16px">
   <div class="card tile"><div class="num">${tot}</div><div class="lbl">ações nos planos</div></div>
   <div class="card tile sage"><div class="num">${pct}%</div><div class="lbl">ações concluídas (${ok})</div></div>
@@ -599,7 +647,7 @@ function moreMenu(){return `<h2>Mais áreas</h2><div class="list">${ROUTES.filte
 function openM(h){$('#sheet').innerHTML=h;$('#modal').classList.add('on')}
 function closeM(){$('#modal').classList.remove('on');$('#sheet').innerHTML=''}
 $('#modal').addEventListener('click',e=>{if(e.target.id==='modal')closeM()});
-const COLL={actions:'actions',tasks:'tasks',mats:'materiais',alunos:'alunos'};
+const COLL={resps:'respostas',actions:'actions',tasks:'tasks',mats:'materiais',alunos:'alunos'};
 async function wr(fn){if(!db){toast('Sem conexão com os dados da turma.');return false}try{await fn();return true}catch(e){const c=e&&e.code;if(c==='invalid_argument'||c==='permission-denied'){S.canWrite=false;render();toast('Você não tem permissão para editar aqui.')}else if(c==='quota_exceeded')toast('Limite de dados atingido: exclua itens antigos.');else toast('Não foi possível salvar agora. Tente de novo.');return false}}
 function wipWarn(a,newSt){if(newSt!=='Em andamento')return;const n=S.actions.filter(x=>x.id!==a.id&&x.setor===a.setor&&x.funcao===a.funcao&&effStatus(x)==='Em andamento').length;if(n>=1)toast('Atenção: essa função já tem uma ação em andamento. O combinado é uma por vez.')}
 async function saveGeral(patch){const o=Object.assign({},G(),patch);return wr(()=>db.doc('config/geral').set(o))}
@@ -623,6 +671,8 @@ document.addEventListener('click',async e=>{
  if(a==='newMat')return openM(matForm());
  if(a==='editMat')return openM(matForm(S.mats.find(x=>x.id===id)));
  if(a==='kpiForm')return openM(kpiForm());
+ if(a==='rLida'){await wr(()=>db.doc('respostas/'+id).update({lida:true}));return}
+ if(a==='rApply'){const r=S.resps.find(z=>z.id===id);const x=r&&S.actions.find(z=>z.id===r.acao);if(!x||!r.status)return;const o=Object.assign({},x,{status:r.status,atualizado:Date.now()});delete o.id;if(await wr(()=>db.doc('actions/'+x.id).set(o))){await wr(()=>db.doc('respostas/'+id).update({lida:true}));toast('Status do plano atualizado ✅')}return}
  if(a==='login')return fbLogin();if(a==='logout')return fbLogout();if(a==='cyc'){const x=S.actions.find(z=>z.id===id);if(!x)return;const ns=CYC[effStatus(x)]||'Em andamento';wipWarn(x,ns);const o=Object.assign({},x,{status:ns,atualizado:Date.now()});delete o.id;await wr(()=>db.doc('actions/'+id).set(o));return}
  if(a==='mvTask'){await wr(()=>db.doc('tasks/'+id).update({status:v,atualizado:Date.now()}));return}
  if(a==='delAsk'){el.outerHTML=`<span style="font-weight:800;color:var(--red)">Excluir mesmo?</span><button type="button" class="btn danger sm" data-act="del" data-coll="${el.dataset.coll}" data-id="${esc(id)}">Sim, excluir</button>`;return}
@@ -666,6 +716,7 @@ document.addEventListener('input',e=>{const k=e.target.dataset.in;if(k==='fq'){S
 document.addEventListener('focusout',e=>{if(S.pend)setTimeout(()=>{const ae=document.activeElement;if(!(ae&&ae.dataset&&ae.dataset.keep!=null))render()},60)});
 document.addEventListener('change',async e=>{
  const t=e.target;
+ if(t.dataset.in==='me'){setMe(t.value);return render()}
  if(t.dataset.in==='fstatus'){S.f.status=t.value;return render()}
  if(t.dataset.in==='formSetor'){const s=SK[t.value];$('#fFun').innerHTML=s.f.map(x=>`<option>${esc(x)}</option>`).join('');return}
  if(t.dataset.role!==undefined&&t.dataset.setor){await assignRole(t.value,t.dataset.setor,t.dataset.role);return}
@@ -674,6 +725,10 @@ document.addEventListener('change',async e=>{
 });
 document.addEventListener('submit',async e=>{
  e.preventDefault();const f=e.target;const d=Object.fromEntries(new FormData(f).entries());
+  if(f.dataset.form==='resp'){if(!db)return toast('Sem conexão com os dados da turma.');const me=S.alunos.find(a=>a.id===RS.me);if(!me)return toast('Escolha seu nome primeiro.');const feito=String(d.feito||'').trim();if(!feito)return toast('Conte o que você fez.');const ac=S.actions.find(a=>a.id===d.acao);
+   const o={alunoId:me.id,aluno:String(me.nome||'').slice(0,60),setor:String(me.setor||''),funcao:String(me.funcao||''),acao:ac?ac.id:'',acaoTitulo:ac?String(ac.oque||'').slice(0,200):'',feito:feito.slice(0,1500),status:STATUS.includes(d.status)?d.status:'',valor:String(d.valor||'').trim().slice(0,20),duvida:String(d.duvida||'').trim().slice(0,800),quinta:curQ(),criado:Date.now(),lida:false};
+   document.activeElement&&document.activeElement.blur();const b=f.querySelector('button[type=submit]');if(b)b.disabled=true;
+   try{await db.collection('respostas').add(o);f.reset();toast('Resposta enviada! Valeu 🐾')}catch(err){toast('Não foi possível enviar agora. Tente de novo.')}finally{if(b)b.disabled=false}return}
  if(f.id==='fA'){if(!d.oque||!d.oque.trim())return toast('Preencha o "O quê?"');const o={setor:d.setor,funcao:d.funcao||'',oque:d.oque.trim(),porque:d.porque||'',onde:d.onde||'',quem:d.quem||'',quando:d.quando||'',prazo:d.prazo||'',como:d.como||'',custo:d.custo===''?0:Number(d.custo),indicador:d.indicador||'',status:d.status||'Não iniciado',obs:d.obs||'',atualizado:Date.now()};const id=f.dataset.id;const old=id?S.actions.find(x=>x.id===id):null;o.criado=old&&old.criado||Date.now();wipWarn(Object.assign({id},o),o.status);
   if(await wr(()=>id?db.doc('actions/'+id).set(o):db.collection('actions').add(o))){closeM();toast('Ação salva 🎯')}}
  if(f.id==='fT'){const o={titulo:d.titulo.trim(),descricao:d.descricao||'',setor:d.setor||'todos',responsavel:d.responsavel||'',prazo:d.prazo||'',status:d.status||'A fazer',atualizado:Date.now()};const id=f.dataset.id;const old=id?S.tasks.find(x=>x.id===id):null;o.criado=old&&old.criado||Date.now();
@@ -712,9 +767,7 @@ function exportLogo(){const svg=LOGO.replace(/SZ/g,'1024').replace('<svg ','<svg
 /* ===== início ===== */
 $('#logo1').innerHTML=LOGO.replace(/SZ/g,'44');$('#logo2').innerHTML=LOGO.replace(/SZ/g,'34');
 document.addEventListener('keydown',e=>{const t=e.target;if(t&&t.matches&&t.matches('input,textarea,select'))return;if($('#modal').classList.contains('on'))return;
- if(e.code==='Space'){e.preventDefault();return tPlay()}
- if(e.key==='n'||e.key==='N'){return tGo((T.i+1)%BLOCOS().length)}
- if(route()==='quinta'&&(S.tab||BLOCOS()[T.i].k)==='rodada'&&(e.key==='ArrowRight'||e.key==='ArrowLeft')){const L=ACT();S.rod=(S.rod+(e.key==='ArrowRight'?1:-1)+L.length)%L.length;rtNext();render()}});
+  if(route()==='quinta'&&(S.tab||BLOCOS()[T.i].k)==='rodada'&&(e.key==='ArrowRight'||e.key==='ArrowLeft')){const L=ACT();S.rod=(S.rod+(e.key==='ArrowRight'?1:-1)+L.length)%L.length;render()}});
 window.addEventListener('hashchange',()=>{if(route()==='quinta')document.body.classList.remove('timer-hidden');render();window.scrollTo(0,0)});
 document.addEventListener('fullscreenchange',()=>{if(!document.fullscreenElement&&document.body.classList.contains('proj')){document.body.classList.remove('proj');render()}});
 render();
@@ -728,6 +781,7 @@ async function importBackup(o){const fs=FB.fs,F=FB.F,base='turmas/'+TURMA+'/';co
  L(o.acoes,'actions');L(o.tarefas,'tasks');L(o.alunos,'alunos');L(o.materiais,'materiais');L(o.entregas,'entregas');L(o.atas,'atas');L(o.historicoIndicadores,'kpihist');
  if(o.geral)put('config/geral',o.geral);if(o.empresa)put('config/empresa',o.empresa);if(o.indicadores)put('config/kpis',o.indicadores);if(o.sorteio)put('config/sorteio',o.sorteio);
  for(let i=0;i<ops.length;i+=400){const b=fs.writeBatch(F);ops.slice(i,i+400).forEach(([p,d])=>b.set(fs.doc(F,base+p),d));await b.commit()}return ops.length}
+window.importBackup=importBackup;
 document.addEventListener('change',async e=>{const t=e.target;if(!t.matches||!t.matches('[data-imp]')||!t.files[0])return;
  try{const o=JSON.parse(await t.files[0].text());if(!o.acoes)throw 0;if(!confirm('Restaurar este backup? Os itens com o mesmo código serão substituídos.'))return;const n=await importBackup(o);toast(n+' itens restaurados ✅')}catch(err){toast('Arquivo de backup inválido ou sem permissão.')}finally{t.value=''}});
 async function fbLogin(){if(!FB)return;try{await FB.au.signInWithPopup(FB.auth,new FB.au.GoogleAuthProvider())}catch(e){if(e&&e.code!=='auth/popup-closed-by-user')toast('Não foi possível entrar agora.')}}
@@ -748,7 +802,7 @@ async function fbLogout(){if(!FB)return;await FB.au.signOut(FB.auth);toast('Voc�
   const err=e=>{clearTimeout(timer);S.ready=true;if(e&&e.code==='permission-denied')S.offline=true;render()};
   const start=()=>{if(subs)return;subs=true;
    const sub=(path,key)=>db.collection(path).onSnapshot(s=>{S[key]=s.docs.map(d=>Object.assign({id:d.id},d.data()));mark(s);render()},err);
-   sub('actions','actions');sub('tasks','tasks');sub('alunos','alunos');sub('materiais','mats');sub('entregas','entregas');sub('atas','atas');sub('kpihist','kpihist');
+   sub('respostas','resps');sub('actions','actions');sub('tasks','tasks');sub('alunos','alunos');sub('materiais','mats');sub('entregas','entregas');sub('atas','atas');sub('kpihist','kpihist');
    db.doc('config/empresa').onSnapshot(s=>{S.cfg=s.exists?s.data():null;render()},err);
    db.doc('config/kpis').onSnapshot(s=>{S.kpis=s.exists?s.data():{};render()},err);
    db.doc('config/sorteio').onSnapshot(s=>{S.sorteio=s.exists?s.data():null;render()},err);

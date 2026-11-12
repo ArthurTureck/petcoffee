@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#3b2a20">
+<title>Pet Coffee • Central da Turma</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Ctext y=%27.9em%27 font-size=%2790%27%3E%E2%98%95%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500..700&family=Nunito:wght@400;600;700;800&display=swap">
+<style>
+:root{--dark:#3b2a20;--dark2:#4a372b;--cream:#f7f0e6;--beige:#efe3d1;--line:#e3d5c1;--car:#c8793a;--dcar:#9a4f1e;--sage:#4f6e54;--sage2:#e3ecd9;--pink:#f2b8b5;--muted:#6f5a49;--white:#fffdf9;--red:#b4462f;--r:18px}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--cream);color:var(--dark);font-family:Nunito,system-ui,sans-serif;font-size:15px}
+h1,h2,h3{font-family:Fraunces,Georgia,serif;margin:0;font-weight:600}
+button,input,select,textarea{font-family:inherit;font-size:14px}
+a{color:var(--dcar)}
+.app{display:grid;grid-template-columns:240px minmax(0,1fr);min-height:100vh}
+.app>div{min-width:0}
+aside.side{background:var(--dark);color:var(--cream);padding:22px 16px;position:sticky;top:0;height:100vh;display:flex;flex-direction:column;gap:6px}
+.brand{display:flex;align-items:center;gap:10px;padding:4px 8px 18px}
+.brand b{font-family:Fraunces,serif;font-size:20px;display:block}
+.brand small{color:#d9c9b4;font-size:12px}
+.nav a{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;color:#eadbc7;text-decoration:none;font-weight:700}
+.nav a:hover{background:var(--dark2)}
+.nav a.on{background:var(--car);color:#2a1c13}
+.side .foot{margin-top:auto;font-size:12px;color:#bfa98f;padding:8px}
+main{padding:28px 32px 120px;max-width:1280px;width:100%}
+.top{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:22px}
+.top h1{font-size:32px}
+.top p{margin:4px 0 0;color:var(--muted)}
+.eyebrow{font-size:12px;font-weight:800;letter-spacing:.12em;color:var(--dcar);text-transform:uppercase}
+.btn{border:0;border-radius:12px;padding:10px 16px;font-weight:800;cursor:pointer;background:var(--dark);color:var(--cream)}
+.btn:hover{filter:brightness(1.15)}
+.btn.alt{background:var(--white);color:var(--dark);border:1px solid var(--line)}
+.btn.car{background:var(--car);color:#2a1c13}
+.btn.sm{padding:6px 10px;font-size:13px;border-radius:10px}
+.btn.danger{background:#f6e0da;color:var(--red)}
+.btn.ok{background:var(--sage);color:#fff}
+.btn:disabled{opacity:.5;cursor:default}
+.grid{display:grid;gap:16px}
+.g4{grid-template-columns:repeat(4,minmax(0,1fr))}.g3{grid-template-columns:repeat(3,minmax(0,1fr))}.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.card{background:var(--white);border:1px solid var(--line);border-radius:var(--r);padding:18px 20px}
+.card h3{font-size:18px;margin-bottom:12px}
+.tile .num{font-family:Fraunces,serif;font-size:36px;font-weight:600;color:var(--dcar);line-height:1.1}
+.tile .lbl{color:var(--muted);font-weight:700;font-size:13px}
+.tile.dark{background:var(--dark);color:var(--cream);border-color:var(--dark)}.tile.dark .num{color:#e0a46e}.tile.dark .lbl{color:#d9c9b4}
+.tile.sage{background:var(--sage);color:var(--cream);border-color:var(--sage)}.tile.sage .num{color:#fff}.tile.sage .lbl{color:var(--sage2)}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.sp{flex:1}
+.chip{border:1px solid var(--line);background:var(--white);border-radius:999px;padding:6px 12px;font-weight:700;font-size:13px;cursor:pointer;color:var(--dark)}
+.chip.on{background:var(--dark);color:var(--cream);border-color:var(--dark)}
+.pill{display:inline-block;border-radius:999px;padding:3px 10px;font-size:12px;font-weight:800;white-space:nowrap;border:0;font-family:inherit}
+button.pill{cursor:pointer}
+button.pill:hover{outline:2px solid var(--car)}
+.s-nao{background:#eee5d8;color:#6f5a49}.s-and{background:#dfeaf3;color:#2f5876}.s-ok{background:var(--sage2);color:#3a5a40}.s-atr{background:#f6e0da;color:var(--red)}
+.bar{height:10px;border-radius:99px;background:#eee5d8;overflow:hidden}
+.bar>i{display:block;height:100%;border-radius:99px;background:var(--car)}
+.stack{display:flex;height:22px;border-radius:8px;overflow:hidden;background:#eee5d8}
+.stack>i{display:block;height:100%}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted);font-weight:700}
+.legend span::before{content:"";display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;background:var(--c)}
+.list{display:flex;flex-direction:column;gap:10px}
+.item{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border:1px solid var(--line);border-radius:14px;background:var(--white);cursor:pointer}
+.item:hover{border-color:var(--car)}
+.item .t{font-weight:800}
+.item .m{font-size:13px;color:var(--muted);margin-top:2px}
+.emo{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;background:var(--beige);flex:none;font-size:18px}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:8px 10px;border-bottom:2px solid var(--line)}
+td{padding:10px;border-bottom:1px solid var(--line);vertical-align:top}
+tr.click{cursor:pointer}tr.click:hover td{background:#fbf6ee}
+.kpi{display:flex;flex-direction:column;gap:8px}
+.kpi .h{display:flex;justify-content:space-between;align-items:center;font-weight:800;gap:6px}
+.kpi .v{font-family:Fraunces,serif;font-size:26px}
+.kpi .s{font-size:12px;color:var(--muted)}
+.kanban{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;align-items:start}
+.col{background:var(--beige);border-radius:var(--r);padding:12px;min-height:200px}
+.col h3{font-size:16px;display:flex;justify-content:space-between;margin:4px 6px 12px}
+.tcard{background:var(--white);border-radius:14px;padding:12px 14px;margin-bottom:10px;border:1px solid var(--line)}
+.tcard .t{font-weight:800}
+.tcard .m{font-size:12px;color:var(--muted);margin:4px 0 8px}
+.late{color:var(--red);font-weight:800}
+.empty{padding:24px;text-align:center;color:var(--muted);border:2px dashed var(--line);border-radius:var(--r)}
+.banner{background:#fff4dc;border:1px solid #efd39a;color:#6b4d12;padding:12px 16px;border-radius:14px;margin-bottom:18px;font-weight:700}
+.org{display:flex;flex-direction:column;align-items:center}
+.org .boss{background:var(--dark);color:var(--cream);border-radius:16px;padding:14px 26px;text-align:center;font-weight:800}
+.org .vl{width:3px;height:22px;background:var(--car)}
+.org .kids{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:10px;width:100%;border-top:3px solid var(--car);padding-top:16px}
+.org .kid{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:12px 6px;text-align:center;font-weight:800;font-size:13px}
+.org .kid .e{font-size:22px;display:block}
+.flow{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.flow .st{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:10px 12px;font-weight:800;font-size:13px}
+.flow .st small{display:block;color:var(--dcar);font-size:11px;letter-spacing:.06em}
+.flow .ar{color:var(--car);font-weight:800}
+.mat{display:flex;flex-direction:column;gap:8px}
+.mat .ic{width:48px;height:48px;border-radius:14px;display:grid;place-items:center;font-size:24px;background:var(--beige)}
+.mat .t{font-weight:800;font-size:16px}
+.mat .d{color:var(--muted);font-size:13px;flex:1}
+input.in,select.in,textarea.in{width:100%;border:1px solid var(--line);border-radius:10px;padding:9px 11px;background:#fff;color:var(--dark)}
+textarea.in{min-height:64px;resize:vertical}
+label.f{display:flex;flex-direction:column;gap:5px;font-weight:800;font-size:13px}
+label.f small{font-weight:600;color:var(--muted)}
+.modal{position:fixed;inset:0;background:rgba(43,30,22,.45);display:none;align-items:flex-start;justify-content:center;padding:40px 16px;overflow:auto;z-index:40}
+.modal.on{display:flex}
+.sheet{background:var(--cream);border-radius:22px;padding:22px;width:100%;max-width:720px}
+.sheet h2{font-size:24px;margin-bottom:14px}
+.fgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.fgrid .full{grid-column:1/-1}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--dark);color:var(--cream);padding:12px 18px;border-radius:12px;font-weight:700;display:none;z-index:50;max-width:90vw}
+.donut{display:flex;gap:20px;align-items:center;flex-wrap:wrap}
+.mobnav,.mhead,.fab,.mcards{display:none}
+/* quinta */
+.qhead{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.qnum{font-family:Fraunces,serif;font-size:40px;font-weight:600}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 18px}
+.tab{border:1px solid var(--line);background:var(--white);border-radius:12px;padding:10px 14px;font-weight:800;cursor:pointer;color:var(--dark);font-size:14px;display:flex;gap:8px;align-items:center}
+.tab small{color:var(--muted);font-weight:700}
+.tab.on{background:var(--dark);color:var(--cream);border-color:var(--dark)}.tab.on small{color:#e0a46e}
+.tab.live{box-shadow:0 0 0 3px var(--car)}
+.ent{display:flex;flex-direction:column;gap:10px}
+.ent .d{font-size:17px;font-weight:700;line-height:1.35;flex:1}
+.ent .d.none{color:var(--muted);font-weight:600;font-style:italic}
+.ent.ok{border-color:var(--sage);box-shadow:inset 0 0 0 2px var(--sage)}
+.ent.no{border-color:var(--red);box-shadow:inset 0 0 0 2px #e9b8ac}
+.rod{display:grid;grid-template-columns:1.2fr 1fr;gap:16px}
+.spark{display:block}
+/* cronômetro discreto */
+.timer{position:fixed;right:18px;bottom:18px;z-index:30;font-family:Nunito,sans-serif}
+.tmini{display:flex;align-items:center;gap:8px;background:rgba(59,42,32,.92);color:var(--cream);border-radius:999px;padding:6px 6px 6px 14px;box-shadow:0 6px 20px rgba(43,30,22,.25);backdrop-filter:blur(6px)}
+.tmini .lab{font-size:12px;font-weight:800;color:#e0a46e;max-width:150px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer}
+.tmini .clk{font-family:Fraunces,serif;font-size:20px;font-weight:600;min-width:62px;text-align:center;cursor:pointer;font-variant-numeric:tabular-nums}
+.tmini button,.tpan button.ic{width:32px;height:32px;border-radius:50%;border:0;background:rgba(255,255,255,.12);color:var(--cream);font-size:14px;cursor:pointer;display:grid;place-items:center}
+.tmini button:hover,.tpan button.ic:hover{background:rgba(255,255,255,.25)}
+.tmini .pg{position:absolute;left:14px;right:14px;bottom:2px;height:3px;border-radius:3px;background:rgba(255,255,255,.12);overflow:hidden}
+.tmini .pg i{display:block;height:100%;background:#e0a46e}
+.tmini.end{background:rgba(180,70,47,.95);animation:pulse 1s infinite alternate}
+.tmini.end .lab{color:#fff}
+@keyframes pulse{to{transform:scale(1.04)}}
+.tpan{position:absolute;right:0;bottom:56px;width:300px;background:rgba(59,42,32,.96);color:var(--cream);border-radius:18px;padding:14px;box-shadow:0 10px 30px rgba(43,30,22,.35);display:none}
+.tpan.on{display:block}
+.tpan .st{display:flex;align-items:center;gap:8px;padding:7px 8px;border-radius:10px;cursor:pointer;font-size:13px;font-weight:700}
+.tpan .st:hover{background:rgba(255,255,255,.08)}
+.tpan .st.cur{background:rgba(200,121,58,.35)}
+.tpan .st .n{flex:1}
+.tpan .st .m{font-variant-numeric:tabular-nums;color:#e0a46e;min-width:46px;text-align:right}
+.tpan .st button.ic{width:24px;height:24px;font-size:13px}
+.tpan .tot{font-size:12px;color:#d9c9b4;margin-top:8px;display:flex;justify-content:space-between}
+body.timer-hidden .timer{display:none}
+/* projetor */
+body.proj{font-size:18px}
+body.proj aside.side,body.proj .mhead,body.proj .mobnav{display:none!important}
+body.proj .app{grid-template-columns:minmax(0,1fr)}
+body.proj main{max-width:none;padding:28px 44px 120px}
+body.proj .top h1{font-size:44px}
+body.proj .top p{font-size:20px}
+body.proj .card h3{font-size:24px}
+body.proj .ent .d{font-size:24px}
+body.proj .item .t,body.proj .tcard .t{font-size:20px}
+body.proj .item .m,body.proj .kpi .s,body.proj .tile .lbl{font-size:16px}
+body.proj .pill{font-size:16px;padding:5px 14px}
+body.proj .tab{font-size:18px;padding:12px 18px}
+body.proj .tmini .clk{font-size:30px;min-width:92px}
+body.proj .tmini .lab{font-size:16px;max-width:260px}
+body.proj .qnum{font-size:56px}
+@media (max-width:900px){
+ .app{grid-template-columns:minmax(0,1fr)}
+ aside.side{display:none}
+ .mhead{display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:10;background:var(--dark);color:var(--cream);padding:10px 14px;padding-top:calc(10px + env(safe-area-inset-top))}
+ .mhead b{font-family:Fraunces,serif;font-size:17px;display:block;line-height:1.1}
+ .mhead small{font-size:11px;color:#d9c9b4}
+ .mobnav{display:grid;grid-template-columns:repeat(5,1fr);position:fixed;left:0;right:0;bottom:0;z-index:25;background:var(--dark);padding:6px 4px;padding-bottom:calc(6px + env(safe-area-inset-bottom));box-shadow:0 -4px 16px rgba(0,0,0,.15)}
+ .mobnav a{display:flex;flex-direction:column;align-items:center;gap:2px;color:#d9c9b4;text-decoration:none;font-weight:800;font-size:10px;padding:6px 2px;border-radius:10px;text-align:center;line-height:1.1;cursor:pointer}
+ .mobnav a i{font-style:normal;font-size:20px}
+ .mobnav a.on{background:var(--car);color:#2a1c13}
+ main{padding:16px 14px calc(150px + env(safe-area-inset-bottom))}
+ .top{margin-bottom:14px;align-items:stretch}
+ .top h1{font-size:25px}
+ .top p{font-size:14px}
+ .top>.row{width:100%}
+ .top>.row .btn{flex:1}
+ .hide-m{display:none!important}
+ .grid{gap:10px}
+ .g4,.g3{grid-template-columns:1fr 1fr}.g2{grid-template-columns:minmax(0,1fr)}
+ #g21,.rod{grid-template-columns:minmax(0,1fr)!important}
+ .card{padding:14px;border-radius:16px}
+ .tile .num{font-size:28px}.tile .lbl{font-size:12px}
+ .kpi .v{font-size:22px}.kpi .h{font-size:13px;flex-direction:column;align-items:flex-start}.kpi .s{font-size:11px}
+ .srow{grid-template-columns:96px minmax(0,1fr) 34px!important;gap:8px!important}
+ .srow>div:first-child{font-size:12px!important}
+ .chips,.tabs{flex-wrap:nowrap;overflow-x:auto;margin-left:-14px;margin-right:-14px;padding:2px 14px 6px;scrollbar-width:none}
+ .chips::-webkit-scrollbar,.tabs::-webkit-scrollbar{display:none}
+ .chip,.tab{white-space:nowrap;flex:none}
+ .filters{display:grid!important;grid-template-columns:minmax(0,1fr);gap:8px}
+ .filters select,.filters input{max-width:none!important;width:100%!important}
+ .ptable{display:none}
+ .mcards{display:flex;flex-direction:column;gap:10px}
+ .pc{background:var(--white);border:1px solid var(--line);border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:6px;cursor:pointer}
+ .pc .t{font-weight:800;font-size:15px;line-height:1.3}
+ .pc .w{font-size:13px;color:var(--muted)}
+ .pc .f{display:flex;gap:4px 12px;align-items:center;flex-wrap:wrap;font-size:12px;color:var(--muted);font-weight:700}
+ .kanban{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:12px;margin:0 -14px;padding:0 14px 8px}
+ .col{flex:0 0 86%;scroll-snap-align:center}
+ .swipe{display:block!important}
+ .org .kids{grid-template-columns:repeat(2,1fr)}
+ .fgrid{grid-template-columns:minmax(0,1fr)}
+ input.in,select.in,textarea.in{font-size:16px;padding:11px 12px}
+ .modal{padding:0;align-items:flex-end}
+ .sheet{border-radius:22px 22px 0 0;max-height:92vh;overflow:auto;padding:18px 16px calc(18px + env(safe-area-inset-bottom))}
+ .sheet .acts{position:sticky;bottom:-18px;background:var(--cream);padding:12px 0 4px}
+ .sheet .acts .btn{flex:1}
+ .fab{display:flex;position:fixed;left:16px;bottom:calc(84px + env(safe-area-inset-bottom));z-index:24;width:54px;height:54px;border-radius:50%;background:var(--car);color:#2a1c13;border:0;font-size:28px;font-weight:800;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(59,42,32,.35)}
+ .crow{grid-template-columns:minmax(0,1fr) 92px!important}
+ .crow .bar{grid-column:1/-1;order:3}
+ .flow .ar{transform:rotate(90deg);width:100%;text-align:center}
+ .flow .st{width:100%}
+ .toast{bottom:calc(150px + env(safe-area-inset-bottom))}
+ .timer{right:12px;bottom:calc(80px + env(safe-area-inset-bottom))}
+ .tmini .lab{max-width:90px}
+ .tpan{width:min(300px,calc(100vw - 24px))}
+ .qnum{font-size:30px}
+ .gent{grid-template-columns:minmax(0,1fr)!important}
+ .rodnav{flex-wrap:wrap}
+ .rodnav .rodchips{order:-1;flex:1 1 100%!important;justify-content:flex-start!important;overflow-x:auto;flex-wrap:nowrap}
+ .rodnav>.btn{flex:1}
+ .eqh{flex-wrap:wrap}
+}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="side">
+ <div class="brand"><span id="logo1"></span><div><b>Pet Coffee</b><small>Central da Turma • Gestores do Futuro</small></div></div>
+ <nav class="nav" id="nav"></nav>
+ <div class="foot">Jovem Aprendiz ESPRO ✨<br>Projeto às quintas-feiras</div>
+</aside>
+<div>
+ <header class="mhead"><span id="logo2"></span><div><b>Pet Coffee</b><small>Central da Turma • Gestores do Futuro</small></div></header>
+ <main id="main"></main>
+</div>
+</div>
+<nav class="mobnav" id="mobnav"></nav>
+<button class="fab" id="fab" aria-label="Adicionar">+</button>
+<div class="timer" id="timer"></div>
+<div class="modal" id="modal"><div class="sheet" id="sheet"></div></div>
+<div class="toast" id="toast"></div>
+<script>
+/* ===== dados fixos ===== */
+const SETORES=[
+{k:'diretoria',diag:'Até hoje ninguém acompanhava as metas: só 45% delas foram atingidas no último trimestre e cada setor trabalhava sozinho.',n:'Diretoria',e:'👑',f:['Diretor(a) Geral','Diretor(a) de Planejamento'],cuida:'Define as metas, une os setores e acompanha os resultados.',ind:'Metas da empresa atingidas',meta:80,op:'>=',un:'%'},
+{k:'financeiro',diag:'O lucro caiu para 6% (meta: 10%). Os ingredientes já consomem 35% do faturamento e os preços não mudam desde a abertura.',n:'Financeiro',e:'💰',f:['Gerente Financeiro','Analista de Custos e Caixa'],cuida:'Controla caixa, custos, preços e lucro.',ind:'Lucro sobre o faturamento',meta:10,op:'>=',un:'%'},
+{k:'rh',diag:'Só 60% da equipe passou por treinamento. Entraram 3 funcionários novos em outubro e faltam pessoas no horário do almoço.',n:'Gestão de Pessoas (RH)',e:'🤝',f:['Gerente de RH','Analista de Treinamento'],cuida:'Escalas, treinamentos e bom clima na equipe.',ind:'Equipe treinada no mês',meta:100,op:'>=',un:'%'},
+{k:'marketing',diag:'O Instagram tem 2.400 seguidores, mas ganha só 180 por mês (meta: 300). Os posts são irregulares e quase não mostram os animais.',n:'Marketing',e:'📣',f:['Gerente de Marketing','Analista de Redes Sociais'],cuida:'Divulgação, redes sociais e campanhas de adoção.',ind:'Novos seguidores por mês',meta:300,op:'>=',un:''},
+{k:'atendimento',diag:'A nota de satisfação caiu de 4,6 para 4,3. No almoço (12h–14h) a espera chega a 15 minutos e há pedidos errados.',n:'Atendimento e Vendas',e:'☕',f:['Gerente de Atendimento','Líder de Caixa'],cuida:'Recepção, pedidos, pagamento e satisfação do cliente.',ind:'Nota de satisfação (0 a 5)',meta:4.7,op:'>=',un:''},
+{k:'cozinha',diag:'O preparo leva em média 16 minutos (meta: 12). Não existem fichas técnicas e o desperdício chega a 9% dos ingredientes.',n:'Cozinha e Produção',e:'🧁',f:['Chef de Produção','Responsável pelo Estoque'],cuida:'Preparo, cardápio, estoque e desperdício.',ind:'Tempo de preparo (min)',meta:12,op:'<=',un:' min'},
+{k:'qualidade',diag:'O checklist de higiene só é feito em 70% dos dias e houve 2 quase acidentes com piso molhado. A vigilância sanitária visita a loja em dezembro.',n:'Qualidade e Segurança',e:'🧼',f:['Gerente de Qualidade','Técnico(a) de Segurança e Higiene'],cuida:'Higiene, checklists e prevenção de acidentes.',ind:'Dias com checklist de higiene',meta:100,op:'>=',un:'%'},
+{k:'bemestar',diag:'São 6 adoções por mês (meta: 10). Dois animais estão com a vacinação atrasada e houve 1 devolução em outubro.',n:'Bem-estar Animal e Adoção',e:'🐾',f:['Gerente de Bem-estar Animal','Coordenador(a) de Adoções'],cuida:'Saúde e rotina dos animais e processo de adoção.',ind:'Adoções por mês',meta:10,op:'>=',un:''},
+{k:'tecnologia',diag:'Todos os pedidos ainda são anotados em papel. Não existe cardápio digital nem controle de dados.',n:'Tecnologia e Inovação',e:'💻',nova:true,f:['Gerente de Tecnologia','Analista de Sistemas e Dados'],cuida:'Cardápio digital, sistemas, dados do painel e novas ideias com tecnologia.',ind:'Pedidos pelo cardápio digital',meta:30,op:'>=',un:'%'}];
+const SK=Object.fromEntries(SETORES.map(s=>[s.k,s]));
+const STATUS=['Não iniciado','Em andamento','Concluído','Atrasado'];
+const CYC={'Não iniciado':'Em andamento','Em andamento':'Concluído','Concluído':'Não iniciado','Atrasado':'Em andamento'};
+const SCLS={'Não iniciado':'s-nao','Em andamento':'s-and','Concluído':'s-ok','Atrasado':'s-atr'};
+const SCOL={'Não iniciado':'#d8c9b4','Em andamento':'#6f9cc0','Concluído':'#4f6e54','Atrasado':'#b4462f'};
+const TST=['A fazer','Fazendo','Feito'];
+const MT={'Apresentação':'📽️','Planilha':'📊','Documento':'📄','Site':'🌐','Vídeo':'🎬','Imagem':'🖼️','Outro':'📎'};
+const ROUTES=[['quinta','🗓️','Quinta de hoje','Quinta'],['painel','📊','Painel','Painel'],['planos','🎯','Planos de ação','Planos'],['tarefas','✅','Tarefas ESPRO','Tarefas'],['equipe','👥','Equipe e setores','Equipe'],['empresa','☕','A empresa','Empresa'],['materiais','📁','Materiais','Materiais'],['historico','📚','Histórico','Histórico']];
+const MOB=['quinta','painel','planos','tarefas'];
+const DEF_CFG={clientes:120,ticket:32,dias:26,custos:{'Ingredientes e insumos':32,'Equipe (salários)':30,'Aluguel, água e luz':15,'Cuidados com os animais':8,'Marketing':5}};
+const DEF_BLOCOS=[{k:'abertura',n:'Abertura com o Painel',min:5},{k:'duplas',n:'Trabalho das duplas',min:25},{k:'rodada',n:'Rodada relâmpago',min:15},{k:'fechamento',n:'Fechamento',min:5}];
+const BDESC={abertura:'Painel na tela: o que foi entregue desde a última quinta.',duplas:'Todas as duplas trabalham ao mesmo tempo na entrega de hoje.',rodada:'1 minuto por setor: entrega, ação em andamento e onde travou.',fechamento:'Registrar decisões e combinar a entrega da próxima quinta.'};
+const LOGO='<svg viewBox="0 0 120 120" width="SZ" height="SZ" aria-label="Logo Pet Coffee"><circle cx="60" cy="60" r="58" fill="#c8793a"/><path d="M48 32 C44 26 52 22 48 15 M66 32 C62 26 70 22 66 15" stroke="#fff4e4" stroke-width="4" fill="none" stroke-linecap="round"/><ellipse cx="58" cy="96" rx="36" ry="6" fill="#9a4f1e"/><path d="M84 56 C99 56 99 80 84 80" stroke="#fff4e4" stroke-width="7" fill="none"/><polygon points="31,52 37,35 49,49" fill="#fff4e4"/><polygon points="67,49 79,35 85,52" fill="#fff4e4"/><polygon points="36,48 39,40 45,47" fill="#f2b8b5"/><polygon points="71,47 77,40 80,48" fill="#f2b8b5"/><path d="M30 48 H86 V72 C86 87 76 94 58 94 C40 94 30 87 30 72 Z" fill="#fff4e4"/><g fill="#3b2a20"><ellipse cx="58" cy="78" rx="8" ry="6.5"/><circle cx="49" cy="69" r="3.2"/><circle cx="54.5" cy="64.5" r="3.2"/><circle cx="61.5" cy="64.5" r="3.2"/><circle cx="67" cy="69" r="3.2"/></g></svg>';
+
+/* ===== estado ===== */
+const S={actions:[],tasks:[],team:[],alunos:[],sorteio:null,mats:[],entregas:[],atas:[],kpihist:[],cfg:null,kpis:{},geral:null,ready:false,slow:false,offline:false,canWrite:true,q:null,qTouched:false,tab:null,rod:0,f:{setor:'todos',status:'todos',q:'',tset:'todos'}};
+let db=null,dl=null;
+const $=s=>document.querySelector(s);
+const esc=v=>String(v==null?'':v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const iso=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+const pd=s=>{const[y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d)};
+const today=()=>iso(new Date());
+const fdate=s=>{if(!s||!/^\d{4}-\d{2}-\d{2}$/.test(s))return '';const[y,m,d]=s.split('-');return d+'/'+m+'/'+y};
+const fdm=s=>fdate(s).slice(0,5);
+const brl=n=>{const v=Number(n||0);return 'R$ '+v.toLocaleString('pt-BR',{minimumFractionDigits:v%1?2:0,maximumFractionDigits:2})};
+const route=()=>{const h=location.hash.slice(1);return ROUTES.some(r=>r[0]===h)?h:'quinta'};
+function toast(m){const t=$('#toast');t.textContent=m;t.style.display='block';clearTimeout(toast.h);toast.h=setTimeout(()=>t.style.display='none',3400)}
+const G=()=>Object.assign({inicio:'2026-11-12',tecAtivo:false},S.geral||{});
+const BLOCOS=()=>{const b=G().blocos;return Array.isArray(b)&&b.length?b:DEF_BLOCOS};
+const ACT=()=>SETORES.filter(s=>!s.nova||G().tecAtivo);
+function qDate(n){const d=pd(G().inicio);d.setDate(d.getDate()+(n-1)*7);return iso(d)}
+function qOf(dateStr){const diff=Math.round((pd(dateStr)-pd(G().inicio))/864e5);return Math.floor(diff/7)+1}
+function curQ(){const d=new Date();while(d.getDay()!==4)d.setDate(d.getDate()+1);return Math.max(1,qOf(iso(d)))}
+const Q=()=>S.q||curQ();
+function qLabel(n){return n===0?'Ponto de partida':`Quinta ${n} • ${fdm(qDate(n))}`}
+function isLate(a){return a.status!=='Concluído'&&((a.status==='Atrasado')||(a.prazo&&a.prazo<today()))}
+function effStatus(a){return a.status!=='Concluído'&&a.prazo&&a.prazo<today()?'Atrasado':(a.status||'Não iniciado')}
+function cfg(){return Object.assign({},DEF_CFG,S.cfg||{})}
+function entOf(n,k){return S.entregas.find(e=>e.id===`q${n}-${k}`)}
+function ataOf(n){return S.atas.find(a=>a.id===`q${n}`)}
+const W=()=>S.canWrite&&!!db;
+
+/* ===== navegação ===== */
+function nav(){const r=route();
+ $('#nav').innerHTML=ROUTES.map(([k,e,n])=>`<a href="#${k}" class="${k===r?'on':''}">${e} ${n}</a>`).join('');
+ $('#mobnav').innerHTML=MOB.map(k=>{const x=ROUTES.find(z=>z[0]===k);return `<a href="#${k}" class="${k===r?'on':''}"><i>${x[1]}</i>${x[3]}</a>`}).join('')+`<a data-act="more" class="${MOB.includes(r)?'':'on'}"><i>☰</i>Mais</a>`;
+ const fa={planos:'newAction',tarefas:'newTask',materiais:'newMat'}[r];const fb=$('#fab');
+ if(fa&&W()){fb.style.visibility='visible';fb.dataset.act=fa}else{fb.style.visibility='hidden';delete fb.dataset.act}}
+function banner(){
+ if(S.offline)return `<div class="banner">Não foi possível carregar os dados da turma. Confira a internet e o link da turma.</div>`;
+ if(!S.ready&&S.slow)return `<div class="banner">Ainda não foi possível carregar os dados da turma. Verifique a conexão; a página atualiza sozinha quando conectar.</div>`;
+ if(!S.ready)return `<div class="banner" style="background:#f3ece2;border-color:var(--line);color:var(--muted)">Carregando dados da turma…</div>`;
+ if(!S.canWrite)return `<div class="banner row" style="background:#f3ece2;border-color:var(--line);color:var(--muted)"><span>Modo de leitura: só a organização edita os dados.</span><span class="sp"></span><button class="btn alt sm" data-act="login">🔑 Entrar para editar</button></div>`;
+ return S.user&&!S.user.isAnonymous?`<div style="text-align:right;font-size:12px;color:var(--muted);margin:-4px 0 8px">Editando como ${esc(S.user.email)} • <button data-act="logout" style="background:none;border:0;color:inherit;text-decoration:underline;cursor:pointer;font:inherit;padding:0">sair</button></div>`:'';
+}
+function render(){const ae=document.activeElement;if(ae&&$('#main').contains(ae)&&ae.matches('input,textarea,select')&&ae.dataset.keep!=null){S.pend=true;return}S.pend=false;nav();const r=route();
+ const fn={quinta:vQuinta,painel:vPainel,planos:vPlanos,tarefas:vTarefas,equipe:vEquipe,empresa:vEmpresa,materiais:vMateriais,historico:vHistorico}[r];
+ $('#main').innerHTML=banner()+fn();renderTimer()}
+
+/* ===== QUINTA DE HOJE ===== */
+function vQuinta(){
+ const n=Q(),date=qDate(n),B=BLOCOS(),tk=S.tab||B[T.i]?.k||'abertura';
+ const tabs=B.map((b,i)=>`<button class="tab ${b.k===tk?'on':''} ${i===T.i&&T.run?'live':''}" data-act="qtab" data-v="${b.k}">${i+1}. ${esc(b.n)} <small>${b.min} min</small></button>`).join('');
+ const body={abertura:qAbertura,duplas:qDuplas,rodada:qRodada,fechamento:qFechamento}[tk]||qAbertura;
+ return `<div class="top"><div><div class="eyebrow">Aula do projeto • ${B.reduce((s,b)=>s+b.min,0)} minutos</div>
+ <div class="qhead"><button class="btn alt sm" data-act="qprev" aria-label="Quinta anterior">◀</button><span class="qnum">Quinta ${n}</span><span style="font-size:18px;color:var(--muted);font-weight:700">${fdate(date)}${date===today()?' • hoje':''}</span><button class="btn alt sm" data-act="qnext" aria-label="Próxima quinta">▶</button>${S.q&&S.q!==curQ()?`<button class="btn alt sm" data-act="qnow">Voltar para a atual</button>`:''}</div></div>
+ <div class="row"><button class="btn alt hide-m" data-act="proj">${document.body.classList.contains('proj')?'Sair do modo projetor':'📽️ Modo projetor'}</button>${dl?`<button class="btn alt" data-act="resumo">⬇ Resumo da quinta</button>`:''}</div></div>
+ <div class="tabs">${tabs}</div>
+ <p style="margin:-8px 0 16px;color:var(--muted);font-weight:700">${esc(BDESC[tk]||'')}<span class="hide-m" style="font-weight:600;font-size:12px;margin-left:10px;opacity:.8">⌨️ espaço = iniciar/pausar • N = próxima etapa${tk==='rodada'?' • ← → = trocar de setor':''}</span></p>
+ ${body(n)}`;
+}
+function entCard(s,n,opts){const e=entOf(n,s.k);const st=e&&e.status;const cls=st==='Entregue'?'ok':st==='Não entregue'?'no':'';
+ return `<div class="card ent ${cls}"><div class="row" style="gap:8px"><div class="emo">${s.e}</div><div style="flex:1"><b>${esc(s.n)}</b>${nomes(s.k)?`<div style="font-size:12px;color:var(--muted);font-weight:700">👤 ${nomes(s.k)}</div>`:''}</div>${st?`<span class="pill ${st==='Entregue'?'s-ok':st==='Não entregue'?'s-atr':'s-nao'}">${esc(st)}</span>`:''}</div>
+ <div class="d ${e&&e.descricao?'':'none'}">${e&&e.descricao?esc(e.descricao):'Nenhuma entrega combinada'}</div>
+ ${opts&&opts.mark&&W()&&e&&e.descricao?`<div class="row"><button class="btn ${st==='Entregue'?'ok':'alt'} sm" data-act="entMark" data-k="${s.k}" data-v="Entregue">✅ Entregue</button><button class="btn ${st==='Não entregue'?'danger':'alt'} sm" data-act="entMark" data-k="${s.k}" data-v="Não entregue">❌ Não entregue</button></div>`:''}
+ ${opts&&opts.acao?(()=>{const a=S.actions.find(x=>x.setor===s.k&&effStatus(x)==='Em andamento');return `<div style="font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:8px"><b>Ação em andamento:</b> ${a?esc(a.oque):'nenhuma'}</div>`})():''}</div>`}
+function qAbertura(n){
+ const L=ACT();const com=L.filter(s=>{const e=entOf(n,s.k);return e&&e.descricao});const ok=com.filter(s=>entOf(n,s.k).status==='Entregue').length;
+ const late=S.actions.filter(isLate).length,and=S.actions.filter(a=>effStatus(a)==='Em andamento').length,done=S.actions.filter(a=>a.status==='Concluído').length;
+ return `<div class="grid g4" style="margin-bottom:16px">
+  <div class="card tile sage"><div class="num">${ok}/${com.length}</div><div class="lbl">entregas de hoje confirmadas</div></div>
+  <div class="card tile"><div class="num">${done}/${S.actions.length}</div><div class="lbl">ações concluídas</div></div>
+  <div class="card tile"><div class="num">${and}</div><div class="lbl">ações em andamento</div></div>
+  <div class="card tile ${late?'':'dark'}"><div class="num" style="${late?'color:var(--red)':''}">${late}</div><div class="lbl">ações atrasadas</div></div></div>
+ ${com.length?'':`<div class="banner" style="background:var(--sage2);border-color:#c6d8bf;color:#3a5a40">Ainda não há entregas combinadas para esta quinta. No fim da aula, use a etapa <b>Fechamento</b> para combinar as entregas da próxima.</div>`}
+ <div class="grid g3 gent">${L.map(s=>entCard(s,n,{mark:true})).join('')}</div>`}
+function qDuplas(n){return `<div class="grid g3 gent">${ACT().map(s=>entCard(s,n,{acao:true})).join('')}</div>
+ <p style="font-size:13px;color:var(--muted);margin-top:14px">Combinado: cada função mantém só uma ação "Em andamento" por vez.</p>`}
+function qRodada(n){
+ const L=ACT();S.rod=Math.min(Math.max(0,S.rod),L.length-1);const s=L[S.rod];const e=entOf(n,s.k);const acts=S.actions.filter(a=>a.setor===s.k);
+ const raw=S.kpis[s.k],has=raw!==undefined&&raw!==''&&raw!==null&&!isNaN(Number(raw));
+ const ata=ataOf(n)||{};
+ return `<div class="row rodnav" style="margin-bottom:12px"><button class="btn alt" data-act="rod" data-v="-1">◀ Anterior</button><div class="row rodchips" style="gap:6px;flex:1;justify-content:center">${L.map((x,i)=>`<button class="chip ${i===S.rod?'on':''}" data-act="rodgo" data-v="${i}" title="${esc(x.n)}">${x.e}</button>`).join('')}</div><button class="btn car" data-act="rod" data-v="1">Próximo ▶</button></div>
+ <div class="row" style="margin-bottom:12px;gap:8px"><div id="rt" class="pill s-nao" style="font-size:20px;padding:8px 16px;font-family:Fraunces,serif">⏱ ${fmt(RT.left)}</div><button class="btn alt sm" data-act="rtPlay">${RT.run?'❚❚ Pausar':'▶ 1 minuto'}</button><span style="font-size:13px;color:var(--muted)">Reinicia sozinho ao trocar de setor</span><span class="sp"></span><button class="btn alt sm" data-act="iaCopy" data-k="${s.k}">🤖 Contexto para IA</button></div>
+ <div class="rod"><div class="card"><div class="row" style="margin-bottom:10px"><div class="emo" style="width:52px;height:52px;font-size:26px">${s.e}</div><div style="flex:1"><div class="eyebrow">Setor ${S.rod+1} de ${L.length}</div><h2 style="font-size:28px">${esc(s.n)}</h2>${nomes(s.k)?`<div style="font-weight:800;color:var(--dcar)">👤 ${nomes(s.k)}</div>`:''}</div></div>
+ <div style="font-size:13px;margin-top:8px;background:#fff4dc;border-radius:10px;padding:8px 10px;color:#6b4d12"><b>Situação atual:</b> ${esc(s.diag)}</div><div class="eyebrow" style="margin-top:12px">Entrega de hoje</div><div class="ent"><div class="d ${e&&e.descricao?'':'none'}" style="margin:6px 0">${e&&e.descricao?esc(e.descricao):'Nenhuma entrega combinada'}</div>
+ ${W()&&e&&e.descricao?`<div class="row"><button class="btn ${e.status==='Entregue'?'ok':'alt'} sm" data-act="entMark" data-k="${s.k}" data-v="Entregue">✅ Entregue</button><button class="btn ${e.status==='Não entregue'?'danger':'alt'} sm" data-act="entMark" data-k="${s.k}" data-v="Não entregue">❌ Não entregue</button></div>`:''}</div>
+ <div class="eyebrow" style="margin-top:16px">Ações do setor <span style="text-transform:none;letter-spacing:0;font-weight:700;color:var(--muted)">(toque no status para mudar)</span></div>
+ <div class="list" style="margin-top:8px">${acts.length?acts.map(a=>actLine(a,true)).join(''):'<div class="empty">Nenhuma ação cadastrada.</div>'}</div></div>
+ <div class="card kpi"><div class="eyebrow">Indicador</div><h3 style="margin:0">${esc(s.ind)}</h3><div class="v" style="font-size:40px">${has?esc(String(raw).replace('.',','))+s.un:'—'}</div><div class="s">Meta: ${metaTxt(s)}</div>
+ ${W()?`<form class="row" data-form="kpi1" data-k="${s.k}" style="margin-top:6px"><input class="in" type="number" step="0.1" name="v" placeholder="Valor desta quinta" style="flex:1"><button class="btn car sm">Salvar</button></form>`:''}
+ ${spark(s)}
+ <div class="eyebrow" style="margin-top:14px">Decisões da quinta</div>
+ ${W()?`<textarea class="in" data-keep data-ata="decisoes" placeholder="Anote o que foi decidido…" style="min-height:120px">${esc(ata.decisoes)}</textarea><div class="row"><span class="sp"></span><button class="btn alt sm" data-act="saveDec">Salvar decisões</button></div>`:`<p>${esc(ata.decisoes)||'—'}</p>`}</div></div>`}
+function qFechamento(n){
+ const L=ACT(),nx=n+1,ata=ataOf(n)||{};
+ return `<div class="card" style="margin-bottom:16px"><h3>Entregas combinadas para a ${esc(qLabel(nx))}</h3><p style="margin:-6px 0 12px;color:var(--muted)">Uma entrega pequena por dupla, que fique pronta durante a próxima aula.</p>
+ <form data-form="fech"><div class="grid g2">${L.map(s=>{const e=entOf(nx,s.k);return `<label class="f">${s.e} ${esc(s.n)}<input class="in" data-keep name="e_${s.k}" value="${esc(e&&e.descricao)}" placeholder="O que a dupla vai entregar" ${W()?'':'disabled'}></label>`}).join('')}</div>
+ <div class="grid g2" style="margin-top:14px"><label class="f">Decisões da quinta<textarea class="in" data-keep name="decisoes" ${W()?'':'disabled'}>${esc(ata.decisoes)}</textarea></label><label class="f">Quem faltou <small>toque nos nomes</small><input type="hidden" name="faltas" id="faltasIn" value="${esc(ata.faltas)}"><div class="row" style="gap:6px">${[...S.alunos].sort((a,b)=>String(a.nome).localeCompare(String(b.nome),'pt-BR')).map(a=>{const on=String(ata.faltas||'').split(', ').includes(a.nome);return `<button type="button" class="chip ${on?'on':''}" data-act="falta" data-v="${esc(a.nome)}" ${W()?'':'disabled'}>${on?'❌ ':''}${esc(a.nome)}</button>`}).join('')||'<span style="color:var(--muted)">Cadastre a turma na área Equipe.</span>'}</div></label></div>
+ ${W()?`<div class="row" style="margin-top:14px"><span class="sp"></span><button class="btn car">💾 Salvar fechamento da quinta</button></div>`:''}</form></div>`}
+async function saveEnt(n,k,patch){const id=`q${n}-${k}`;const old=entOf(n,k)||{};const o=Object.assign({quinta:n,setor:k,descricao:'',status:'Combinada'},old,patch,{atualizado:Date.now()});delete o.id;return wr(()=>db.doc('entregas/'+id).set(o))}
+async function saveAta(n,patch){const old=ataOf(n)||{};const o=Object.assign({quinta:n,data:qDate(n),decisoes:'',faltas:''},old,patch,{atualizado:Date.now()});delete o.id;return wr(()=>db.doc('atas/q'+n).set(o))}
+
+/* ===== 1 minuto por setor (rodada) ===== */
+const RT={left:60,run:false,h:null,auto:false};
+function rtShow(){const e=$('#rt');if(!e)return;e.textContent='⏱ '+fmt(RT.left);e.className='pill '+(RT.left<=0?'s-atr':RT.run?'s-and':'s-nao');const b=document.querySelector('[data-act=rtPlay]');if(b)b.textContent=RT.run?'❚❚ Pausar':'▶ 1 minuto'}
+function rtStop(){clearInterval(RT.h);RT.h=null;RT.run=false}
+function rtStart(){rtStop();if(RT.left<=0)RT.left=60;RT.run=true;RT.auto=true;RT.h=setInterval(()=>{RT.left--;if(RT.left<=0){RT.left=0;rtStop();toast('⏰ 1 minuto do setor acabou')}rtShow()},1000);rtShow()}
+function rtNext(){const was=RT.run||RT.auto;rtStop();RT.left=60;if(was)setTimeout(rtStart,0)}
+/* ===== cronômetro discreto ===== */
+const T={i:0,left:null,run:false,open:false,h:null,ended:false};
+function curB(){const B=BLOCOS();T.i=Math.min(T.i,B.length-1);return B[T.i]}
+function fmt(sec){const s=Math.max(0,Math.round(sec));return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')}
+function tLeft(){if(T.left==null)T.left=curB().min*60;return T.left}
+function renderTimer(){const B=BLOCOS(),b=curB(),left=tLeft(),tot=b.min*60,p=tot?Math.min(100,(1-left/tot)*100):0;
+ const sum=B.reduce((s,x)=>s+x.min,0);
+ $('#timer').innerHTML=`<div class="tpan ${T.open?'on':''}"><div class="row" style="margin-bottom:6px"><b style="font-family:Fraunces,serif;font-size:16px">Etapas da aula</b><span class="sp"></span><button class="ic" data-act="tclose" aria-label="Fechar">✕</button></div>
+ ${B.map((x,i)=>`<div class="st ${i===T.i?'cur':''}" data-act="tgo" data-v="${i}"><span>${i+1}.</span><span class="n">${esc(x.n)}</span>${W()?`<button class="ic" data-act="tmin" data-v="${i}" data-d="-1" aria-label="Menos 1 minuto">−</button>`:''}<span class="m">${x.min} min</span>${W()?`<button class="ic" data-act="tmin" data-v="${i}" data-d="1" aria-label="Mais 1 minuto">+</button>`:''}</div>`).join('')}
+ <div class="tot"><span>Total: ${sum} min</span><span>${W()?'Use − e + para ajustar':''}</span></div>
+ <div class="row" style="margin-top:10px;gap:6px"><button class="btn alt sm" data-act="tadd" data-v="-60">−1 min</button><button class="btn alt sm" data-act="tadd" data-v="60">+1 min agora</button><span class="sp"></span><button class="btn alt sm" data-act="treset">Reiniciar</button></div>
+ <div class="row" style="margin-top:8px"><label style="font-size:12px;display:flex;gap:6px;align-items:center;color:#d9c9b4"><input type="checkbox" data-act="thide"> Esconder cronômetro</label></div></div>
+ <div class="tmini ${T.ended?'end':''}" style="position:relative"><span class="lab" data-act="topen" title="Abrir etapas">${T.i+1}/${B.length} • ${esc(b.n)}</span><span class="clk" data-act="topen" id="tclk">${fmt(left)}</span><button data-act="tplay" aria-label="${T.run?'Pausar':'Iniciar'}">${T.run?'❚❚':'▶'}</button><button data-act="tnext" aria-label="Próxima etapa">⏭</button><div class="pg"><i id="tpg" style="width:${p}%"></i></div></div>`}
+function tTick(){if(!T.run)return;T.left=tLeft()-1;if(T.left<=0){T.left=0;T.run=false;T.ended=true;clearInterval(T.h);T.h=null;renderTimer();toast(`⏰ Tempo da etapa "${curB().n}" acabou`);return}
+ const c=$('#tclk');if(c)c.textContent=fmt(T.left);const g=$('#tpg');if(g)g.style.width=Math.min(100,(1-T.left/(curB().min*60))*100)+'%'}
+function tPlay(){T.ended=false;if(T.run){T.run=false;clearInterval(T.h);T.h=null}else{if(tLeft()<=0)T.left=curB().min*60;T.run=true;T.h=setInterval(tTick,1000)}renderTimer();if(route()==='quinta')render()}
+function tGo(i){clearInterval(T.h);T.h=null;T.run=false;T.ended=false;T.i=i;T.left=null;S.tab=BLOCOS()[i].k;if(route()==='quinta')render();else renderTimer()}
+
+/* ===== PAINEL ===== */
+function metaTxt(s){return `${s.op==='>='?'':'até '}${String(s.meta).replace('.',',')}${s.un}${s.op==='>='?' ou mais':''}`}
+function spark(s){const H=S.kpihist.filter(h=>h[s.k]!==undefined&&h[s.k]!==null&&!isNaN(Number(h[s.k]))).sort((a,b)=>a.quinta-b.quinta);if(H.length<2)return H.length===1?`<div class="s">Histórico: ${H.map(h=>`${h.quinta===0?'Início':'Q'+h.quinta}: ${String(h[s.k]).replace('.',',')}${s.un}`).join(' • ')}</div>`:'';
+ const vals=H.map(h=>Number(h[s.k])),mx=Math.max(...vals,s.meta),mn=Math.min(...vals,s.meta,0),w=200,h=40,x=i=>i/(vals.length-1)*w,y=v=>h-(v-mn)/((mx-mn)||1)*h;
+ return `<svg class="spark" viewBox="-4 -4 ${w+8} ${h+8}" width="100%" height="48" aria-label="Evolução do indicador"><line x1="0" x2="${w}" y1="${y(s.meta)}" y2="${y(s.meta)}" stroke="#4f6e54" stroke-dasharray="4 4" stroke-width="1.5"/><polyline points="${vals.map((v,i)=>x(i)+','+y(v)).join(' ')}" fill="none" stroke="#c8793a" stroke-width="3" stroke-linejoin="round"/>${vals.map((v,i)=>`<circle cx="${x(i)}" cy="${y(v)}" r="3.5" fill="#9a4f1e"/>`).join('')}</svg><div class="s">Evolução por quinta (tracejado = meta)</div>`}
+function vPainel(){
+ const L=ACT(),A=S.actions.filter(a=>L.some(s=>s.k===a.setor)),tot=A.length,ok=A.filter(a=>a.status==='Concluído').length,late=A.filter(isLate).length,and=A.filter(a=>effStatus(a)==='Em andamento').length;
+ const pend=S.tasks.filter(t=>t.status!=='Feito').sort((a,b)=>(a.prazo||'9999').localeCompare(b.prazo||'9999'));
+ const pct=tot?Math.round(ok/tot*100):0;const counts={};STATUS.forEach(s=>counts[s]=A.filter(a=>effStatus(a)===s).length);
+ const C=2*Math.PI*54;let off=0;const segs=STATUS.map(s=>{const v=tot?counts[s]/tot*C:0;const el=`<circle r="54" cx="70" cy="70" fill="none" stroke="${SCOL[s]}" stroke-width="22" stroke-dasharray="${v} ${C-v}" stroke-dashoffset="${-off}" transform="rotate(-90 70 70)"/>`;off+=v;return el}).join('');
+ const bySet=L.map(s=>{const X=A.filter(a=>a.setor===s.k);const n=X.length;const parts=STATUS.map(st=>{const c=X.filter(a=>effStatus(a)===st).length;return c?`<i style="width:${c/n*100}%;background:${SCOL[st]}" title="${st}: ${c}"></i>`:''}).join('');const okc=X.filter(a=>a.status==='Concluído').length;
+  return `<div class="srow" style="display:grid;grid-template-columns:200px 1fr 70px;gap:12px;align-items:center;margin-bottom:10px"><div style="font-weight:800;font-size:13px">${s.e} ${esc(s.n)}</div><div class="stack">${n?parts:''}</div><div style="font-size:12px;color:var(--muted);font-weight:800;text-align:right">${okc}/${n}</div></div>`}).join('');
+ const kp=L.map(s=>{const raw=S.kpis[s.k];const has=raw!==undefined&&raw!==''&&raw!==null&&!isNaN(Number(raw));const v=Number(raw);let prog=0,good=false;
+  if(has){if(s.op==='>='){prog=Math.min(100,v/s.meta*100);good=v>=s.meta}else{prog=v<=s.meta?100:Math.max(0,100-(v-s.meta)/s.meta*100);good=v<=s.meta}}
+  const col=!has?'#d8c9b4':good?'var(--sage)':prog>=70?'var(--car)':'var(--red)';
+  return `<div class="card kpi"><div class="h"><span>${s.e} ${esc(s.n)}</span>${has?`<span class="pill ${good?'s-ok':prog>=70?'s-nao':'s-atr'}">${good?'Na meta':'Abaixo'}</span>`:''}</div><div class="s">${esc(s.ind)}</div><div class="v">${has?esc(String(v).replace('.',','))+s.un:'—'}</div><div class="bar"><i style="width:${prog}%;background:${col}"></i></div><div class="s">Meta: ${metaTxt(s)}</div>${spark(s)}</div>`}).join('');
+ const rec=[...A].sort((a,b)=>(b.atualizado||0)-(a.atualizado||0)).slice(0,6);
+ const n=Q(),com=L.filter(s=>{const e=entOf(n,s.k);return e&&e.descricao}).length;
+ return `<div class="top"><div><div class="eyebrow">Projeto Gestores do Futuro</div><h1>Painel da Pet Coffee 🐾</h1><p>Como a nossa empresa está indo.</p></div>
+ <div class="row">${W()?`<button class="btn car hide-m" data-act="newAction">+ Nova ação</button><button class="btn alt" data-act="kpiForm">Atualizar indicadores</button>`:''}</div></div>
+ <a href="#quinta" class="card" style="display:flex;gap:14px;align-items:center;text-decoration:none;color:inherit;margin-bottom:16px;background:var(--dark);color:var(--cream);border-color:var(--dark)"><span style="font-size:30px">🗓️</span><div style="flex:1"><b style="font-family:Fraunces,serif;font-size:20px">${esc(qLabel(n))}</b><div style="color:#d9c9b4;font-size:13px">${com} de ${L.length} setores com entrega combinada • aula de ${BLOCOS().reduce((s,b)=>s+b.min,0)} min</div></div><span class="btn car sm">Abrir →</span></a>
+ <div class="grid g4" style="margin-bottom:16px">
+  <div class="card tile"><div class="num">${tot}</div><div class="lbl">ações nos planos</div></div>
+  <div class="card tile sage"><div class="num">${pct}%</div><div class="lbl">ações concluídas (${ok})</div></div>
+  <div class="card tile"><div class="num" style="color:${late?'var(--red)':'var(--dcar)'}">${late}</div><div class="lbl">atrasadas • ${and} em andamento</div></div>
+  <div class="card tile dark"><div class="num">${pend.length}</div><div class="lbl">tarefas ESPRO pendentes</div></div></div>
+ <div class="grid" style="grid-template-columns:2fr 1fr;margin-bottom:16px" id="g21">
+  <div class="card"><h3>Andamento por setor</h3>${bySet}<div class="legend" style="margin-top:10px">${STATUS.map(s=>`<span style="--c:${SCOL[s]}">${s}</span>`).join('')}</div></div>
+  <div class="card"><h3>Status geral das ações</h3><div class="donut"><svg width="140" height="140" viewBox="0 0 140 140" aria-label="Status das ações"><circle r="54" cx="70" cy="70" fill="none" stroke="#eee5d8" stroke-width="22"/>${segs}<text x="70" y="68" text-anchor="middle" font-family="Fraunces,serif" font-size="26" font-weight="600" fill="#3b2a20">${tot}</text><text x="70" y="88" text-anchor="middle" font-size="11" fill="#6f5a49">ações</text></svg>
+  <div class="list" style="gap:6px">${STATUS.map(s=>`<div style="font-size:13px;font-weight:700"><span class="pill ${SCLS[s]}">${counts[s]}</span> ${s}</div>`).join('')}</div></div></div></div>
+ <div class="row" style="margin:6px 0 12px"><h2 style="font-size:22px">Indicadores dos setores</h2><span class="sp"></span><span style="font-size:12px;color:var(--muted)">Atualizados toda quinta-feira</span></div>
+ <div class="grid g4" style="margin-bottom:16px">${kp}</div>
+ <div class="grid g2"><div class="card"><h3>Próximas tarefas da ESPRO</h3>${pend.length?`<div class="list">${pend.slice(0,5).map(taskLine).join('')}</div>`:`<div class="empty">Nenhuma tarefa pendente 🎉</div>`}<div style="margin-top:10px"><a href="#tarefas">Ver todas as tarefas →</a></div></div>
+ <div class="card"><h3>Atualizações recentes nos planos</h3>${rec.length?`<div class="list">${rec.map(a=>actLine(a,true)).join('')}</div>`:`<div class="empty">Ainda não há ações cadastradas.</div>`}</div></div>`}
+function taskLine(t){const s=SK[t.setor];const late=t.prazo&&t.prazo<today()&&t.status!=='Feito';return `<div class="item" data-act="editTask" data-id="${esc(t.id)}"><div class="emo">${s?s.e:'📌'}</div><div style="flex:1"><div class="t">${esc(t.titulo)}</div><div class="m">${s?esc(s.n):'Toda a turma'} • ${t.prazo?`<span class="${late?'late':''}">prazo ${esc(qName(t.prazo))}</span>`:'sem prazo'}</div></div><span class="pill ${t.status==='Feito'?'s-ok':t.status==='Fazendo'?'s-and':'s-nao'}">${esc(t.status||'A fazer')}</span></div>`}
+function stPill(a,tap){const st=effStatus(a);return tap&&W()?`<button class="pill ${SCLS[st]}" data-act="cyc" data-id="${esc(a.id)}" title="Toque para mudar">${st} ↻</button>`:`<span class="pill ${SCLS[st]}">${st}</span>`}
+function actLine(a,tap){const s=SK[a.setor];return `<div class="item" data-act="editAction" data-id="${esc(a.id)}"><div class="emo">${s?s.e:'🎯'}</div><div style="flex:1;min-width:0"><div class="t">${esc(a.oque)}</div><div class="m">${s?esc(s.n):''}${a.funcao?' • '+esc(a.funcao)+(pessoa(a.setor,a.funcao)?' ('+esc(pessoa(a.setor,a.funcao))+')':''):''}${a.prazo?' • prazo '+esc(qName(a.prazo)):''}</div></div>${stPill(a,tap)}</div>`}
+function qName(d){const n=qOf(d);return qDate(n)===d?`Quinta ${n} (${fdm(d)})`:fdate(d)}
+
+/* ===== PLANOS ===== */
+function vPlanos(){
+ const f=S.f;let L=S.actions.filter(a=>(f.setor==='todos'||a.setor===f.setor)&&(f.status==='todos'||effStatus(a)===f.status));
+ if(f.q){const q=f.q.toLowerCase();L=L.filter(a=>[a.oque,a.porque,a.quem,a.como,a.funcao,a.indicador].join(' ').toLowerCase().includes(q))}
+ L.sort((a,b)=>SETORES.findIndex(s=>s.k===a.setor)-SETORES.findIndex(s=>s.k===b.setor)||(a.prazo||'9').localeCompare(b.prazo||'9'));
+ const cost=L.reduce((s,a)=>s+(Number(a.custo)||0),0);const sec=f.setor!=='todos'?SK[f.setor]:null;
+ const wip=sec?S.actions.filter(a=>a.setor===sec.k&&effStatus(a)==='Em andamento').length:0;
+ return `<div class="top"><div><div class="eyebrow">5W2H</div><h1>Planos de ação</h1><p>Toque no status de uma ação para mudar na hora. Toda ação responde: qual meta da Pet Coffee ela ajuda?</p></div>
+ <div class="row">${dl?`<button class="btn alt" data-act="csv">⬇ Planilha (CSV)</button>`:''}${W()?`<button class="btn car hide-m" data-act="newAction">+ Nova ação</button>`:''}</div></div>
+ <div class="row chips" style="margin-bottom:10px"><button class="chip ${f.setor==='todos'?'on':''}" data-act="fset" data-v="todos">Todos</button>${SETORES.map(s=>`<button class="chip ${f.setor===s.k?'on':''}" data-act="fset" data-v="${s.k}">${s.e} ${esc(s.n)}</button>`).join('')}</div>
+ <div class="row filters" style="margin-bottom:16px"><select class="in" style="width:auto" data-in="fstatus"><option value="todos">Todos os status</option>${STATUS.map(s=>`<option ${f.status===s?'selected':''}>${s}</option>`).join('')}</select><input class="in" style="max-width:320px" placeholder="Buscar ação, responsável…" value="${esc(f.q)}" data-in="fq"><span class="sp"></span><b style="font-size:13px">${L.length} ações • custo ${brl(cost)}</b></div>
+ ${sec?`<div class="card" style="margin-bottom:16px;display:flex;gap:16px;align-items:center;flex-wrap:wrap"><div class="emo" style="width:52px;height:52px;font-size:26px">${sec.e}</div><div style="flex:1;min-width:220px"><h3 style="margin:0">${esc(sec.n)}</h3><div style="color:var(--muted)">${esc(sec.cuida)}</div><div style="font-size:13px;margin-top:8px;background:#fff4dc;border-radius:10px;padding:8px 10px;color:#6b4d12"><b>Situação atual:</b> ${esc(sec.diag)}</div><div style="font-size:13px;margin-top:4px"><b>Funções:</b> ${sec.f.map(esc).join(' • ')}</div></div><div><div class="eyebrow">Indicador</div><b>${esc(sec.ind)}</b><div style="font-size:13px;color:var(--muted)">Meta: ${metaTxt(sec)}</div><div style="font-size:13px;margin-top:4px;font-weight:800;color:${wip>2?'var(--red)':'var(--sage)'}">${wip} em andamento (limite: 2, uma por função)</div></div></div>`:''}
+ ${L.length?`<div class="mcards">${L.map(a=>{const s=SK[a.setor];return `<div class="pc" data-act="editAction" data-id="${esc(a.id)}"><div class="row" style="gap:8px;align-items:flex-start"><div class="t" style="flex:1">${esc(a.oque)}</div>${stPill(a,true)}</div><div class="w">🎯 ${esc(a.porque)}</div><div class="f"><span>${s?s.e+' '+esc(s.n):''}</span>${pessoa(a.setor,a.funcao)||a.quem?`<span>👤 ${esc(pessoa(a.setor,a.funcao)||a.quem)}</span>`:''}<span>${a.prazo?`<span class="${isLate(a)?'late':''}">📅 ${esc(qName(a.prazo))}</span>`:'🔁 '+(esc(a.quando)||'sem prazo')}</span>${a.custo?`<span>💵 ${brl(a.custo)}</span>`:''}</div></div>`}).join('')}</div>
+ <div class="card ptable" style="padding:6px 8px;overflow-x:auto"><table><tr><th>Ação (O quê?)</th><th>Setor / função</th><th>Quem?</th><th>Prazo</th><th>Custo</th><th>Status</th></tr>${L.map(a=>{const s=SK[a.setor];return `<tr class="click" data-act="editAction" data-id="${esc(a.id)}"><td><b>${esc(a.oque)}</b><div style="font-size:12px;color:var(--muted)">${esc(a.porque)}</div></td><td>${s?s.e+' '+esc(s.n):''}<div style="font-size:12px;color:var(--muted)">${esc(a.funcao)}</div></td><td>${esc(a.quem)}${pessoa(a.setor,a.funcao)?`<div style="font-size:12px;color:var(--muted)">${esc(pessoa(a.setor,a.funcao))}</div>`:''}</td><td>${a.prazo?`<span class="${isLate(a)?'late':''}">${esc(qName(a.prazo))}</span>`:`<span style="font-size:12px;color:var(--muted)">${esc(a.quando)||'—'}</span>`}</td><td>${a.custo?brl(a.custo):'—'}</td><td>${stPill(a,true)}</td></tr>`}).join('')}</table></div>`:`<div class="empty">Nenhuma ação encontrada com esses filtros.</div>`}`}
+function qOptions(sel){const n0=Math.max(1,curQ()-2);let o=`<option value="">Sem prazo</option>`;const vals=[];for(let i=n0;i<n0+20;i++){const d=qDate(i);vals.push(d);o+=`<option value="${d}" ${d===sel?'selected':''}>Quinta ${i} – ${fdate(d)}</option>`}if(sel&&!vals.includes(sel))o+=`<option value="${esc(sel)}" selected>${fdate(sel)}</option>`;return o}
+function actionForm(a){
+ a=a||{setor:S.f.setor!=='todos'?S.f.setor:'diretoria',status:'Não iniciado'};const s=SK[a.setor]||SETORES[0];const ro=!W();
+ const fld=(k,l,h,ta)=>`<label class="f ${ta?'full':''}">${l}${h?` <small>${h}</small>`:''}${ta?`<textarea class="in" name="${k}" ${ro?'disabled':''}>${esc(a[k])}</textarea>`:`<input class="in" name="${k}" value="${esc(a[k])}" ${ro?'disabled':''}>`}</label>`;
+ return `<h2>${a.id?'Plano de ação':'Nova ação'} 🎯</h2><form id="fA" data-id="${esc(a.id||'')}"><div class="fgrid">
+ <label class="f">Setor<select class="in" name="setor" ${ro?'disabled':''} data-in="formSetor">${SETORES.map(x=>`<option value="${x.k}" ${x.k===a.setor?'selected':''}>${x.e} ${esc(x.n)}</option>`).join('')}</select></label>
+ <label class="f">Função<select class="in" name="funcao" id="fFun" ${ro?'disabled':''}>${s.f.map(x=>`<option ${x===a.funcao?'selected':''}>${esc(x)}</option>`).join('')}</select></label>
+ ${fld('oque','O quê?','a ação',1)}${fld('porque','Por quê?','qual meta da empresa ela ajuda',1)}${fld('onde','Onde?')}${fld('quem','Quem?','responsável')}${fld('quando','Quando?','frequência ou período')}
+ <label class="f">Prazo <small>escolha a quinta</small><select class="in" name="prazo" ${ro?'disabled':''}>${qOptions(a.prazo)}</select></label>
+ ${fld('como','Como?','passo a passo',1)}
+ <label class="f">Quanto? <small>custo em R$</small><input class="in" type="number" min="0" step="0.01" name="custo" value="${esc(a.custo)}" ${ro?'disabled':''}></label>
+ ${fld('indicador','Indicador','como medir')}
+ <label class="f">Status<select class="in" name="status" ${ro?'disabled':''}>${STATUS.map(x=>`<option ${x===a.status?'selected':''}>${x}</option>`).join('')}</select></label>
+ ${fld('obs','Observações','',1)}</div>
+ <div class="row acts" style="margin-top:16px">${a.id&&W()?`<button type="button" class="btn danger" data-act="delAsk" data-coll="actions" data-id="${esc(a.id)}">Excluir</button>`:''}<span class="sp"></span><button type="button" class="btn alt" data-act="close">Fechar</button>${W()?`<button class="btn car" type="submit">Salvar</button>`:''}</div></form>`}
+
+/* ===== TAREFAS ===== */
+function vTarefas(){
+ const f=S.f.tset;const L=S.tasks.filter(t=>f==='todos'||t.setor===f||(f==='turma'&&(!t.setor||t.setor==='todos')));
+ const col=st=>{const C=L.filter(t=>(t.status||'A fazer')===st).sort((a,b)=>(a.prazo||'9').localeCompare(b.prazo||'9'));return `<div class="col"><h3><span>${st==='A fazer'?'📝':st==='Fazendo'?'⏳':'✅'} ${st}</span><span class="pill s-nao">${C.length}</span></h3>${C.map(t=>{const s=SK[t.setor];const late=t.prazo&&t.prazo<today()&&st!=='Feito';const i=TST.indexOf(st);return `<div class="tcard"><div class="t" data-act="editTask" data-id="${esc(t.id)}" style="cursor:pointer">${esc(t.titulo)}</div><div class="m">${s?s.e+' '+esc(s.n):'👥 Toda a turma'}${t.responsavel?' • '+esc(t.responsavel):''}<br>${t.prazo?`<span class="${late?'late':''}">📅 ${esc(qName(t.prazo))}${late?' (atrasada)':''}</span>`:'Sem prazo'}</div>${W()?`<div class="row">${i>0?`<button class="btn alt sm" data-act="mvTask" data-id="${esc(t.id)}" data-v="${TST[i-1]}">←</button>`:''}<span class="sp"></span>${i<2?`<button class="btn sm" data-act="mvTask" data-id="${esc(t.id)}" data-v="${TST[i+1]}">${TST[i+1]} →</button>`:''}</div>`:''}</div>`}).join('')||`<div style="color:var(--muted);font-size:13px;padding:8px">Nada aqui.</div>`}</div>`};
+ return `<div class="top"><div><div class="eyebrow">Curso Jovem Aprendiz</div><h1>Tarefas da ESPRO</h1><p>Atividades, entregas e prazos do projeto, sempre com prazo em uma quinta.</p></div>${W()?`<button class="btn car hide-m" data-act="newTask">+ Nova tarefa</button>`:''}</div>
+ <div class="row chips" style="margin-bottom:12px"><button class="chip ${f==='todos'?'on':''}" data-act="ftset" data-v="todos">Todas</button><button class="chip ${f==='turma'?'on':''}" data-act="ftset" data-v="turma">👥 Toda a turma</button>${SETORES.map(s=>`<button class="chip ${f===s.k?'on':''}" data-act="ftset" data-v="${s.k}">${s.e} ${esc(s.n)}</button>`).join('')}</div>
+ <p class="swipe" style="display:none;font-size:12px;color:var(--muted);margin:0 0 8px">Deslize para o lado para ver as outras colunas →</p><div class="kanban">${TST.map(col).join('')}</div>`}
+function taskForm(t){t=t||{status:'A fazer',setor:'todos'};const ro=!W();
+ return `<h2>${t.id?'Tarefa':'Nova tarefa'} ✅</h2><form id="fT" data-id="${esc(t.id||'')}"><div class="fgrid">
+ <label class="f full">Título<input class="in" name="titulo" required value="${esc(t.titulo)}" ${ro?'disabled':''}></label>
+ <label class="f full">Descrição<textarea class="in" name="descricao" ${ro?'disabled':''}>${esc(t.descricao)}</textarea></label>
+ <label class="f">Para quem<select class="in" name="setor" ${ro?'disabled':''}><option value="todos">👥 Toda a turma</option>${SETORES.map(s=>`<option value="${s.k}" ${s.k===t.setor?'selected':''}>${s.e} ${esc(s.n)}</option>`).join('')}</select></label>
+ <label class="f">Responsável<input class="in" name="responsavel" value="${esc(t.responsavel)}" ${ro?'disabled':''}></label>
+ <label class="f">Prazo<select class="in" name="prazo" ${ro?'disabled':''}>${qOptions(t.prazo)}</select></label>
+ <label class="f">Status<select class="in" name="status" ${ro?'disabled':''}>${TST.map(x=>`<option ${x===t.status?'selected':''}>${x}</option>`).join('')}</select></label></div>
+ <div class="row acts" style="margin-top:16px">${t.id&&W()?`<button type="button" class="btn danger" data-act="delAsk" data-coll="tasks" data-id="${esc(t.id)}">Excluir</button>`:''}<span class="sp"></span><button type="button" class="btn alt" data-act="close">Fechar</button>${W()?`<button class="btn car" type="submit">Salvar</button>`:''}</div></form>`}
+
+/* ===== EQUIPE ===== */
+function membros(k){return S.alunos.filter(a=>a.setor===k).sort((a,b)=>(SK[k]?SK[k].f.indexOf(a.funcao):0)-(SK[k]?SK[k].f.indexOf(b.funcao):0))}
+function pessoa(k,fn){const a=S.alunos.find(x=>x.setor===k&&x.funcao===fn);return a?a.nome:''}
+function nomesTxt(k){return membros(k).map(a=>a.nome).join(' e ')}
+function ctxIA(k){const s=SK[k],c=cfg(),fat=c.clientes*c.ticket*c.dias,cs=Object.values(c.custos||{}).reduce((t,v)=>t+Number(v||0),0),luc=100-cs;const raw=S.kpis[k];const hoje=raw!==undefined&&raw!==null&&raw!==''?String(raw).replace('.',',')+s.un:'sem medição';const nm=nomesTxt(k);
+ return `🐾 *Pet Coffee – ${s.n}*${nm?' ('+nm+')':''}\nCole o texto abaixo no começo da conversa com a IA 👇\n\nVocê vai me ajudar no projeto Gestores do Futuro (Jovem Aprendiz ESPRO). Nossa empresa fictícia é a *Pet Coffee*, uma cafeteria com cães e gatos para adoção, aberta em março de 2026 no centro de Cascavel-PR, em parceria com a ONG Lar Feliz Pet.\nHoje: ${c.clientes} clientes por dia (meta: 120), gasto médio de ${brl(c.ticket)}, faturamento de cerca de ${brl(Math.round(fat))} por mês e lucro de ${luc.toFixed(1).replace('.',',')}% (meta: 10%). Desafios de dezembro: visita da vigilância sanitária e o evento Natal Pet.\n\nEu sou do setor *${s.n}* (${s.f.join(' e ')}).\nSituação do setor: ${s.diag}\nIndicador: ${s.ind}. Hoje: ${hoje}. Meta: ${metaTxt(s)}.\n\nTrabalhamos no projeto só às quintas, com ${(BLOCOS().find(b=>b.k==='duplas')||{min:25}).min} minutos em dupla. Proponha ações simples e baratas que caibam nesse tempo, no formato 5W2H (O quê, Por quê, Onde, Quando, Quem, Como, Quanto custa). Não invente outros números da empresa.`}
+async function iaCopy(k){const t=ctxIA(k);try{await navigator.clipboard.writeText(t);toast('Contexto copiado! Cole no WhatsApp 📋')}catch(e){openM(`<h2>🤖 Contexto para IA</h2><p style="color:var(--muted);margin-top:-6px">Segure o texto para copiar e mande para a dupla.</p><textarea class="in" readonly style="min-height:320px" onfocus="this.select()">${esc(t)}</textarea><div class="row acts" style="margin-top:12px"><span class="sp"></span><button class="btn alt" data-act="close">Fechar</button></div>`)}}
+function nomes(k){const m=membros(k);return m.length?m.map(a=>esc(a.nome)).join(' • '):''}
+function vEquipe(){
+ const AL=[...S.alunos].sort((a,b)=>String(a.nome).localeCompare(String(b.nome),'pt-BR'));const L=ACT();const on=G().tecAtivo;
+ const com=AL.filter(a=>a.setor&&SK[a.setor]).length;const sem=AL.filter(a=>!a.setor||!SK[a.setor]);const sor=S.sorteio;
+ const opts=(sel)=>`<option value="">— vaga —</option>`+AL.map(a=>`<option value="${esc(a.id)}" ${a.id===sel?'selected':''}>${esc(a.nome)}${a.setor&&SK[a.setor]&&a.id!==sel?' ('+esc(SK[a.setor].n)+')':''}</option>`).join('');
+ return `<div class="top"><div><div class="eyebrow">Organização</div><h1>Equipe e setores</h1><p>2 alunos por setor. Para trocar alguém de setor, é só escolher outro nome na função.</p></div>
+ <div class="row"><div class="card tile" style="padding:10px 18px"><div class="num" style="font-size:28px">${com}/${AL.length}</div><div class="lbl">alunos com setor</div></div>${W()?`<button class="btn car" data-act="sortear">🎲 Sortear duplas</button>`:''}</div></div>
+ ${sor&&sor.em?`<p style="margin:-8px 0 14px;font-size:13px;color:var(--muted);font-weight:700">Último sorteio: ${new Date(sor.em).toLocaleString('pt-BR',{dateStyle:'short',timeStyle:'short'})}</p>`:''}
+ <div class="card" style="margin-bottom:16px"><h3>Organograma</h3><div class="org"><div class="boss">👑 Diretoria<br><small style="color:#e0a46e">${nomes('diretoria')||'metas e alinhamento'}</small></div><div class="vl"></div><div class="kids">${SETORES.slice(1).map(s=>{const off=s.nova&&!on;return `<div class="kid" style="${off?'border:2px dashed var(--car);opacity:.75':''}"><span class="e">${s.e}</span>${esc(s.n)}<br><small style="color:var(--dcar);font-weight:700">${off?'aguardando novos alunos':(nomes(s.k)||'—')}</small></div>`}).join('')}</div></div></div>
+ <div class="grid g2">${SETORES.map(s=>{const off=s.nova&&!on;const M=membros(s.k);const extra=M.filter(a=>!s.f.includes(a.funcao));
+  return `<div class="card" style="${off?'border:2px dashed var(--car)':''}"><div class="row eqh" style="margin-bottom:8px"><div class="emo">${s.e}</div><div style="flex:1"><h3 style="margin:0">${esc(s.n)}${s.nova?` <span class="pill ${on?'s-ok':'s-and'}" style="font-family:Nunito">${on?'Setor ativo':'Vagas para novos alunos'}</span>`:''}</h3><div style="font-size:13px;color:var(--muted)">${esc(s.cuida)}</div><div style="font-size:13px;margin-top:8px;background:#fff4dc;border-radius:10px;padding:8px 10px;color:#6b4d12"><b>Situação atual:</b> ${esc(s.diag)}</div></div><a href="#planos" data-act="goSet" data-v="${s.k}" style="font-size:13px;font-weight:800">Planos →</a>${off?'':`<button class="btn alt sm" data-act="iaCopy" data-k="${s.k}" title="Copiar o contexto do setor para colar na IA">🤖 IA</button>`}</div>
+  ${s.f.map(fn=>{const m=M.find(a=>a.funcao===fn);return `<label class="f" style="margin-top:8px">${esc(fn)}${m&&m.fixo?' <small>📌 fixo</small>':''}${W()?`<select class="in" data-role="${esc(fn)}" data-setor="${s.k}" data-cur="${esc(m?m.id:'')}">${opts(m&&m.id)}</select>`:`<div class="in" style="background:var(--cream)">${m?esc(m.nome):'—'}</div>`}</label>`}).join('')}
+  ${extra.map(a=>`<div class="row" style="margin-top:8px;font-size:14px"><span class="pill s-and">Apoio</span><b style="flex:1">${esc(a.nome)}</b>${W()?`<button class="btn alt sm" data-act="alOut" data-id="${esc(a.id)}">Tirar do setor</button>`:''}</div>`).join('')}
+  ${W()?`<label class="f" style="margin-top:10px"><small>Adicionar mais alguém (apoio)</small><select class="in" data-addto="${s.k}"><option value="">+ escolher aluno…</option>${AL.filter(a=>a.setor!==s.k).map(a=>`<option value="${esc(a.id)}">${esc(a.nome)}${a.setor&&SK[a.setor]?' ('+esc(SK[a.setor].n)+')':''}</option>`).join('')}</select></label>`:''}
+  ${s.nova&&W()?`<div class="row" style="margin-top:12px"><span style="font-size:12px;color:var(--muted);flex:1">${on?'O setor entra no painel, nas entregas e nos indicadores.':'Enquanto estiver inativo, fica fora do painel e das contas.'}</span><button class="btn ${on?'alt':'car'} sm" data-act="tecToggle">${on?'Desativar setor':'Ativar setor'}</button></div>`:''}</div>`}).join('')}</div>
+ <div class="card" style="margin-top:16px"><div class="row" style="margin-bottom:10px"><h3 style="margin:0">Turma (${AL.length} alunos)</h3><span class="sp"></span>${sem.length?`<span class="pill s-atr">${sem.length} sem setor</span>`:'<span class="pill s-ok">todos com setor</span>'}</div>
+ <div class="grid g3" style="gap:8px">${AL.map(a=>`<div class="row" style="gap:6px;background:var(--cream);border-radius:12px;padding:8px 10px"><div style="flex:1;min-width:0">${W()?`<input class="in" data-keep data-alnome="${esc(a.id)}" value="${esc(a.nome)}" style="padding:6px 8px">`:`<b>${esc(a.nome)}</b>`}<div style="font-size:12px;color:var(--muted);margin-top:3px">${a.setor&&SK[a.setor]?SK[a.setor].e+' '+esc(SK[a.setor].n)+(a.funcao?' • '+esc(a.funcao):''):'Sem setor'}</div></div>${W()?`<button class="btn ${a.fixo?'car':'alt'} sm" data-act="alFix" data-id="${esc(a.id)}" title="${a.fixo?'Fixo: não entra no sorteio':'Entra no sorteio'}">📌</button><button class="btn danger sm" data-act="alDel" data-id="${esc(a.id)}" title="Remover da turma">✕</button>`:''}</div>`).join('')}</div>
+ ${W()?`<form class="row" data-form="alAdd" style="margin-top:12px"><input class="in" name="nome" placeholder="Nome de um novo aluno" style="flex:1;max-width:360px"><button class="btn sm">+ Adicionar à turma</button></form><p style="font-size:12px;color:var(--muted);margin-bottom:0">📌 = fixo (não entra no sorteio). Hoje: Diretoria com a Tamilys e o Arthur.</p>`:''}</div>`}
+
+/* ===== SORTEIO ===== */
+const SR={res:null,extra:'trio',anim:null};
+function sortPlan(){
+ const L=SETORES.filter(s=>!s.nova||G().tecAtivo||SR.extra==='tec');
+ const fix=S.alunos.filter(a=>a.fixo&&a.setor);const pool=S.alunos.filter(a=>!(a.fixo&&a.setor)).map(a=>a.id);
+ for(let i=pool.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[pool[i],pool[j]]=[pool[j],pool[i]]}
+ const res={};fix.forEach(a=>res[a.id]={setor:a.setor,funcao:a.funcao});
+ const slots=[];SETORES.filter(s=>!s.nova).forEach(s=>s.f.forEach(fn=>{if(!fix.some(a=>a.setor===s.k&&a.funcao===fn))slots.push([s.k,fn])}));
+ slots.sort(()=>Math.random()-.5);
+ while(pool.length&&slots.length){const [k,fn]=slots.shift();res[pool.shift()]={setor:k,funcao:fn}}
+ if(pool.length&&SR.extra==='tec'){SK.tecnologia.f.forEach(fn=>{if(pool.length)res[pool.shift()]={setor:'tecnologia',funcao:fn}})}
+ const alvo=SETORES.filter(s=>!s.nova&&s.k!=='diretoria').map(s=>s.k).sort(()=>Math.random()-.5);
+ while(pool.length){const k=alvo.shift()||'atendimento';res[pool.shift()]={setor:k,funcao:'Apoio'}}
+ return res}
+function sortView(res,spin){const byId=Object.fromEntries(S.alunos.map(a=>[a.id,a]));const fixN=S.alunos.filter(a=>a.fixo&&a.setor).length;const free=S.alunos.length-fixN;const vagas=SETORES.filter(s=>!s.nova).reduce((t,s)=>t+s.f.length,0)-fixN;
+ const L=SETORES.filter(s=>!s.nova||G().tecAtivo||SR.extra==='tec'||(res&&Object.values(res).some(r=>r.setor===s.k)));
+ const cell=(s)=>{const M=res?Object.entries(res).filter(([,r])=>r.setor===s.k).map(([id,r])=>({n:byId[id]?byId[id].nome:'?',f:r.funcao,fx:byId[id]&&byId[id].fixo})):[];
+  return `<div class="card" style="padding:12px 14px"><b>${s.e} ${esc(s.n)}</b>${M.length?M.map(m=>`<div style="font-size:${spin?15:16}px;margin-top:6px;${spin?'opacity:.55':''}"><b>${esc(m.n)}</b> <span style="font-size:12px;color:var(--muted)">${esc(m.f)}${m.fx?' 📌':''}</span></div>`).join(''):`<div style="font-size:22px;color:var(--muted);margin-top:6px">❔ ❔</div>`}</div>`};
+ return `<h2>🎲 Sorteio das duplas</h2><p style="color:var(--muted);margin-top:-6px">${free} alunos no sorteio para ${vagas} vagas • 📌 fixos ficam onde estão.</p>
+ ${free>vagas?`<div class="row" style="margin-bottom:12px;font-size:14px"><b>Aluno(s) a mais (${free-vagas}):</b><button class="chip ${SR.extra==='trio'?'on':''}" data-act="sortExtra" data-v="trio">Formar trio num setor sorteado</button><button class="chip ${SR.extra==='tec'?'on':''}" data-act="sortExtra" data-v="tec">💻 Abrir Tecnologia</button></div>`:''}
+ <div class="grid g3" style="gap:10px">${L.map(cell).join('')}</div>
+ <div class="row acts" style="margin-top:16px"><button type="button" class="btn alt" data-act="close">Fechar</button><span class="sp"></span><button class="btn alt" data-act="sortGo" ${spin?'disabled':''}>${res&&!spin?'🎲 Sortear de novo':'🎲 Sortear'}</button>${res&&!spin?`<button class="btn car" data-act="sortOk">✅ Confirmar e salvar</button>`:''}</div>`}
+function sortGo(){clearInterval(SR.anim);let t=0;SR.anim=setInterval(()=>{t++;const r=sortPlan();if(t>=22){clearInterval(SR.anim);SR.res=r;$('#sheet').innerHTML=sortView(r,false);return}$('#sheet').innerHTML=sortView(r,true)},90)}
+async function sortOk(){const res=SR.res;if(!res)return;let ok=true;for(const a of S.alunos){const r=res[a.id]||{setor:'',funcao:''};if(a.setor!==r.setor||a.funcao!==r.funcao){ok=(await wr(()=>db.doc('alunos/'+a.id).update({setor:r.setor,funcao:r.funcao,atualizado:Date.now()})))&&ok}}
+ if(SR.extra==='tec'&&Object.values(res).some(r=>r.setor==='tecnologia')&&!G().tecAtivo)await saveGeral({tecAtivo:true});
+ await wr(()=>db.doc('config/sorteio').set({em:Date.now(),extra:SR.extra}));closeM();if(ok)toast('Duplas salvas! 🎉')}
+async function assignRole(id,k,fn){/* coloca o aluno id na função fn do setor k; se a função estava ocupada, as duas pessoas trocam de lugar */
+ const cur=S.alunos.find(a=>a.setor===k&&a.funcao===fn&&a.id!==id);const mov=id?S.alunos.find(a=>a.id===id):null;
+ const from=mov&&mov.setor&&SK[mov.setor]?{setor:mov.setor,funcao:mov.funcao}:{setor:'',funcao:''};
+ if(cur)await wr(()=>db.doc('alunos/'+cur.id).update({setor:from.setor,funcao:from.funcao,atualizado:Date.now()}));
+ if(id)await wr(()=>db.doc('alunos/'+id).update({setor:k,funcao:fn,atualizado:Date.now()}));
+ toast(!id?'Vaga liberada':cur&&from.setor?`${cur.nome} e ${mov.nome} trocaram de lugar 🔄`:'Equipe atualizada ✨')}
+
+/* ===== EMPRESA ===== */
+function vEmpresa(){
+ const c=cfg();const fat=c.clientes*c.ticket*c.dias;const cs=Object.entries(c.custos||{});const sum=cs.reduce((s,[,v])=>s+Number(v||0),0);const lucro=100-sum;const max=Math.max(...cs.map(([,v])=>Number(v)),lucro,1);
+ return `<div class="top"><div><div class="eyebrow">Quem somos</div><h1>A empresa Pet Coffee ☕🐶🐱</h1><p>Cafeteria aberta desde março de 2026 que une café, lanches e adoção responsável: o cliente come bem na companhia de cães e gatos que esperam por um novo lar.</p></div></div>
+ <div class="grid g3" style="margin-bottom:16px">
+ <div class="card"><div class="eyebrow">Missão</div><p style="font-family:Fraunces,serif;font-size:18px;margin:8px 0 0">Oferecer café e lanches de qualidade em um ambiente acolhedor, aproximando pessoas e animais que esperam por adoção.</p></div>
+ <div class="card"><div class="eyebrow">Visão</div><p style="font-family:Fraunces,serif;font-size:18px;margin:8px 0 0">Ser referência em cafeteria com adoção responsável, lembrada pelo carinho com clientes e bichinhos.</p></div>
+ <div class="card tile dark"><div class="eyebrow" style="color:#e0a46e">Valores</div><p style="margin:8px 0 0;line-height:1.8;font-weight:700">✨ Qualidade<br>✨ Higiene e segurança<br>✨ Respeito aos animais<br>✨ Trabalho em equipe<br>✨ Melhoria contínua</p></div></div>
+<div class="grid g2" style="margin-bottom:16px"><div class="card"><h3>Nossa história 📖</h3><div class="list" style="gap:12px">${[['Mar/2026','Abertura da Pet Coffee no centro de Cascavel, com 30 lugares e 8 animais da ONG parceira Lar Feliz Pet.'],['Mai/2026','Primeiro evento de adoção: 9 bichinhos ganharam uma família em um só sábado.'],['Jul/2026','A loja cresce: salão ampliado para 40 lugares, novos funcionários e cardápio maior.'],['Set/2026','Primeiros problemas: fila no almoço, pedidos errados, desperdício na cozinha e lucro em queda.'],['Out/2026','A nota de satisfação cai para 4,3 e entram 3 funcionários sem treinamento.'],['Nov/2026','A diretoria chama os Gestores do Futuro: cada setor ganha uma dupla e um plano de ação.']].map(([d,t])=>`<div style="display:flex;gap:12px"><span class="pill s-and" style="min-width:76px;text-align:center">${d}</span><span style="font-size:14px">${t}</span></div>`).join('')}</div></div>
+ <div class="card"><h3>Situação em novembro de 2026 📍</h3><div class="grid g2" style="gap:10px">${[['Desde a abertura','46 adoções'],['Clientes por dia','95 (meta 120)'],['Nota de satisfação','4,3 (meta 4,7)'],['Lucro','6% (meta 10%)'],['Espera no almoço','15 min'],['Animais no espaço','14 (6 cães, 8 gatos)']].map(([a,b])=>`<div style="background:var(--cream);border-radius:12px;padding:10px 12px"><div style="font-size:12px;color:var(--muted);font-weight:700">${a}</div><b style="font-size:16px">${b}</b></div>`).join('')}</div>
+ <p style="font-size:13px;margin:12px 0 0"><b>Grandes desafios de dezembro:</b> a visita da vigilância sanitária e o <b>Natal Pet</b>, o evento de fim de ano, que é a época de mais movimento.</p></div></div>
+ <div class="grid g4" style="margin-bottom:16px">
+  <div class="card tile"><div class="num">${c.clientes}</div><div class="lbl">clientes por dia</div></div>
+  <div class="card tile"><div class="num">${brl(c.ticket)}</div><div class="lbl">gasto médio por cliente</div></div>
+  <div class="card tile dark"><div class="num">${brl(Math.round(fat))}</div><div class="lbl">faturamento por mês (${c.dias} dias)</div></div>
+  <div class="card tile sage"><div class="num">${brl(Math.round(fat*lucro/100))}</div><div class="lbl">lucro por mês (${lucro.toFixed(1).replace('.',',')}%)</div></div></div>
+ <div class="grid g2" style="margin-bottom:16px">
+ <div class="card"><h3>Para onde vai cada R$ 100</h3>${cs.map(([k,v])=>`<div class="crow" style="display:grid;grid-template-columns:170px 1fr 120px;gap:10px;align-items:center;margin-bottom:10px;font-size:13px"><b>${esc(k)}</b><div class="bar" style="height:16px"><i style="width:${Number(v)/max*100}%"></i></div><span style="text-align:right">${Number(v)}% • ${brl(Math.round(fat*v/100))}</span></div>`).join('')}<div class="crow" style="display:grid;grid-template-columns:170px 1fr 120px;gap:10px;align-items:center;font-size:13px"><b style="color:var(--sage)">Lucro 🌱</b><div class="bar" style="height:16px"><i style="width:${Math.max(0,lucro)/max*100}%;background:var(--sage)"></i></div><span style="text-align:right;font-weight:800;color:${lucro<0?'var(--red)':'var(--sage)'}">${lucro.toFixed(1).replace('.',',')}%</span></div>
+ <p style="font-size:12px;color:var(--muted);margin-bottom:0">Números atuais da empresa (novembro de 2026). Faturamento = clientes × gasto médio × dias.</p></div>
+ <div class="card"><h3>Dados de referência</h3>${W()?`<form id="fC"><div class="fgrid"><label class="f">Clientes por dia<input class="in" data-keep type="number" name="clientes" value="${c.clientes}"></label><label class="f">Gasto médio (R$)<input class="in" data-keep type="number" step="0.01" name="ticket" value="${c.ticket}"></label><label class="f">Dias por mês<input class="in" data-keep type="number" name="dias" value="${c.dias}"></label>${cs.map(([k,v],i)=>`<label class="f">${esc(k)} (%)<input class="in" data-keep type="number" step="0.1" name="c${i}" data-k="${esc(k)}" value="${v}"></label>`).join('')}</div><div class="row" style="margin-top:12px"><span class="sp"></span><button class="btn car">Salvar dados</button></div></form>`:`<p style="color:var(--muted)">Só quem tem acesso de edição altera estes números.</p>`}</div></div>
+ <div class="card"><h3>Fluxograma: a jornada do cliente passa por todos os setores</h3><div class="flow">${[['MARKETING','Atrai o cliente'],['ATENDIMENTO','Recebe e anota o pedido'],['COZINHA','Prepara o pedido'],['QUALIDADE','Confere higiene e pedido'],['ATENDIMENTO','Entrega e cobra'],['FINANCEIRO','Registra a venda'],['BEM-ESTAR ANIMAL','Apresenta os bichinhos'],['RESULTADO','Cliente volta e indica 💛']].map((x,i,a)=>`<div class="st"><small>${x[0]}</small>${x[1]}</div>${i<a.length-1?'<span class="ar">→</span>':''}`).join('')}</div><p style="font-size:13px;color:var(--muted);margin-bottom:0">Por trás de tudo: 🤝 RH treina a equipe • 👑 Diretoria define as metas e acompanha.</p></div>`}
+
+/* ===== MATERIAIS ===== */
+function vMateriais(){
+ const L=[...S.mats].sort((a,b)=>(b.criado||0)-(a.criado||0));
+ return `<div class="top"><div><div class="eyebrow">Repositório</div><h1>Materiais da turma 📁</h1><p>Apresentações, planilhas, documentos e links do projeto, todos em um só lugar.</p></div>${W()?`<button class="btn car hide-m" data-act="newMat">+ Adicionar material</button>`:''}</div>
+ <div class="grid g3">
+ <div class="card mat"><div class="row"><div>${LOGO.replace(/SZ/g,'72')}</div><span class="sp"></span><span class="pill s-nao">Logo</span></div><div class="t">Logo da Pet Coffee (proposta)</div><div class="d">Xícara com orelhinhas de gato e patinha. Serve para o cadastro no repositório como imagem destacada.</div><div class="row">${dl?`<button class="btn sm" data-act="logoPng">⬇ Baixar PNG</button>`:''}</div></div>
+ ${L.map(m=>{const s=SK[m.setor];const safe=/^https?:\/\//i.test(m.url||'');return `<div class="card mat"><div class="row"><div class="ic">${MT[m.tipo]||'📎'}</div><span class="sp"></span><span class="pill s-nao">${esc(m.tipo||'Outro')}</span></div><div class="t">${esc(m.titulo)}</div><div class="d">${esc(m.descricao)}</div><div style="font-size:12px;color:var(--muted)">${s?s.e+' '+esc(s.n):'👥 Toda a turma'}</div><div class="row">${safe?`<a class="btn sm" href="${esc(m.url)}" target="_blank" rel="noopener">Abrir ↗</a>`:''}<span class="sp"></span>${W()?`<button class="btn alt sm" data-act="editMat" data-id="${esc(m.id)}">Editar</button>`:''}</div></div>`}).join('')}</div>
+ <p style="font-size:12px;color:var(--muted);margin-top:16px">Os links do Claude só abrem para quem recebeu o compartilhamento. Para arquivos do celular ou computador, envie para o Google Drive e cole o link aqui.</p>`}
+function matForm(m){m=m||{tipo:'Link',setor:'todos'};
+ return `<h2>${m.id?'Editar material':'Novo material'} 📁</h2><form id="fM" data-id="${esc(m.id||'')}"><div class="fgrid">
+ <label class="f full">Título<input class="in" name="titulo" required value="${esc(m.titulo)}"></label>
+ <label class="f full">Link <small>começando com https://</small><input class="in" name="url" type="url" placeholder="https://" value="${esc(m.url)}"></label>
+ <label class="f">Tipo<select class="in" name="tipo">${Object.keys(MT).map(x=>`<option ${x===m.tipo?'selected':''}>${x}</option>`).join('')}</select></label>
+ <label class="f">Setor<select class="in" name="setor"><option value="todos">👥 Toda a turma</option>${SETORES.map(s=>`<option value="${s.k}" ${s.k===m.setor?'selected':''}>${s.e} ${esc(s.n)}</option>`).join('')}</select></label>
+ <label class="f full">Descrição<textarea class="in" name="descricao">${esc(m.descricao)}</textarea></label></div>
+ <div class="row acts" style="margin-top:16px">${m.id?`<button type="button" class="btn danger" data-act="delAsk" data-coll="mats" data-id="${esc(m.id)}">Excluir</button>`:''}<span class="sp"></span><button type="button" class="btn alt" data-act="close">Fechar</button><button class="btn car" type="submit">Salvar</button></div></form>`}
+
+/* ===== HISTÓRICO ===== */
+function vHistorico(){
+ const qs=[...new Set([...S.entregas.map(e=>e.quinta),...S.atas.map(a=>a.quinta),...S.kpihist.map(h=>h.quinta)])].filter(n=>n).sort((a,b)=>a-b);
+ const L=ACT();
+ const bars=qs.map(n=>{const E=S.entregas.filter(e=>e.quinta===n&&e.descricao);const ok=E.filter(e=>e.status==='Entregue').length;const p=E.length?Math.round(ok/E.length*100):0;return `<div style="display:grid;grid-template-columns:120px 1fr 90px;gap:10px;align-items:center;margin-bottom:8px;font-size:13px"><b>${esc(qLabel(n))}</b><div class="bar" style="height:16px"><i style="width:${p}%;background:var(--sage)"></i></div><span style="text-align:right;font-weight:800">${ok}/${E.length} (${p}%)</span></div>`}).join('');
+ const kq=[...new Set(S.kpihist.map(h=>h.quinta))].sort((a,b)=>a-b);
+ return `<div class="top"><div><div class="eyebrow">Memória do projeto</div><h1>Histórico das quintas 📚</h1><p>Entregas, decisões e indicadores de cada aula. É a prova do trabalho da turma.</p></div><div class="row">${W()?`<label class="btn alt" style="cursor:pointer">⬆ Restaurar backup<input type="file" accept=".json,application/json" data-imp hidden></label>`:''}${dl?`<button class="btn alt" data-act="backup">⬇ Backup completo</button><button class="btn alt" data-act="csv">⬇ Planilha (CSV)</button>`:''}</div></div>
+ <div class="grid g2" style="margin-bottom:16px"><div class="card"><h3>Entregas cumpridas por quinta</h3>${bars||'<div class="empty">As entregas aparecem aqui depois do primeiro fechamento.</div>'}</div>
+ <div class="card" style="overflow-x:auto"><h3>Indicadores por quinta</h3>${kq.length?`<table><tr><th>Setor</th>${kq.map(n=>`<th>${n===0?'Início':'Q'+n}</th>`).join('')}<th>Meta</th></tr>${L.map(s=>`<tr><td><b>${s.e} ${esc(s.n)}</b></td>${kq.map(n=>{const h=S.kpihist.find(x=>x.quinta===n);const v=h&&h[s.k];const has=v!==undefined&&v!==null&&!isNaN(Number(v));const good=has&&(s.op==='>='?Number(v)>=s.meta:Number(v)<=s.meta);return `<td style="font-weight:800;color:${!has?'var(--muted)':good?'var(--sage)':'var(--red)'}">${has?String(v).replace('.',','):'—'}</td>`}).join('')}<td style="color:var(--muted)">${metaTxt(s)}</td></tr>`).join('')}</table>`:'<div class="empty">Os indicadores salvos em cada quinta aparecem aqui.</div>'}</div></div>
+ <h2 style="font-size:22px;margin:6px 0 12px">Registro de cada quinta</h2>
+ ${qs.length?`<div class="list">${[...qs].reverse().map(n=>{const a=ataOf(n)||{};const E=L.map(s=>[s,entOf(n,s.k)]).filter(([,e])=>e&&e.descricao);return `<div class="card"><div class="row"><h3 style="margin:0">${esc(qLabel(n))}</h3><span class="sp"></span>${dl?`<button class="btn alt sm" data-act="resumo" data-v="${n}">⬇ Resumo</button>`:''}</div>
+ <div class="grid g2" style="margin-top:10px"><div><div class="eyebrow">Entregas</div>${E.length?E.map(([s,e])=>`<div style="font-size:14px;margin-top:6px">${s.e} <b>${esc(s.n)}:</b> ${esc(e.descricao)} ${e.status==='Entregue'?'<span class="pill s-ok">Entregue</span>':e.status==='Não entregue'?'<span class="pill s-atr">Não entregue</span>':'<span class="pill s-nao">Combinada</span>'}</div>`).join(''):'<p style="color:var(--muted)">—</p>'}</div>
+ <div><div class="eyebrow">Decisões</div><p style="white-space:pre-wrap;margin:6px 0">${esc(a.decisoes)||'—'}</p>${a.faltas?`<div class="eyebrow">Faltas</div><p style="white-space:pre-wrap;margin:6px 0">${esc(a.faltas)}</p>`:''}</div></div></div>`}).join('')}</div>`:'<div class="empty">Nenhuma quinta registrada ainda. Tudo o que for salvo no Fechamento aparece aqui.</div>'}`}
+
+/* ===== formulários extras ===== */
+function kpiForm(){const n=Q();return `<h2>Indicadores da ${esc(qLabel(n))} 📈</h2><p style="color:var(--muted);margin-top:-6px">Valor atual de cada setor (deixe em branco se ainda não mediu). Fica salvo no histórico desta quinta.</p><form id="fK"><div class="fgrid">${ACT().map(s=>`<label class="f">${s.e} ${esc(s.n)} <small>${esc(s.ind)} • meta ${metaTxt(s)}</small><input class="in" type="number" step="0.1" name="${s.k}" value="${esc(S.kpis[s.k])}"></label>`).join('')}</div><div class="row acts" style="margin-top:16px"><span class="sp"></span><button type="button" class="btn alt" data-act="close">Fechar</button><button class="btn car">Salvar</button></div></form>`}
+function moreMenu(){return `<h2>Mais áreas</h2><div class="list">${ROUTES.filter(r=>!MOB.includes(r[0])).map(([k,e,n])=>`<a class="item" href="#${k}" data-act="close" style="text-decoration:none;color:inherit"><div class="emo">${e}</div><div class="t" style="align-self:center">${n}</div></a>`).join('')}</div><div class="row acts" style="margin-top:16px"><span class="sp"></span><button class="btn alt" data-act="close">Fechar</button></div>`}
+
+/* ===== modal, escrita ===== */
+function openM(h){$('#sheet').innerHTML=h;$('#modal').classList.add('on')}
+function closeM(){$('#modal').classList.remove('on');$('#sheet').innerHTML=''}
+$('#modal').addEventListener('click',e=>{if(e.target.id==='modal')closeM()});
+const COLL={actions:'actions',tasks:'tasks',mats:'materiais',alunos:'alunos'};
+async function wr(fn){if(!db){toast('Sem conexão com os dados da turma.');return false}try{await fn();return true}catch(e){const c=e&&e.code;if(c==='invalid_argument'||c==='permission-denied'){S.canWrite=false;render();toast('Você não tem permissão para editar aqui.')}else if(c==='quota_exceeded')toast('Limite de dados atingido: exclua itens antigos.');else toast('Não foi possível salvar agora. Tente de novo.');return false}}
+function wipWarn(a,newSt){if(newSt!=='Em andamento')return;const n=S.actions.filter(x=>x.id!==a.id&&x.setor===a.setor&&x.funcao===a.funcao&&effStatus(x)==='Em andamento').length;if(n>=1)toast('Atenção: essa função já tem uma ação em andamento. O combinado é uma por vez.')}
+async function saveGeral(patch){const o=Object.assign({},G(),patch);return wr(()=>db.doc('config/geral').set(o))}
+async function saveKpis(vals){const n=Q();const o=Object.assign({},S.kpis,vals,{atualizado:Date.now()});const h=Object.assign({},S.kpihist.find(x=>x.quinta===n)||{},vals,{quinta:n,atualizado:Date.now()});delete h.id;delete o.id;
+ return (await wr(()=>db.doc('config/kpis').set(o)))&&(await wr(()=>db.doc('kpihist/q'+n).set(h)))}
+
+/* ===== eventos ===== */
+document.addEventListener('click',async e=>{
+ const el=e.target.closest('[data-act]');if(!el)return;const a=el.dataset.act,id=el.dataset.id,v=el.dataset.v;
+ if(a==='thide'){document.body.classList.add('timer-hidden');toast('Cronômetro escondido. Ele volta ao abrir a Quinta de hoje.');return}
+ if(el.tagName!=='A'||a==='more')e.preventDefault();
+ if(a==='close'){closeM();if(el.tagName==='A')location.hash=el.getAttribute('href');return}
+ if(a==='more')return openM(moreMenu());
+ if(a==='fset'){S.f.setor=v;return render()}
+ if(a==='ftset'){S.f.tset=v;return render()}
+ if(a==='goSet'){S.f.setor=v;location.hash='planos';return}
+ if(a==='newAction')return openM(actionForm());
+ if(a==='editAction')return openM(actionForm(S.actions.find(x=>x.id===id)));
+ if(a==='newTask')return openM(taskForm());
+ if(a==='editTask')return openM(taskForm(S.tasks.find(x=>x.id===id)));
+ if(a==='newMat')return openM(matForm());
+ if(a==='editMat')return openM(matForm(S.mats.find(x=>x.id===id)));
+ if(a==='kpiForm')return openM(kpiForm());
+ if(a==='login')return fbLogin();if(a==='logout')return fbLogout();if(a==='cyc'){const x=S.actions.find(z=>z.id===id);if(!x)return;const ns=CYC[effStatus(x)]||'Em andamento';wipWarn(x,ns);const o=Object.assign({},x,{status:ns,atualizado:Date.now()});delete o.id;await wr(()=>db.doc('actions/'+id).set(o));return}
+ if(a==='mvTask'){await wr(()=>db.doc('tasks/'+id).update({status:v,atualizado:Date.now()}));return}
+ if(a==='delAsk'){el.outerHTML=`<span style="font-weight:800;color:var(--red)">Excluir mesmo?</span><button type="button" class="btn danger sm" data-act="del" data-coll="${el.dataset.coll}" data-id="${esc(id)}">Sim, excluir</button>`;return}
+ if(a==='del'){if(await wr(()=>db.doc(COLL[el.dataset.coll]+'/'+id).delete())){closeM();toast('Excluído.')}return}
+ if(a==='csv')return exportCsv();
+ if(a==='backup')return exportBackup();
+ if(a==='resumo')return exportResumo(v?Number(v):Q());
+ if(a==='logoPng')return exportLogo();
+ if(a==='sortear'){SR.res=null;return openM(sortView(null,false))}
+ if(a==='sortGo')return sortGo();
+ if(a==='sortOk')return sortOk();
+ if(a==='sortExtra'){SR.extra=v;SR.res=null;$('#sheet').innerHTML=sortView(null,false);return}
+ if(a==='alOut'){await wr(()=>db.doc('alunos/'+id).update({setor:'',funcao:'',atualizado:Date.now()}));return}
+ if(a==='alFix'){const x=S.alunos.find(z=>z.id===id);if(x)await wr(()=>db.doc('alunos/'+id).update({fixo:!x.fixo}));return}
+ if(a==='alDel'){openM(`<h2>Remover da turma?</h2><p>${esc((S.alunos.find(z=>z.id===id)||{}).nome)} sai da lista da turma e do setor.</p><div class="row acts"><span class="sp"></span><button class="btn alt" data-act="close">Cancelar</button><button class="btn danger" data-act="del" data-coll="alunos" data-id="${esc(id)}">Remover</button></div>`);return}
+ if(a==='tecToggle'){if(await saveGeral({tecAtivo:!G().tecAtivo}))toast(G().tecAtivo?'Setor desativado.':'Setor de Tecnologia ativado 💻');return}
+ /* quinta */
+ if(a==='qprev'){S.q=Math.max(1,Q()-1);return render()}
+ if(a==='qnext'){S.q=Q()+1;return render()}
+ if(a==='qnow'){S.q=null;return render()}
+ if(a==='qtab'){S.tab=v;const i=BLOCOS().findIndex(b=>b.k===v);if(i>=0&&!T.run&&i!==T.i){T.i=i;T.left=null;T.ended=false}return render()}
+ if(a==='proj'){const on=document.body.classList.toggle('proj');try{if(on&&document.documentElement.requestFullscreen)await document.documentElement.requestFullscreen();else if(!on&&document.fullscreenElement)await document.exitFullscreen()}catch(err){}return render()}
+ if(a==='entMark'){const k=el.dataset.k;const cur=entOf(Q(),k);const nv=cur&&cur.status===v?'Combinada':v;await saveEnt(Q(),k,{status:nv});return}
+ if(a==='rod'){S.rod+=Number(v);const L=ACT();S.rod=(S.rod+L.length)%L.length;rtNext();return render()}
+ if(a==='rodgo'){S.rod=Number(v);rtNext();return render()}
+ if(a==='rtPlay'){if(RT.run)rtStop();else rtStart();return rtShow()}
+ if(a==='iaCopy')return iaCopy(el.dataset.k);
+ if(a==='falta'){const inp=$('#faltasIn');const L=(inp.value?inp.value.split(', '):[]).filter(Boolean);const i=L.indexOf(v);if(i>=0)L.splice(i,1);else L.push(v);inp.value=L.join(', ');const on=i<0;el.classList.toggle('on',on);el.textContent=(on?'❌ ':'')+v;return}
+ if(a==='saveDec'){const t=document.querySelector('[data-ata=decisoes]');if(t&&await saveAta(Q(),{decisoes:t.value}))toast('Decisões salvas 📝');return}
+ /* cronômetro */
+ if(a==='topen'){T.open=!T.open;return renderTimer()}
+ if(a==='tclose'){T.open=false;return renderTimer()}
+ if(a==='tplay')return tPlay();
+ if(a==='tnext'){const B=BLOCOS();return tGo((T.i+1)%B.length)}
+ if(a==='tgo'){if(e.target.closest('[data-act=tmin]'))return;return tGo(Number(v))}
+ if(a==='tadd'){T.left=Math.max(0,tLeft()+Number(v));if(T.left>0)T.ended=false;return renderTimer()}
+ if(a==='treset'){clearInterval(T.h);T.h=null;T.run=false;T.ended=false;T.left=null;return renderTimer()}
+ if(a==='tmin'){const B=BLOCOS().map(b=>Object.assign({},b));const i=Number(v);B[i].min=Math.min(120,Math.max(1,B[i].min+Number(el.dataset.d)));if(i===T.i&&!T.run)T.left=null;if(await saveGeral({blocos:B}))renderTimer();return}
+});
+document.addEventListener('input',e=>{const k=e.target.dataset.in;if(k==='fq'){S.f.q=e.target.value;clearTimeout(window._q);window._q=setTimeout(()=>{render();const i=document.querySelector('[data-in=fq]');if(i){i.focus();i.setSelectionRange(i.value.length,i.value.length)}},250)}});
+document.addEventListener('focusout',e=>{if(S.pend)setTimeout(()=>{const ae=document.activeElement;if(!(ae&&ae.dataset&&ae.dataset.keep!=null))render()},60)});
+document.addEventListener('change',async e=>{
+ const t=e.target;
+ if(t.dataset.in==='fstatus'){S.f.status=t.value;return render()}
+ if(t.dataset.in==='formSetor'){const s=SK[t.value];$('#fFun').innerHTML=s.f.map(x=>`<option>${esc(x)}</option>`).join('');return}
+ if(t.dataset.role!==undefined&&t.dataset.setor){await assignRole(t.value,t.dataset.setor,t.dataset.role);return}
+ if(t.dataset.addto){if(t.value)await wr(()=>db.doc('alunos/'+t.value).update({setor:t.dataset.addto,funcao:'Apoio',atualizado:Date.now()}));return}
+ if(t.dataset.alnome){const v=t.value.trim().slice(0,60);if(v&&await wr(()=>db.doc('alunos/'+t.dataset.alnome).update({nome:v})))toast('Nome salvo ✨');return}
+});
+document.addEventListener('submit',async e=>{
+ e.preventDefault();const f=e.target;const d=Object.fromEntries(new FormData(f).entries());
+ if(f.id==='fA'){if(!d.oque||!d.oque.trim())return toast('Preencha o "O quê?"');const o={setor:d.setor,funcao:d.funcao||'',oque:d.oque.trim(),porque:d.porque||'',onde:d.onde||'',quem:d.quem||'',quando:d.quando||'',prazo:d.prazo||'',como:d.como||'',custo:d.custo===''?0:Number(d.custo),indicador:d.indicador||'',status:d.status||'Não iniciado',obs:d.obs||'',atualizado:Date.now()};const id=f.dataset.id;const old=id?S.actions.find(x=>x.id===id):null;o.criado=old&&old.criado||Date.now();wipWarn(Object.assign({id},o),o.status);
+  if(await wr(()=>id?db.doc('actions/'+id).set(o):db.collection('actions').add(o))){closeM();toast('Ação salva 🎯')}}
+ if(f.id==='fT'){const o={titulo:d.titulo.trim(),descricao:d.descricao||'',setor:d.setor||'todos',responsavel:d.responsavel||'',prazo:d.prazo||'',status:d.status||'A fazer',atualizado:Date.now()};const id=f.dataset.id;const old=id?S.tasks.find(x=>x.id===id):null;o.criado=old&&old.criado||Date.now();
+  if(await wr(()=>id?db.doc('tasks/'+id).set(o):db.collection('tasks').add(o))){closeM();toast('Tarefa salva ✅')}}
+ if(f.id==='fM'){const url=(d.url||'').trim();if(url&&!/^https?:\/\//i.test(url))return toast('O link precisa começar com https://');const o={titulo:d.titulo.trim(),url,tipo:d.tipo,setor:d.setor,descricao:d.descricao||''};const id=f.dataset.id;const old=id?S.mats.find(x=>x.id===id):null;o.criado=old&&old.criado||Date.now();
+  if(await wr(()=>id?db.doc('materiais/'+id).set(o):db.collection('materiais').add(o))){closeM();toast('Material salvo 📁')}}
+ if(f.id==='fK'){const o={};ACT().forEach(s=>{if(d[s.k]!==''&&d[s.k]!=null)o[s.k]=Number(d[s.k])});if(await saveKpis(o)){closeM();toast('Indicadores salvos no histórico 📈')}}
+ if(f.id==='fC'){const custos={};f.querySelectorAll('input[data-k]').forEach(i=>custos[i.dataset.k]=Number(i.value)||0);const o={clientes:Number(d.clientes)||0,ticket:Number(d.ticket)||0,dias:Number(d.dias)||0,custos};document.activeElement&&document.activeElement.blur();if(await wr(()=>db.doc('config/empresa').set(o)))toast('Dados salvos ☕')}
+ if(f.dataset.form==='alAdd'){const v=(d.nome||'').trim().slice(0,60);if(!v)return toast('Digite o nome.');if(await wr(()=>db.collection('alunos').add({nome:v,setor:'',funcao:'',fixo:false,criado:Date.now()}))){f.reset();toast('Aluno adicionado 👋')}return}
+ if(f.dataset.form==='kpi1'){if(d.v==='')return toast('Digite um valor.');if(await saveKpis({[f.dataset.k]:Number(d.v)}))toast('Indicador salvo 📈')}
+ if(f.dataset.form==='fech'){const n=Q(),nx=n+1;document.activeElement&&document.activeElement.blur();let ok=true;
+  for(const s of ACT()){const val=(d['e_'+s.k]||'').trim();const cur=entOf(nx,s.k);if((cur&&cur.descricao||'')!==val){ok=(await saveEnt(nx,s.k,{descricao:val}))&&ok}}
+  ok=(await saveAta(n,{decisoes:d.decisoes||'',faltas:d.faltas||''}))&&ok;if(ok)toast(`Fechamento salvo. Entregas combinadas para a Quinta ${nx} ✨`)}
+});
+
+/* ===== downloads ===== */
+async function save(filename,data,type){try{await dl.save({filename,data})}catch(e){try{await dl.save({filename,data:new Blob([data],{type})})}catch(e2){toast('Download não concluído.')}}}
+function exportCsv(){const H=['Setor','Função','O quê','Por quê','Onde','Quando','Prazo','Quem','Como','Custo (R$)','Indicador','Status','Observações'];const q=v=>'"'+String(v==null?'':v).replace(/"/g,'""')+'"';
+ const rows=S.actions.map(a=>[SK[a.setor]?SK[a.setor].n:a.setor,a.funcao,a.oque,a.porque,a.onde,a.quando,a.prazo?qName(a.prazo):'',a.quem,a.como,String(a.custo||0).replace('.',','),a.indicador,effStatus(a),a.obs].map(q).join(';'));
+ save('pet-coffee-planos-de-acao.csv','﻿'+[H.map(q).join(';'),...rows].join('\r\n'),'text/csv')}
+function exportBackup(){const strip=L=>L.map(x=>Object.assign({},x));const o={geradoEm:new Date().toISOString(),geral:G(),empresa:cfg(),indicadores:S.kpis,acoes:strip(S.actions),tarefas:strip(S.tasks),alunos:strip(S.alunos),materiais:strip(S.mats),entregas:strip(S.entregas),atas:strip(S.atas),historicoIndicadores:strip(S.kpihist),sorteio:S.sorteio};
+ save(`pet-coffee-backup-${today()}.json`,JSON.stringify(o,null,2),'application/json')}
+function exportResumo(n){const L=ACT(),a=ataOf(n)||{},nx=n+1;const A=S.actions;const h=S.kpihist.find(x=>x.quinta===n)||{};
+ const row=(s,e)=>`<tr><td>${s.e} ${esc(s.n)}</td><td>${e&&e.descricao?esc(e.descricao):'—'}</td><td>${e&&e.descricao?esc(e.status||'Combinada'):''}</td></tr>`;
+ const html=`<!DOCTYPE html><html lang="pt-BR"><head><meta charset="utf-8"><title>Pet Coffee • Resumo da Quinta ${n}</title><style>body{font-family:Arial,sans-serif;color:#3b2a20;max-width:860px;margin:30px auto;padding:0 20px;background:#fff}h1{margin:0}h2{color:#9a4f1e;font-size:18px;margin-top:28px;border-bottom:2px solid #efe3d1;padding-bottom:6px}table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid #e3d5c1;padding:8px;text-align:left;vertical-align:top}th{background:#3b2a20;color:#fff}.k{display:inline-block;background:#f7f0e6;border-radius:10px;padding:10px 14px;margin:4px;font-weight:bold}</style></head><body>
+ <p style="color:#9a4f1e;font-weight:bold;letter-spacing:2px">PROJETO GESTORES DO FUTURO • JOVEM APRENDIZ ESPRO</p><h1>🐾 Pet Coffee – Resumo da Quinta ${n}</h1><p>${fdate(qDate(n))}</p>
+ <div><span class="k">Ações: ${A.length}</span><span class="k">Concluídas: ${A.filter(x=>x.status==='Concluído').length}</span><span class="k">Em andamento: ${A.filter(x=>effStatus(x)==='Em andamento').length}</span><span class="k">Atrasadas: ${A.filter(isLate).length}</span></div>
+ <h2>Entregas desta quinta</h2><table><tr><th>Setor</th><th>Entrega</th><th>Situação</th></tr>${L.map(s=>row(s,entOf(n,s.k))).join('')}</table>
+ <h2>Decisões</h2><p style="white-space:pre-wrap">${esc(a.decisoes)||'—'}</p>${a.faltas?`<h2>Faltas</h2><p style="white-space:pre-wrap">${esc(a.faltas)}</p>`:''}
+ <h2>Indicadores</h2><table><tr><th>Setor</th><th>Indicador</th><th>Valor</th><th>Meta</th></tr>${L.map(s=>`<tr><td>${s.e} ${esc(s.n)}</td><td>${esc(s.ind)}</td><td>${h[s.k]!==undefined?String(h[s.k]).replace('.',','):'—'}</td><td>${metaTxt(s)}</td></tr>`).join('')}</table>
+ <h2>Entregas combinadas para a Quinta ${nx} (${fdate(qDate(nx))})</h2><table><tr><th>Setor</th><th>Entrega</th><th></th></tr>${L.map(s=>row(s,entOf(nx,s.k))).join('')}</table>
+ <p style="margin-top:30px;color:#6f5a49;font-size:12px">Gerado pela Central da Turma Pet Coffee em ${fdate(today())}.</p></body></html>`;
+ save(`pet-coffee-resumo-quinta-${n}.html`,html,'text/html')}
+function exportLogo(){const svg=LOGO.replace(/SZ/g,'1024').replace('<svg ','<svg xmlns="http://www.w3.org/2000/svg" ');const img=new Image();img.onload=()=>{const c=document.createElement('canvas');c.width=c.height=1024;c.getContext('2d').drawImage(img,0,0,1024,1024);c.toBlob(async b=>{try{await dl.save({filename:'logo-pet-coffee.png',data:b})}catch(e){toast('Download não concluído.')}},'image/png')};img.onerror=()=>toast('Não foi possível gerar a imagem.');img.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg)}
+
+/* ===== início ===== */
+$('#logo1').innerHTML=LOGO.replace(/SZ/g,'44');$('#logo2').innerHTML=LOGO.replace(/SZ/g,'34');
+document.addEventListener('keydown',e=>{const t=e.target;if(t&&t.matches&&t.matches('input,textarea,select'))return;if($('#modal').classList.contains('on'))return;
+ if(e.code==='Space'){e.preventDefault();return tPlay()}
+ if(e.key==='n'||e.key==='N'){return tGo((T.i+1)%BLOCOS().length)}
+ if(route()==='quinta'&&(S.tab||BLOCOS()[T.i].k)==='rodada'&&(e.key==='ArrowRight'||e.key==='ArrowLeft')){const L=ACT();S.rod=(S.rod+(e.key==='ArrowRight'?1:-1)+L.length)%L.length;rtNext();render()}});
+window.addEventListener('hashchange',()=>{if(route()==='quinta')document.body.classList.remove('timer-hidden');render();window.scrollTo(0,0)});
+document.addEventListener('fullscreenchange',()=>{if(!document.fullscreenElement&&document.body.classList.contains('proj')){document.body.classList.remove('proj');render()}});
+render();
+const FB_CFG={apiKey:"AIzaSyAw6DQO4qelj8X8rKNRAxasxW-cHoqo1kk",authDomain:"pet-coffee-gestores.firebaseapp.com",projectId:"pet-coffee-gestores",storageBucket:"pet-coffee-gestores.firebasestorage.app",messagingSenderId:"939153868119",appId:"1:939153868119:web:e8a3bac2eb07707c51ea12"};
+const ADMIN='arthurtureck@gmail.com';
+const TURMA=(new URLSearchParams(location.search).get('t')||'pet26').toLowerCase().replace(/[^a-z0-9-]/g,'');
+let FB=null;
+dl={save:async({filename,data})=>{const b=data instanceof Blob?data:new Blob([data]);const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=filename;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},2000)}};
+async function importBackup(o){const fs=FB.fs,F=FB.F,base='turmas/'+TURMA+'/';const ops=[];const put=(p,d)=>ops.push([p,d]);
+ const L=(arr,c)=>(arr||[]).forEach(x=>{const d=Object.assign({},x);const id=d.id;delete d.id;if(id)put(c+'/'+id,d)});
+ L(o.acoes,'actions');L(o.tarefas,'tasks');L(o.alunos,'alunos');L(o.materiais,'materiais');L(o.entregas,'entregas');L(o.atas,'atas');L(o.historicoIndicadores,'kpihist');
+ if(o.geral)put('config/geral',o.geral);if(o.empresa)put('config/empresa',o.empresa);if(o.indicadores)put('config/kpis',o.indicadores);if(o.sorteio)put('config/sorteio',o.sorteio);
+ for(let i=0;i<ops.length;i+=400){const b=fs.writeBatch(F);ops.slice(i,i+400).forEach(([p,d])=>b.set(fs.doc(F,base+p),d));await b.commit()}return ops.length}
+document.addEventListener('change',async e=>{const t=e.target;if(!t.matches||!t.matches('[data-imp]')||!t.files[0])return;
+ try{const o=JSON.parse(await t.files[0].text());if(!o.acoes)throw 0;if(!confirm('Restaurar este backup? Os itens com o mesmo código serão substituídos.'))return;const n=await importBackup(o);toast(n+' itens restaurados ✅')}catch(err){toast('Arquivo de backup inválido ou sem permissão.')}finally{t.value=''}});
+async function fbLogin(){if(!FB)return;try{await FB.au.signInWithPopup(FB.auth,new FB.au.GoogleAuthProvider())}catch(e){if(e&&e.code!=='auth/popup-closed-by-user')toast('Não foi possível entrar agora.')}}
+async function fbLogout(){if(!FB)return;await FB.au.signOut(FB.auth);toast('Você saiu da edição.')}
+(async()=>{
+ const timer=setTimeout(()=>{if(!S.ready){S.slow=true;render()}},10000);
+ S.canWrite=false;
+ try{
+  const B='https://www.gstatic.com/firebasejs/10.14.1/';
+  const [ap,fs,au]=await Promise.all([import(B+'firebase-app.js'),import(B+'firebase-firestore.js'),import(B+'firebase-auth.js')]);
+  const A=ap.initializeApp(FB_CFG);const F=fs.getFirestore(A);const auth=au.getAuth(A);FB={fs,au,auth,F};
+  const base='turmas/'+TURMA+'/';const M={includeMetadataChanges:true};const dref=p=>fs.doc(F,base+p);
+  const wd=d=>({id:d.id,exists:d.exists(),data:()=>d.data()});
+  db={collection:p=>({onSnapshot:(cb,er)=>fs.onSnapshot(fs.collection(F,base+p),M,s=>cb({docs:s.docs.map(wd),metadata:s.metadata}),er),add:o=>fs.addDoc(fs.collection(F,base+p),o)}),
+   doc:p=>({onSnapshot:(cb,er)=>fs.onSnapshot(dref(p),M,s=>cb({exists:s.exists(),data:()=>s.data(),metadata:s.metadata}),er),set:o=>fs.setDoc(dref(p),o),update:o=>fs.updateDoc(dref(p),o),delete:()=>fs.deleteDoc(dref(p))})};
+  let subs=false;
+  const mark=s=>{if(!s.metadata.fromCache&&!S.ready){S.ready=true;S.slow=false;clearTimeout(timer)}};
+  const err=e=>{clearTimeout(timer);S.ready=true;if(e&&e.code==='permission-denied')S.offline=true;render()};
+  const start=()=>{if(subs)return;subs=true;
+   const sub=(path,key)=>db.collection(path).onSnapshot(s=>{S[key]=s.docs.map(d=>Object.assign({id:d.id},d.data()));mark(s);render()},err);
+   sub('actions','actions');sub('tasks','tasks');sub('alunos','alunos');sub('materiais','mats');sub('entregas','entregas');sub('atas','atas');sub('kpihist','kpihist');
+   db.doc('config/empresa').onSnapshot(s=>{S.cfg=s.exists?s.data():null;render()},err);
+   db.doc('config/kpis').onSnapshot(s=>{S.kpis=s.exists?s.data():{};render()},err);
+   db.doc('config/sorteio').onSnapshot(s=>{S.sorteio=s.exists?s.data():null;render()},err);
+   db.doc('config/geral').onSnapshot(s=>{S.geral=s.exists?s.data():null;render()},err)};
+  au.onAuthStateChanged(auth,u=>{
+   if(!u){au.signInAnonymously(auth).catch(()=>{clearTimeout(timer);S.offline=true;render()});return}
+   S.user=u;S.canWrite=!u.isAnonymous&&u.email===ADMIN&&u.emailVerified;
+   if(!u.isAnonymous&&!S.canWrite)toast('Essa conta não tem acesso de edição.');
+   start();render()});
+ }catch(e){clearTimeout(timer);S.offline=true;render()}
+})();
+</script>
+</body>
+</html>

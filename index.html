@@ -178,7 +178,10 @@ body.proj .qnum{font-size:56px}
 .rbox .m{font-size:12px;color:var(--muted);font-weight:700;display:flex;flex-wrap:wrap;gap:4px 12px}
 .rbox .txt{white-space:pre-wrap;word-break:break-word}
 .rform textarea.in{min-height:96px}
-.fbtn{align-self:flex-start;cursor:pointer}
+.ff{display:flex;flex-direction:column;gap:6px;font-weight:800;font-size:13px}
+.ff small{font-weight:600;color:var(--muted)}
+small.req{color:var(--dcar)!important;font-weight:800!important}
+.fbtn{align-self:flex-start;cursor:pointer;display:inline-flex}
 .fprev{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
 .fprev img{width:96px;height:96px;object-fit:cover;border-radius:12px;border:1px solid var(--line)}
 .rfoto{padding:0;border:0;background:none;cursor:zoom-in;align-self:flex-start}
@@ -354,10 +357,10 @@ function vResponder(){
    <h2 style="margin:18px 0 10px">Planos de ação do setor</h2><div class="list" style="margin-bottom:18px">${acts.length?acts.map((a,i)=>`<details class="rplan" ${i===0?'open':''}><summary><span class="t">${esc(a.oque)}${a.funcao===me.funcao?'<span class="mine">sua função</span>':''}</span>${stPill(a,false)}<span class="chev">›</span></summary><div class="b">
     <div><b>Por quê?</b>${esc(a.porque)||'—'}</div><div><b>Como?</b>${esc(a.como)||'—'}</div><div><b>Onde?</b>${esc(a.onde)||'—'}</div><div><b>Quando?</b>${a.prazo?esc(qName(a.prazo)):esc(a.quando)||'—'}</div><div><b>Quem?</b>${esc(pessoa(a.setor,a.funcao)||a.quem)||'—'}</div><div><b>Indicador</b>${esc(a.indicador)||'—'}</div>${a.custo?`<div><b>Custo</b>${brl(a.custo)}</div>`:''}</div></details>`).join(''):'<div class="empty">Ainda não há planos para este setor.</div>'}</div>
    <form data-form="resp" class="card rform" style="margin-bottom:18px"><h2 style="margin:0 0 12px">Mandar resposta ✉️</h2><div style="display:flex;flex-direction:column;gap:12px">
-    <label class="f">Sobre qual plano?<select class="in" name="acao">${acts.map(a=>`<option value="${esc(a.id)}">${esc(a.oque)}</option>`).join('')}<option value="">Outro assunto</option></select></label>
-    <label class="f">O que você fez hoje? <small>conte com suas palavras</small><textarea class="in" data-keep name="feito" maxlength="1500" required placeholder="Ex.: fiz a lista dos itens do estoque e combinei com a dupla…"></textarea></label>
+    <label class="f">Sobre qual plano? <small class="req">obrigatório</small><select class="in" name="acao" required><option value="" disabled selected>Toque para escolher o plano</option>${acts.map(a=>`<option value="${esc(a.id)}">${esc(a.oque)}</option>`).join('')}<option value="outro">Outro assunto</option></select></label>
+    <label class="f">O que você fez hoje? <small class="req">obrigatório</small><textarea class="in" data-keep name="feito" maxlength="1500" required placeholder="Ex.: fiz a lista dos itens do estoque e combinei com a dupla…"></textarea></label>
     <div class="grid g2"><label class="f">Como está o plano?<select class="in" name="status">${STATUS.filter(x=>x!=='Atrasado').map(x=>`<option ${x==='Em andamento'?'selected':''}>${x}</option>`).join('')}</select></label><label class="f">Valor do indicador <small>se tiver</small><input class="in" data-keep name="valor" maxlength="20" inputmode="decimal" placeholder="${esc(s.ind)}"></label></div>
-    <div class="f"><span>Foto <small>opcional: print, foto do cartaz, do caderno…</small></span><div id="fotoBox">${fotoBox()}</div></div>
+    <div class="ff"><div>Foto <small>opcional: print, foto do cartaz, do caderno…</small></div><div id="fotoBox">${fotoBox()}</div></div>
     <label class="f">Alguma dúvida ou dificuldade? <small>opcional</small><textarea class="in" data-keep name="duvida" maxlength="800" style="min-height:64px"></textarea></label>
     <button type="submit" class="btn car">Enviar resposta</button></div></form>`;
    const mine=S.resps.filter(r=>r.alunoId===me.id).sort((a,b)=>(b.criado||0)-(a.criado||0)).slice(0,5);
@@ -736,7 +739,7 @@ document.addEventListener('change',async e=>{
 });
 document.addEventListener('submit',async e=>{
  e.preventDefault();const f=e.target;const d=Object.fromEntries(new FormData(f).entries());
-  if(f.dataset.form==='resp'){if(!db)return toast('Sem conexão com os dados da turma.');const me=S.alunos.find(a=>a.id===RS.me);if(!me)return toast('Escolha seu nome primeiro.');const feito=String(d.feito||'').trim();if(!feito)return toast('Conte o que você fez.');const ac=S.actions.find(a=>a.id===d.acao);
+  if(f.dataset.form==='resp'){if(!db)return toast('Sem conexão com os dados da turma.');const me=S.alunos.find(a=>a.id===RS.me);if(!me)return toast('Escolha seu nome primeiro.');const feito=String(d.feito||'').trim();if(!d.acao)return toast('Escolha sobre qual plano é a resposta.');if(!feito)return toast('Conte o que você fez.');const ac=S.actions.find(a=>a.id===d.acao);
    const o={alunoId:me.id,aluno:String(me.nome||'').slice(0,60),setor:String(me.setor||''),funcao:String(me.funcao||''),acao:ac?ac.id:'',acaoTitulo:ac?String(ac.oque||'').slice(0,200):'',feito:feito.slice(0,1500),status:STATUS.includes(d.status)?d.status:'',valor:String(d.valor||'').trim().slice(0,20),duvida:String(d.duvida||'').trim().slice(0,800),quinta:curQ(),criado:Date.now(),lida:false};if(RS.foto&&/^data:image\/jpeg;base64,/.test(RS.foto))o.foto=RS.foto;
    document.activeElement&&document.activeElement.blur();const b=f.querySelector('button[type=submit]');if(b)b.disabled=true;
    try{await db.collection('respostas').add(o);f.reset();RS.foto='';{const fb=$('#fotoBox');if(fb)fb.innerHTML=fotoBox()}toast('Resposta enviada! Valeu 🐾')}catch(err){toast('Não foi possível enviar agora. Tente de novo.')}finally{if(b)b.disabled=false}return}

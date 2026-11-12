@@ -178,6 +178,23 @@ body.proj .qnum{font-size:56px}
 .rbox .m{font-size:12px;color:var(--muted);font-weight:700;display:flex;flex-wrap:wrap;gap:4px 12px}
 .rbox .txt{white-space:pre-wrap;word-break:break-word}
 .rform textarea.in{min-height:96px}
+.stp{display:inline-flex;align-items:center;gap:8px}
+.stp i{font-style:normal;display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;background:var(--car);color:#2a1c13;font-size:12px;font-weight:800;font-family:Nunito,sans-serif}
+.stp.big i{width:28px;height:28px;font-size:15px}
+.okbox{background:var(--sage2);color:var(--sage);border-radius:12px;padding:12px 14px;margin-bottom:14px;font-weight:700}
+.sech{font-family:Fraunces,serif;font-size:22px;margin:22px 0 12px}
+.qdate{font-size:18px;color:var(--muted);font-weight:700}
+.qcard{display:flex;flex-direction:column;gap:12px}
+.qcard.done{cursor:pointer;border-color:#cfdcc4}
+.qcard.done:hover{box-shadow:0 8px 22px rgba(59,42,32,.08)}
+.qcard .who{display:flex;flex-wrap:wrap;gap:4px 10px;font-size:12px;font-weight:700;color:var(--muted);margin-top:2px}
+.qcard .who .ok{color:var(--sage)}
+.qcard .focus{background:var(--cream);border-radius:12px;padding:10px 12px;font-size:14px}
+.qcard .lastr{font-size:14px;border-left:3px solid var(--sage);padding-left:10px}
+.qcard .lastr .m{font-size:12px;color:var(--muted);font-weight:700;margin-top:2px}
+.qcard .lastr.none{border-left-color:var(--line);color:var(--muted);font-style:italic}
+.cta{display:flex;gap:14px;align-items:center;text-decoration:none;color:inherit;margin-bottom:6px;border-color:var(--car);background:#fff7ee}
+.cta div div{font-size:14px;color:var(--muted)}
 .ff{display:flex;flex-direction:column;gap:6px;font-weight:800;font-size:13px}
 .ff small{font-weight:600;color:var(--muted)}
 small.req{color:var(--dcar)!important;font-weight:800!important}
@@ -186,7 +203,7 @@ small.req{color:var(--dcar)!important;font-weight:800!important}
 .fprev img{width:96px;height:96px;object-fit:cover;border-radius:12px;border:1px solid var(--line)}
 .rfoto{padding:0;border:0;background:none;cursor:zoom-in;align-self:flex-start}
 .rfoto img{max-width:180px;max-height:140px;border-radius:10px;border:1px solid var(--line);display:block}
-@media (max-width:900px){.rplan .b{grid-template-columns:minmax(0,1fr)}.rform .btn{width:100%}}
+@media (max-width:900px){.qgrid{grid-template-columns:minmax(0,1fr)!important}.qhead{flex-wrap:wrap;gap:8px}.qhead .qnum{font-size:30px}.qdate{font-size:14px}.rplan .b{grid-template-columns:minmax(0,1fr)}.rform .btn{width:100%}}
 @media (max-width:900px){
  .app{grid-template-columns:minmax(0,1fr)}
  aside.side{display:none}
@@ -288,7 +305,7 @@ const SCOL={'Não iniciado':'#d8c9b4','Em andamento':'#6f9cc0','Concluído':'#4f
 const TST=['A fazer','Fazendo','Feito'];
 const MT={'Apresentação':'📽️','Planilha':'📊','Documento':'📄','Site':'🌐','Vídeo':'🎬','Imagem':'🖼️','Outro':'📎'};
 const ROUTES=[['quinta','🗓️','Quinta de hoje','Quinta'],['painel','📊','Painel','Painel'],['planos','🎯','Planos de ação','Planos'],['responder','📝','Responder','Responder'],['tarefas','✅','Tarefas ESPRO','Tarefas'],['equipe','👥','Equipe e setores','Equipe'],['empresa','☕','A empresa','Empresa'],['materiais','📁','Materiais','Materiais'],['historico','📚','Histórico','Histórico']];
-const MOB=['quinta','planos','responder','painel'];
+let MOB=['quinta','planos','responder','painel'];
 const DEF_CFG={clientes:120,ticket:32,dias:26,custos:{'Ingredientes e insumos':32,'Equipe (salários)':30,'Aluguel, água e luz':15,'Cuidados com os animais':8,'Marketing':5}};
 const DEF_BLOCOS=[{k:'abertura',n:'Abertura com o Painel',min:5},{k:'duplas',n:'Trabalho das duplas',min:25},{k:'rodada',n:'Rodada relâmpago',min:15},{k:'fechamento',n:'Fechamento',min:5}];
 const BDESC={abertura:'Painel na tela: o que foi entregue desde a última quinta.',duplas:'Todas as duplas trabalham ao mesmo tempo na entrega de hoje.',rodada:'1 minuto por setor: entrega, ação em andamento e onde travou.',fechamento:'Registrar decisões e combinar a entrega da próxima quinta.'};
@@ -323,8 +340,8 @@ function ataOf(n){return S.atas.find(a=>a.id===`q${n}`)}
 const W=()=>S.canWrite&&!!db;
 
 /* ===== navegação ===== */
-function nav(){const r=route();
- $('#nav').innerHTML=ROUTES.map(([k,e,n])=>`<a href="#${k}" class="${k===r?'on':''}">${e} ${n}</a>`).join('');
+function nav(){const r=route();MOB=W()?['quinta','planos','responder','painel']:['responder','planos','quinta','painel'];const RT2=W()?ROUTES:[...ROUTES].sort((a,b)=>(a[0]==='responder'?-1:0)-(b[0]==='responder'?-1:0));
+ $('#nav').innerHTML=RT2.map(([k,e,n])=>`<a href="#${k}" class="${k===r?'on':''}">${e} ${n}</a>`).join('');
  $('#mobnav').innerHTML=MOB.map(k=>{const x=ROUTES.find(z=>z[0]===k);return `<a href="#${k}" class="${k===r?'on':''}"><i>${x[1]}</i>${x[3]}</a>`}).join('')+`<a data-act="more" class="${MOB.includes(r)?'':'on'}"><i>☰</i>Mais</a>`;
  const fa={planos:'newAction',tarefas:'newTask',materiais:'newMat'}[r];const fb=$('#fab');
  if(fa&&W()){fb.style.visibility='visible';fb.dataset.act=fa}else{fb.style.visibility='hidden';delete fb.dataset.act}}
@@ -347,16 +364,16 @@ function setMe(id){RS.me=id;try{localStorage.setItem('pc_me',id)}catch(e){}}
 function vResponder(){
  const me=S.alunos.find(a=>a.id===RS.me);const al=[...S.alunos].sort((a,b)=>String(a.nome).localeCompare(String(b.nome),'pt-BR'));
  let h=`<div class="top"><div><div class="eyebrow">Para cada aluno</div><h1>Responder 📝</h1><p>Escolha seu nome, veja o que o seu setor precisa fazer e mande o que você fez hoje.</p></div></div>
- <div class="card" style="margin-bottom:14px"><label class="f">Quem é você?<select class="in" data-in="me"><option value="">Toque para escolher seu nome</option>${al.map(a=>{const s=SK[a.setor];return `<option value="${esc(a.id)}" ${a.id===RS.me?'selected':''}>${esc(a.nome)}${s?' • '+s.e+' '+esc(s.n):''}</option>`}).join('')}</select></label></div>`;
+ <div class="card" style="margin-bottom:14px"><label class="f"><span class="stp"><i>1</i> Quem é você?</span><select class="in" data-in="me"><option value="">Toque para escolher seu nome</option>${al.map(a=>{const s=SK[a.setor];return `<option value="${esc(a.id)}" ${a.id===RS.me?'selected':''}>${esc(a.nome)}${s?' • '+s.e+' '+esc(s.n):''}</option>`}).join('')}</select></label></div>`;
  if(me){const s=SK[me.setor];
   if(!s)h+=`<div class="empty" style="margin-bottom:14px">Você ainda não está em um setor. Fale com a organização.</div>`;
   else{const acts=S.actions.filter(a=>a.setor===s.k).sort((a,b)=>(a.funcao===me.funcao?0:1)-(b.funcao===me.funcao?0:1)||(a.prazo||'9').localeCompare(b.prazo||'9'));
    const dupla=S.alunos.filter(a=>a.setor===s.k&&a.id!==me.id).map(a=>a.nome).join(', ');
    h+=`<div class="card" style="margin-bottom:14px;display:flex;gap:14px;align-items:flex-start;flex-wrap:wrap"><div class="emo" style="width:52px;height:52px;font-size:26px">${s.e}</div><div style="flex:1;min-width:0"><div class="eyebrow">Seu setor</div><h2 style="margin:2px 0">${esc(s.n)}</h2><div style="font-size:14px">Sua função: <b>${esc(me.funcao||'—')}</b>${dupla?` • Dupla: <b>${esc(dupla)}</b>`:''}</div>
     <div style="font-size:13px;margin-top:8px;background:#fff4dc;border-radius:10px;padding:8px 10px;color:#6b4d12"><b>Situação atual:</b> ${esc(s.diag)}</div><div style="font-size:13px;margin-top:6px"><b>Indicador:</b> ${esc(s.ind)} • meta ${metaTxt(s)}</div></div></div>
-   <h2 style="margin:18px 0 10px">Planos de ação do setor</h2><div class="list" style="margin-bottom:18px">${acts.length?acts.map((a,i)=>`<details class="rplan" ${i===0?'open':''}><summary><span class="t">${esc(a.oque)}${a.funcao===me.funcao?'<span class="mine">sua função</span>':''}</span>${stPill(a,false)}<span class="chev">›</span></summary><div class="b">
+   <h2 class="sech"><span class="stp big"><i>2</i> Veja o que o seu setor precisa fazer</span></h2><p style="margin:-6px 0 12px;color:var(--muted)">Toque num plano para ver os detalhes. Os marcados com <span class="mine" style="margin:0">sua função</span> são seus.</p><div class="list" style="margin-bottom:18px">${acts.length?acts.map((a,i)=>`<details class="rplan" ${i===0?'open':''}><summary><span class="t">${esc(a.oque)}${a.funcao===me.funcao?'<span class="mine">sua função</span>':''}</span>${stPill(a,false)}<span class="chev">›</span></summary><div class="b">
     <div><b>Por quê?</b>${esc(a.porque)||'—'}</div><div><b>Como?</b>${esc(a.como)||'—'}</div><div><b>Onde?</b>${esc(a.onde)||'—'}</div><div><b>Quando?</b>${a.prazo?esc(qName(a.prazo)):esc(a.quando)||'—'}</div><div><b>Quem?</b>${esc(pessoa(a.setor,a.funcao)||a.quem)||'—'}</div><div><b>Indicador</b>${esc(a.indicador)||'—'}</div>${a.custo?`<div><b>Custo</b>${brl(a.custo)}</div>`:''}</div></details>`).join(''):'<div class="empty">Ainda não há planos para este setor.</div>'}</div>
-   <form data-form="resp" class="card rform" style="margin-bottom:18px"><h2 style="margin:0 0 12px">Mandar resposta ✉️</h2><div style="display:flex;flex-direction:column;gap:12px">
+   <form data-form="resp" class="card rform" style="margin-bottom:18px">${RS.sent&&Date.now()-RS.sent<600000?`<div class="okbox">✅ <b>Resposta enviada!</b> Valeu. Se fez mais alguma coisa, pode mandar outra.</div>`:''}<h2 style="margin:0 0 12px"><span class="stp big"><i>3</i> Mande o que você fez</span></h2><div style="display:flex;flex-direction:column;gap:12px">
     <label class="f">Sobre qual plano? <small class="req">obrigatório</small><select class="in" name="acao" required><option value="" disabled selected>Toque para escolher o plano</option>${acts.map(a=>`<option value="${esc(a.id)}">${esc(a.oque)}</option>`).join('')}<option value="outro">Outro assunto</option></select></label>
     <label class="f">O que você fez hoje? <small class="req">obrigatório</small><textarea class="in" data-keep name="feito" maxlength="1500" required placeholder="Ex.: fiz a lista dos itens do estoque e combinei com a dupla…"></textarea></label>
     <div class="grid g2"><label class="f">Como está o plano?<select class="in" name="status">${STATUS.filter(x=>x!=='Atrasado').map(x=>`<option ${x==='Em andamento'?'selected':''}>${x}</option>`).join('')}</select></label><label class="f">Valor do indicador <small>se tiver</small><input class="in" data-keep name="valor" maxlength="20" inputmode="decimal" placeholder="${esc(s.ind)}"></label></div>
@@ -375,16 +392,27 @@ function rBox(r,adm){const s=SK[r.setor];const x=S.actions.find(a=>a.id===r.acao
  ${adm?`<div class="row" style="gap:8px;margin-top:4px;flex-wrap:wrap">${!r.lida?`<button class="btn alt sm" data-act="rLida" data-id="${esc(r.id)}">✔ Marcar como lida</button>`:''}${can?`<button class="btn car sm" data-act="rApply" data-id="${esc(r.id)}">Mudar plano para "${esc(r.status)}"</button>`:''}<span class="sp"></span><button class="btn alt sm" data-act="delAsk" data-coll="resps" data-id="${esc(r.id)}">Excluir</button></div>`:''}</div>`}
 
 /* ===== QUINTA DE HOJE ===== */
+function focusPlan(k){const A=S.actions.filter(a=>a.setor===k&&a.status!=='Concluído');return A.find(a=>effStatus(a)==='Em andamento')||A.filter(a=>a.prazo).sort((a,b)=>a.prazo.localeCompare(b.prazo))[0]||A[0]}
 function vQuinta(){
- const n=Q(),date=qDate(n),B=BLOCOS(),tk=S.tab||B[T.i]?.k||'abertura';
- const tabs=B.map((b,i)=>`<button class="tab ${b.k===tk?'on':''}" data-act="qtab" data-v="${b.k}">${i+1}. ${esc(b.n)}</button>`).join('');
- const body={abertura:qAbertura,duplas:qDuplas,rodada:qRodada,fechamento:qFechamento}[tk]||qAbertura;
+ const n=Q(),date=qDate(n),L=ACT();const R=S.resps.filter(r=>Number(r.quinta)===n).sort((a,b)=>(b.criado||0)-(a.criado||0));
+ const quem=new Set(R.map(r=>r.alunoId));const setOk=L.filter(s=>R.some(r=>r.setor===s.k)).length;const duv=R.filter(r=>r.duvida);const nAl=S.alunos.filter(a=>a.setor&&L.some(s=>s.k===a.setor)).length;
+ const cards=L.map(s=>{const rs=R.filter(r=>r.setor===s.k);const al=S.alunos.filter(a=>a.setor===s.k);const p=focusPlan(s.k);const last=rs[0];
+  return `<div class="card qcard ${rs.length?'done':''}" ${rs.length?`data-act="qSet" data-v="${s.k}" role="button" tabindex="0"`:''}>
+   <div class="row" style="gap:10px;align-items:flex-start"><div class="emo">${s.e}</div><div style="flex:1;min-width:0"><b>${esc(s.n)}</b><div class="who">${al.map(a=>`<span class="${quem.has(a.id)?'ok':''}">${quem.has(a.id)?'✓ ':''}${esc(a.nome)}</span>`).join('')||'<span>Sem alunos</span>'}</div></div><span class="pill ${rs.length?'s-ok':'s-nao'}">${rs.length?rs.length+(rs.length>1?' respostas':' resposta'):'Sem resposta'}</span></div>
+   ${p?`<div class="focus"><div class="eyebrow">Plano em foco</div><div class="row" style="gap:8px;align-items:flex-start"><span style="flex:1;font-weight:700">${esc(p.oque)}</span>${stPill(p,false)}</div></div>`:''}
+   ${last?`<div class="lastr"><div class="txt">“${esc(String(last.feito).slice(0,140))}${String(last.feito).length>140?'…':''}”</div><div class="m">— ${esc(last.aluno)}${last.foto?' • 📷 com foto':''}</div></div>`:`<div class="lastr none">Ainda ninguém do setor respondeu hoje.</div>`}</div>`}).join('');
  return `<div class="top"><div><div class="eyebrow">Aula do projeto</div>
- <div class="qhead"><button class="btn alt sm" data-act="qprev" aria-label="Quinta anterior">◀</button><span class="qnum">Quinta ${n}</span><span style="font-size:18px;color:var(--muted);font-weight:700">${fdate(date)}${date===today()?' • hoje':''}</span><button class="btn alt sm" data-act="qnext" aria-label="Próxima quinta">▶</button>${S.q&&S.q!==curQ()?`<button class="btn alt sm" data-act="qnow">Voltar para a atual</button>`:''}</div></div>
- <div class="row"><button class="btn alt hide-m" data-act="proj">${document.body.classList.contains('proj')?'Sair do modo projetor':'📽️ Modo projetor'}</button>${dl?`<button class="btn alt" data-act="resumo">⬇ Resumo da quinta</button>`:''}</div></div>
- <div class="tabs">${tabs}</div>
- <p style="margin:-8px 0 16px;color:var(--muted);font-weight:700">${esc(BDESC[tk]||'')}<span class="hide-m" style="font-weight:600;font-size:12px;margin-left:10px;opacity:.8">⌨️ espaço = iniciar/pausar • N = próxima etapa${tk==='rodada'?' • ← → = trocar de setor':''}</span></p>
- ${body(n)}`;
+ <div class="qhead"><button class="btn alt sm" data-act="qprev" aria-label="Quinta anterior">◀</button><span class="qnum">Quinta ${n}</span><span class="qdate">${fdate(date)}${date===today()?' • hoje':''}</span><button class="btn alt sm" data-act="qnext" aria-label="Próxima quinta">▶</button>${S.q&&S.q!==curQ()?`<button class="btn alt sm" data-act="qnow">Voltar para hoje</button>`:''}</div></div>
+ <div class="row"><button class="btn alt hide-m" data-act="proj">${document.body.classList.contains('proj')?'Sair do modo projetor':'📽️ Modo projetor'}</button>${dl&&W()?`<button class="btn alt" data-act="resumo">⬇ Resumo</button>`:''}</div></div>
+ <div class="grid g4" style="margin-bottom:18px">
+  <div class="card tile sage"><div class="num">${quem.size}/${nAl}</div><div class="lbl">alunos já responderam</div></div>
+  <div class="card tile"><div class="num">${setOk}/${L.length}</div><div class="lbl">setores com resposta</div></div>
+  <div class="card tile"><div class="num">${R.filter(r=>r.foto).length}</div><div class="lbl">fotos enviadas</div></div>
+  <div class="card tile ${duv.length?'':'dark'}"><div class="num" style="${duv.length?'color:var(--car)':''}">${duv.length}</div><div class="lbl">dúvidas da turma</div></div></div>
+ ${!R.length&&n===curQ()?`<a href="#responder" class="card cta"><span style="font-size:28px">📝</span><div style="flex:1"><b>Ninguém respondeu ainda hoje</b><div>Cada aluno abre <b>Responder</b>, escolhe o nome e conta o que fez no seu plano.</div></div><span class="btn car sm">Responder →</span></a>`:''}
+ <h2 class="sech">Como está cada setor</h2><div class="grid g3 qgrid">${cards}</div>
+ ${duv.length?`<h2 class="sech">Dúvidas da turma</h2><div class="list">${duv.map(r=>`<div class="rbox"><div class="m"><span>${(SK[r.setor]||{}).e||''} ${esc(r.aluno)}</span><span>${esc(r.acaoTitulo||'Outro assunto')}</span></div><div class="txt">${esc(r.duvida)}</div></div>`).join('')}</div>`:''}
+ ${W()?`<h2 class="sech">Fechamento da aula</h2>${qFechamento(n)}`:''}`;
 }
 function entCard(s,n,opts){const e=entOf(n,s.k);const st=e&&e.status;const cls=st==='Entregue'?'ok':st==='Não entregue'?'no':'';
  return `<div class="card ent ${cls}"><div class="row" style="gap:8px"><div class="emo">${s.e}</div><div style="flex:1"><b>${esc(s.n)}</b>${nomes(s.k)?`<div style="font-size:12px;color:var(--muted);font-weight:700">👤 ${nomes(s.k)}</div>`:''}</div>${st?`<span class="pill ${st==='Entregue'?'s-ok':st==='Não entregue'?'s-atr':'s-nao'}">${esc(st)}</span>`:''}</div>
@@ -421,7 +449,7 @@ function qRodada(n){
  ${W()?`<textarea class="in" data-keep data-ata="decisoes" placeholder="Anote o que foi decidido…" style="min-height:120px">${esc(ata.decisoes)}</textarea><div class="row"><span class="sp"></span><button class="btn alt sm" data-act="saveDec">Salvar decisões</button></div>`:`<p>${esc(ata.decisoes)||'—'}</p>`}</div></div>`}
 function qFechamento(n){
  const L=ACT(),nx=n+1,ata=ataOf(n)||{};
- return `<div class="card" style="margin-bottom:16px"><h3>Entregas combinadas para a ${esc(qLabel(nx))}</h3><p style="margin:-6px 0 12px;color:var(--muted)">Uma entrega pequena por dupla, que fique pronta durante a próxima aula.</p>
+ return `<div class="card" style="margin-bottom:16px"><h3>Combinar para a ${esc(qLabel(nx))} <small style="font-weight:600;color:var(--muted)">(opcional)</small></h3><p style="margin:-6px 0 12px;color:var(--muted)">Se quiser, escreva o que cada dupla vai trazer na próxima aula. Deixe em branco o que não foi combinado.</p>
  <form data-form="fech"><div class="grid g2">${L.map(s=>{const e=entOf(nx,s.k);return `<label class="f">${s.e} ${esc(s.n)}<input class="in" data-keep name="e_${s.k}" value="${esc(e&&e.descricao)}" placeholder="O que a dupla vai entregar" ${W()?'':'disabled'}></label>`}).join('')}</div>
  <div class="grid g2" style="margin-top:14px"><label class="f">Decisões da quinta<textarea class="in" data-keep name="decisoes" ${W()?'':'disabled'}>${esc(ata.decisoes)}</textarea></label><label class="f">Quem faltou <small>toque nos nomes</small><input type="hidden" name="faltas" id="faltasIn" value="${esc(ata.faltas)}"><div class="row" style="gap:6px">${[...S.alunos].sort((a,b)=>String(a.nome).localeCompare(String(b.nome),'pt-BR')).map(a=>{const on=String(ata.faltas||'').split(', ').includes(a.nome);return `<button type="button" class="chip ${on?'on':''}" data-act="falta" data-v="${esc(a.nome)}" ${W()?'':'disabled'}>${on?'❌ ':''}${esc(a.nome)}</button>`}).join('')||'<span style="color:var(--muted)">Cadastre a turma na área Equipe.</span>'}</div></label></div>
  ${W()?`<div class="row" style="margin-top:14px"><span class="sp"></span><button class="btn car">💾 Salvar fechamento da quinta</button></div>`:''}</form></div>`}
@@ -472,7 +500,7 @@ function vPainel(){
  const n=Q(),com=L.filter(s=>{const e=entOf(n,s.k);return e&&e.descricao}).length;
  return `<div class="top"><div><div class="eyebrow">Projeto Gestores do Futuro</div><h1>Painel da Pet Coffee 🐾</h1><p>Como a nossa empresa está indo.</p></div>
  <div class="row">${W()?`<button class="btn car hide-m" data-act="newAction">+ Nova ação</button><button class="btn alt" data-act="kpiForm">Atualizar indicadores</button>`:''}</div></div>
- <a href="#quinta" class="card" style="display:flex;gap:14px;align-items:center;text-decoration:none;color:inherit;margin-bottom:16px;background:var(--dark);color:var(--cream);border-color:var(--dark)"><span style="font-size:30px">🗓️</span><div style="flex:1"><b style="font-family:Fraunces,serif;font-size:20px">${esc(qLabel(n))}</b><div style="color:#d9c9b4;font-size:13px">${com} de ${L.length} setores com entrega combinada</div></div><span class="btn car sm">Abrir →</span></a>
+ <a href="#quinta" class="card" style="display:flex;gap:14px;align-items:center;text-decoration:none;color:inherit;margin-bottom:16px;background:var(--dark);color:var(--cream);border-color:var(--dark)"><span style="font-size:30px">🗓️</span><div style="flex:1"><b style="font-family:Fraunces,serif;font-size:20px">${esc(qLabel(n))}</b><div style="color:#d9c9b4;font-size:13px">${S.resps.filter(r=>Number(r.quinta)===n).length} respostas dos alunos hoje</div></div><span class="btn car sm">Abrir →</span></a>
  <div class="grid g4" style="margin-bottom:16px">
   <div class="card tile"><div class="num">${tot}</div><div class="lbl">ações nos planos</div></div>
   <div class="card tile sage"><div class="num">${pct}%</div><div class="lbl">ações concluídas (${ok})</div></div>
@@ -682,6 +710,7 @@ document.addEventListener('click',async e=>{
  if(a==='newMat')return openM(matForm());
  if(a==='editMat')return openM(matForm(S.mats.find(x=>x.id===id)));
  if(a==='kpiForm')return openM(kpiForm());
+ if(a==='qSet'){const n=Q();const k=v;const s=SK[k];const rs=S.resps.filter(r=>Number(r.quinta)===n&&r.setor===k).sort((a,b)=>(b.criado||0)-(a.criado||0));return openM(`<h2>${s.e} ${esc(s.n)} • Quinta ${n}</h2><div class="list">${rs.map(r=>rBox(r,W())).join('')}</div><div class="row acts" style="margin-top:14px"><span class="sp"></span><button class="btn alt" data-act="close">Fechar</button></div>`)}
  if(a==='fotoDel'){RS.foto='';const b=$('#fotoBox');if(b)b.innerHTML=fotoBox();return}
  if(a==='verFoto'){const r=S.resps.find(z=>z.id===id);if(r&&r.foto)openM(`<h2>📷 ${esc(r.aluno)}</h2><img src="${r.foto}" alt="Foto da resposta" style="width:100%;border-radius:12px"><div class="row acts" style="margin-top:14px"><span class="sp"></span><button class="btn alt" data-act="close">Fechar</button></div>`);return}
  if(a==='rLida'){await wr(()=>db.doc('respostas/'+id).update({lida:true}));return}
@@ -742,7 +771,7 @@ document.addEventListener('submit',async e=>{
   if(f.dataset.form==='resp'){if(!db)return toast('Sem conexão com os dados da turma.');const me=S.alunos.find(a=>a.id===RS.me);if(!me)return toast('Escolha seu nome primeiro.');const feito=String(d.feito||'').trim();if(!d.acao)return toast('Escolha sobre qual plano é a resposta.');if(!feito)return toast('Conte o que você fez.');const ac=S.actions.find(a=>a.id===d.acao);
    const o={alunoId:me.id,aluno:String(me.nome||'').slice(0,60),setor:String(me.setor||''),funcao:String(me.funcao||''),acao:ac?ac.id:'',acaoTitulo:ac?String(ac.oque||'').slice(0,200):'',feito:feito.slice(0,1500),status:STATUS.includes(d.status)?d.status:'',valor:String(d.valor||'').trim().slice(0,20),duvida:String(d.duvida||'').trim().slice(0,800),quinta:curQ(),criado:Date.now(),lida:false};if(RS.foto&&/^data:image\/jpeg;base64,/.test(RS.foto))o.foto=RS.foto;
    document.activeElement&&document.activeElement.blur();const b=f.querySelector('button[type=submit]');if(b)b.disabled=true;
-   try{await db.collection('respostas').add(o);f.reset();RS.foto='';{const fb=$('#fotoBox');if(fb)fb.innerHTML=fotoBox()}toast('Resposta enviada! Valeu 🐾')}catch(err){toast('Não foi possível enviar agora. Tente de novo.')}finally{if(b)b.disabled=false}return}
+   try{await db.collection('respostas').add(o);f.reset();RS.foto='';RS.sent=Date.now();render();{const fb=$('#fotoBox');if(fb)fb.innerHTML=fotoBox()}toast('Resposta enviada! Valeu 🐾')}catch(err){toast('Não foi possível enviar agora. Tente de novo.')}finally{if(b)b.disabled=false}return}
  if(f.id==='fA'){if(!d.oque||!d.oque.trim())return toast('Preencha o "O quê?"');const o={setor:d.setor,funcao:d.funcao||'',oque:d.oque.trim(),porque:d.porque||'',onde:d.onde||'',quem:d.quem||'',quando:d.quando||'',prazo:d.prazo||'',como:d.como||'',custo:d.custo===''?0:Number(d.custo),indicador:d.indicador||'',status:d.status||'Não iniciado',obs:d.obs||'',atualizado:Date.now()};const id=f.dataset.id;const old=id?S.actions.find(x=>x.id===id):null;o.criado=old&&old.criado||Date.now();wipWarn(Object.assign({id},o),o.status);
   if(await wr(()=>id?db.doc('actions/'+id).set(o):db.collection('actions').add(o))){closeM();toast('Ação salva 🎯')}}
  if(f.id==='fT'){const o={titulo:d.titulo.trim(),descricao:d.descricao||'',setor:d.setor||'todos',responsavel:d.responsavel||'',prazo:d.prazo||'',status:d.status||'A fazer',atualizado:Date.now()};const id=f.dataset.id;const old=id?S.tasks.find(x=>x.id===id):null;o.criado=old&&old.criado||Date.now();
@@ -782,7 +811,7 @@ function exportLogo(){const svg=LOGO.replace(/SZ/g,'1024').replace('<svg ','<svg
 $('#logo1').innerHTML=LOGO.replace(/SZ/g,'44');$('#logo2').innerHTML=LOGO.replace(/SZ/g,'34');
 document.addEventListener('keydown',e=>{const t=e.target;if(t&&t.matches&&t.matches('input,textarea,select'))return;if($('#modal').classList.contains('on'))return;
   if(route()==='quinta'&&(S.tab||BLOCOS()[T.i].k)==='rodada'&&(e.key==='ArrowRight'||e.key==='ArrowLeft')){const L=ACT();S.rod=(S.rod+(e.key==='ArrowRight'?1:-1)+L.length)%L.length;render()}});
-window.addEventListener('hashchange',()=>{if(route()==='quinta')document.body.classList.remove('timer-hidden');render();window.scrollTo(0,0)});
+window.addEventListener('hashchange',()=>{if($('#modal').classList.contains('on'))closeM();if(route()==='quinta')document.body.classList.remove('timer-hidden');render();window.scrollTo(0,0)});
 document.addEventListener('fullscreenchange',()=>{if(!document.fullscreenElement&&document.body.classList.contains('proj')){document.body.classList.remove('proj');render()}});
 render();
 const FB_CFG={apiKey:"AIzaSyAw6DQO4qelj8X8rKNRAxasxW-cHoqo1kk",authDomain:"pet-coffee-gestores.firebaseapp.com",projectId:"pet-coffee-gestores",storageBucket:"pet-coffee-gestores.firebasestorage.app",messagingSenderId:"939153868119",appId:"1:939153868119:web:e8a3bac2eb07707c51ea12"};

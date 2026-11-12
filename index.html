@@ -209,6 +209,12 @@ body.presenting{overflow:hidden}
 .qcard.done:hover{box-shadow:0 8px 22px rgba(59,42,32,.08)}
 .qcard .who{display:flex;flex-wrap:wrap;gap:4px 10px;font-size:12px;font-weight:700;color:var(--muted);margin-top:2px}
 .qcard .who .ok{color:var(--sage)}
+.qcard.entok{border-color:#cfdcc4}
+.qcard .ativ{background:#fff4dc;border-radius:12px;padding:10px 12px;font-size:14px}
+.qcard .ativ.ok{background:var(--sage2)}
+.qcard .mlinks{display:flex;flex-direction:column;gap:4px;margin-top:8px}
+.qcard .mlinks a{color:var(--dcar);font-weight:800;font-size:13px;text-decoration:none}
+.qcard .mlinks a:hover{text-decoration:underline}
 .qcard .focus{background:var(--cream);border-radius:12px;padding:10px 12px;font-size:14px}
 .qcard .lastr{font-size:14px;border-left:3px solid var(--sage);padding-left:10px}
 .qcard .lastr .m{font-size:12px;color:var(--muted);font-weight:700;margin-top:2px}
@@ -437,20 +443,22 @@ function focusPlan(k){const A=S.actions.filter(a=>a.setor===k&&a.status!=='Concl
 function vQuinta(){
  const n=Q(),date=qDate(n),L=ACT();const R=S.resps.filter(r=>Number(r.quinta)===n).sort((a,b)=>(b.criado||0)-(a.criado||0));
  const quem=new Set(R.map(r=>r.alunoId));const setOk=L.filter(s=>R.some(r=>r.setor===s.k)).length;const duv=R.filter(r=>r.duvida);const nAl=S.alunos.filter(a=>a.setor&&L.some(s=>s.k===a.setor)).length;
- const cards=L.map(s=>{const rs=R.filter(r=>r.setor===s.k);const al=S.alunos.filter(a=>a.setor===s.k);const p=focusPlan(s.k);const last=rs[0];
-  return `<div class="card qcard ${rs.length?'done':''}" ${rs.length?`data-act="qSet" data-v="${s.k}" role="button" tabindex="0"`:''}>
-   <div class="row" style="gap:10px;align-items:flex-start"><div class="emo">${s.e}</div><div style="flex:1;min-width:0"><b>${esc(s.n)}</b><div class="who">${al.map(a=>`<span class="${quem.has(a.id)?'ok':''}">${quem.has(a.id)?'✓ ':''}${esc(a.nome)}</span>`).join('')||'<span>Sem alunos</span>'}</div></div><span class="pill ${rs.length?'s-ok':'s-nao'}">${rs.length?rs.length+(rs.length>1?' respostas':' resposta'):'Sem resposta'}</span></div>
+ const ENT=k=>{const e=entOf(n,k);return e&&e.descricao&&e.descricao!=='Apresentar a situação atual do setor e escolher a 1ª ação prioritária'?e:null};const MATS=k=>S.mats.filter(m=>m.setor===k&&m.criado&&iso(new Date(m.criado))===date);
+ const cards=L.map(s=>{const rs=R.filter(r=>r.setor===s.k);const al=S.alunos.filter(a=>a.setor===s.k);const p=focusPlan(s.k);const last=rs[0];const e=ENT(s.k);const ms=MATS(s.k);const ok=e&&e.status==='Entregue';
+  return `<div class="card qcard ${rs.length?'done':''} ${ok?'entok':''}" ${rs.length?`data-act="qSet" data-v="${s.k}" role="button" tabindex="0"`:''}>
+   <div class="row" style="gap:10px;align-items:flex-start"><div class="emo">${s.e}</div><div style="flex:1;min-width:0"><b>${esc(s.n)}</b><div class="who">${al.map(a=>`<span class="${quem.has(a.id)?'ok':''}">${quem.has(a.id)?'✓ ':''}${esc(a.nome)}</span>`).join('')||'<span>Sem alunos</span>'}</div></div>${e?`<span class="pill ${ok?'s-ok':e.status==='Não entregue'?'s-atr':'s-and'}">${ok?'✅ Entregue':e.status==='Não entregue'?'Não entregue':'⏳ Pendente'}</span>`:`<span class="pill ${rs.length?'s-ok':'s-nao'}">${rs.length?rs.length+(rs.length>1?' respostas':' resposta'):'Sem resposta'}</span>`}</div>
+   ${e?`<div class="ativ ${ok?'ok':''}"><div class="eyebrow">Atividade de hoje</div><div style="font-weight:800">${esc(e.descricao)}</div>${ms.length?`<div class="mlinks">${ms.map(m=>`<a href="${esc(m.url)}" target="_blank" rel="noopener">${MT[m.tipo]||'📎'} ${esc(m.titulo)}</a>`).join('')}</div>`:''}${W()?`<div class="row" style="gap:6px;margin-top:8px"><button class="btn ${ok?'ok':'alt'} sm" data-act="entMark" data-k="${s.k}" data-v="Entregue">✅ Entregue</button><button class="btn alt sm" data-act="entMark" data-k="${s.k}" data-v="Não entregue">Não entregue</button></div>`:''}</div>`:''}
    ${p?`<div class="focus"><div class="eyebrow">Plano em foco</div><div class="row" style="gap:8px;align-items:flex-start"><span style="flex:1;font-weight:700">${esc(p.oque)}</span>${stPill(p,false)}</div></div>`:''}
-   ${last?`<div class="lastr"><div class="txt">“${esc(String(last.feito).slice(0,140))}${String(last.feito).length>140?'…':''}”</div><div class="m">— ${esc(last.aluno)}${last.foto?' • 📷 com foto':''}</div></div>`:`<div class="lastr none">Ainda ninguém do setor respondeu hoje.</div>`}</div>`}).join('');
+   ${last?`<div class="lastr"><div class="txt">“${esc(String(last.feito).slice(0,140))}${String(last.feito).length>140?'…':''}”</div><div class="m">— ${esc(last.aluno)}${last.foto?' • 📷 com foto':''}</div></div>`:e?'':`<div class="lastr none">Ainda ninguém do setor respondeu hoje.</div>`}</div>`}).join('');
  return `<div class="top"><div><div class="eyebrow">Aula do projeto</div>
  <div class="qhead"><button class="btn alt sm" data-act="qprev" aria-label="Quinta anterior">◀</button><span class="qnum">Quinta ${n}</span><span class="qdate">${fdate(date)}${date===today()?' • hoje':''}</span><button class="btn alt sm" data-act="qnext" aria-label="Próxima quinta">▶</button>${S.q&&S.q!==curQ()?`<button class="btn alt sm" data-act="qnow">Voltar para hoje</button>`:''}</div></div>
  <div class="row"><button class="btn alt hide-m" data-act="proj">${document.body.classList.contains('proj')?'Sair do modo projetor':'📽️ Modo projetor'}</button>${dl&&W()?`<button class="btn alt" data-act="resumo">⬇ Resumo</button>`:''}</div></div>
  <div class="grid g4" style="margin-bottom:18px">
-  <div class="card tile sage"><div class="num">${quem.size}/${nAl}</div><div class="lbl">alunos já responderam</div></div>
-  <div class="card tile"><div class="num">${setOk}/${L.length}</div><div class="lbl">setores com resposta</div></div>
-  <div class="card tile"><div class="num">${R.filter(r=>r.foto).length}</div><div class="lbl">fotos enviadas</div></div>
+  <div class="card tile sage"><div class="num">${L.filter(s=>{const e=ENT(s.k);return e&&e.status==='Entregue'}).length}/${L.filter(s=>ENT(s.k)).length||0}</div><div class="lbl">atividades entregues</div></div>
+  <div class="card tile"><div class="num">${quem.size}/${nAl}</div><div class="lbl">alunos responderam no site</div></div>
+  <div class="card tile"><div class="num">${S.mats.filter(m=>m.criado&&iso(new Date(m.criado))===date).length}</div><div class="lbl">materiais entregues</div></div>
   <div class="card tile ${duv.length?'':'dark'}"><div class="num" style="${duv.length?'color:var(--car)':''}">${duv.length}</div><div class="lbl">dúvidas da turma</div></div></div>
- ${!R.length&&n===curQ()?`<a href="#responder" class="card cta"><span style="font-size:28px">📝</span><div style="flex:1"><b>Ninguém respondeu ainda hoje</b><div>Cada aluno abre <b>Responder</b>, escolhe o nome e conta o que fez no seu plano.</div></div><span class="btn car sm">Responder →</span></a>`:''}
+ ${!R.length&&!L.some(s=>ENT(s.k))&&n===curQ()?`<a href="#responder" class="card cta"><span style="font-size:28px">📝</span><div style="flex:1"><b>Ninguém respondeu ainda hoje</b><div>Cada aluno abre <b>Responder</b>, escolhe o nome e conta o que fez no seu plano.</div></div><span class="btn car sm">Responder →</span></a>`:''}
  <h2 class="sech">Como está cada setor</h2><div class="grid g3 qgrid">${cards}</div>
  ${duv.length?`<h2 class="sech">Dúvidas da turma</h2><div class="list">${duv.map(r=>`<div class="rbox"><div class="m"><span>${(SK[r.setor]||{}).e||''} ${esc(r.aluno)}</span><span>${esc(r.acaoTitulo||'Outro assunto')}</span></div><div class="txt">${esc(r.duvida)}</div></div>`).join('')}</div>`:''}
  ${W()?`<h2 class="sech">Fechamento da aula</h2>${qFechamento(n)}`:''}`;

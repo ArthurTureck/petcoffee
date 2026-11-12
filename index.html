@@ -178,6 +178,11 @@ body.proj .qnum{font-size:56px}
 .rbox .m{font-size:12px;color:var(--muted);font-weight:700;display:flex;flex-wrap:wrap;gap:4px 12px}
 .rbox .txt{white-space:pre-wrap;word-break:break-word}
 .rform textarea.in{min-height:96px}
+.fbtn{align-self:flex-start;cursor:pointer}
+.fprev{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.fprev img{width:96px;height:96px;object-fit:cover;border-radius:12px;border:1px solid var(--line)}
+.rfoto{padding:0;border:0;background:none;cursor:zoom-in;align-self:flex-start}
+.rfoto img{max-width:180px;max-height:140px;border-radius:10px;border:1px solid var(--line);display:block}
 @media (max-width:900px){.rplan .b{grid-template-columns:minmax(0,1fr)}.rform .btn{width:100%}}
 @media (max-width:900px){
  .app{grid-template-columns:minmax(0,1fr)}
@@ -329,10 +334,12 @@ function banner(){
 }
 function render(){const ae=document.activeElement;if(ae&&$('#main').contains(ae)&&ae.matches('input,textarea,select')&&ae.dataset.keep!=null){S.pend=true;return}S.pend=false;nav();const r=route();
  const fn={quinta:vQuinta,painel:vPainel,planos:vPlanos,responder:vResponder,tarefas:vTarefas,equipe:vEquipe,empresa:vEmpresa,materiais:vMateriais,historico:vHistorico}[r];
- $('#main').innerHTML=banner()+fn()}
+ const keep={};const rf=document.querySelector('form[data-form=resp]');if(rf)[...rf.elements].forEach(e=>{if(e.name)keep[e.name]=e.value});$('#main').innerHTML=banner()+fn();const nf=document.querySelector('form[data-form=resp]');if(nf&&rf)[...nf.elements].forEach(e=>{if(!e.name||keep[e.name]==null)return;if(e.tagName==='SELECT'&&![...e.options].some(o=>o.value===keep[e.name]))return;e.value=keep[e.name]})}
 
 /* ===== RESPONDER (alunos) ===== */
-const RS={me:(()=>{try{return localStorage.getItem('pc_me')||''}catch(e){return ''}})()};
+const RS={foto:'',me:(()=>{try{return localStorage.getItem('pc_me')||''}catch(e){return ''}})()};
+function fotoBox(){return RS.foto?`<div class="fprev"><img src="${RS.foto}" alt="Foto anexada"><button type="button" class="btn alt sm" data-act="fotoDel">✕ Tirar foto</button></div>`:`<label class="btn alt fbtn">📷 Anexar foto<input type="file" accept="image/*" data-foto hidden></label>`}
+function shrink(file){return new Promise((ok,no)=>{const u=URL.createObjectURL(file);const im=new Image();im.onload=()=>{let w=im.naturalWidth,h=im.naturalHeight;const M=1000;if(w>M||h>M){const k=M/Math.max(w,h);w=Math.round(w*k);h=Math.round(h*k)}const c=document.createElement('canvas');c.width=w;c.height=h;const g=c.getContext('2d');g.fillStyle='#fff';g.fillRect(0,0,w,h);g.drawImage(im,0,0,w,h);URL.revokeObjectURL(u);let q=.7,d=c.toDataURL('image/jpeg',q);while(d.length>420000&&q>.3){q-=.1;d=c.toDataURL('image/jpeg',q)}d.length>420000?no(new Error('big')):ok(d)};im.onerror=()=>{URL.revokeObjectURL(u);no(new Error('img'))};im.src=u})}
 function setMe(id){RS.me=id;try{localStorage.setItem('pc_me',id)}catch(e){}}
 function vResponder(){
  const me=S.alunos.find(a=>a.id===RS.me);const al=[...S.alunos].sort((a,b)=>String(a.nome).localeCompare(String(b.nome),'pt-BR'));
@@ -350,6 +357,7 @@ function vResponder(){
     <label class="f">Sobre qual plano?<select class="in" name="acao">${acts.map(a=>`<option value="${esc(a.id)}">${esc(a.oque)}</option>`).join('')}<option value="">Outro assunto</option></select></label>
     <label class="f">O que você fez hoje? <small>conte com suas palavras</small><textarea class="in" data-keep name="feito" maxlength="1500" required placeholder="Ex.: fiz a lista dos itens do estoque e combinei com a dupla…"></textarea></label>
     <div class="grid g2"><label class="f">Como está o plano?<select class="in" name="status">${STATUS.filter(x=>x!=='Atrasado').map(x=>`<option ${x==='Em andamento'?'selected':''}>${x}</option>`).join('')}</select></label><label class="f">Valor do indicador <small>se tiver</small><input class="in" data-keep name="valor" maxlength="20" inputmode="decimal" placeholder="${esc(s.ind)}"></label></div>
+    <div class="f"><span>Foto <small>opcional: print, foto do cartaz, do caderno…</small></span><div id="fotoBox">${fotoBox()}</div></div>
     <label class="f">Alguma dúvida ou dificuldade? <small>opcional</small><textarea class="in" data-keep name="duvida" maxlength="800" style="min-height:64px"></textarea></label>
     <button type="submit" class="btn car">Enviar resposta</button></div></form>`;
    const mine=S.resps.filter(r=>r.alunoId===me.id).sort((a,b)=>(b.criado||0)-(a.criado||0)).slice(0,5);
@@ -360,7 +368,7 @@ function vResponder(){
 function rBox(r,adm){const s=SK[r.setor];const x=S.actions.find(a=>a.id===r.acao);const can=adm&&x&&r.status&&effStatus(x)!==r.status;
  return `<div class="rbox ${adm&&!r.lida?'new':''}"><div class="row" style="gap:8px;align-items:flex-start"><b style="flex:1;min-width:0">${adm?esc(r.aluno)+' • ':''}${esc(r.acaoTitulo||'Outro assunto')}</b>${r.status?`<span class="pill ${SCLS[r.status]||'s-nao'}">${esc(r.status)}</span>`:''}</div>
  <div class="m">${s?`<span>${s.e} ${esc(s.n)}</span>`:''}<span>🗓️ Quinta ${esc(r.quinta)}</span><span>${new Date(r.criado||0).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})}</span>${r.valor?`<span>📈 ${esc(r.valor)}</span>`:''}${!adm?`<span>${r.lida?'✔ lida':'enviada'}</span>`:''}</div>
- <div class="txt">${esc(r.feito)}</div>${r.duvida?`<div class="txt" style="font-size:13px;background:#fff4dc;border-radius:10px;padding:8px 10px;color:#6b4d12"><b>Dúvida:</b> ${esc(r.duvida)}</div>`:''}
+ <div class="txt">${esc(r.feito)}</div>${r.foto&&/^data:image\/jpeg;base64,/.test(r.foto)?`<button type="button" class="rfoto" data-act="verFoto" data-id="${esc(r.id)}" aria-label="Ver foto"><img src="${r.foto}" alt="Foto da resposta" loading="lazy"></button>`:''}${r.duvida?`<div class="txt" style="font-size:13px;background:#fff4dc;border-radius:10px;padding:8px 10px;color:#6b4d12"><b>Dúvida:</b> ${esc(r.duvida)}</div>`:''}
  ${adm?`<div class="row" style="gap:8px;margin-top:4px;flex-wrap:wrap">${!r.lida?`<button class="btn alt sm" data-act="rLida" data-id="${esc(r.id)}">✔ Marcar como lida</button>`:''}${can?`<button class="btn car sm" data-act="rApply" data-id="${esc(r.id)}">Mudar plano para "${esc(r.status)}"</button>`:''}<span class="sp"></span><button class="btn alt sm" data-act="delAsk" data-coll="resps" data-id="${esc(r.id)}">Excluir</button></div>`:''}</div>`}
 
 /* ===== QUINTA DE HOJE ===== */
@@ -671,6 +679,8 @@ document.addEventListener('click',async e=>{
  if(a==='newMat')return openM(matForm());
  if(a==='editMat')return openM(matForm(S.mats.find(x=>x.id===id)));
  if(a==='kpiForm')return openM(kpiForm());
+ if(a==='fotoDel'){RS.foto='';const b=$('#fotoBox');if(b)b.innerHTML=fotoBox();return}
+ if(a==='verFoto'){const r=S.resps.find(z=>z.id===id);if(r&&r.foto)openM(`<h2>📷 ${esc(r.aluno)}</h2><img src="${r.foto}" alt="Foto da resposta" style="width:100%;border-radius:12px"><div class="row acts" style="margin-top:14px"><span class="sp"></span><button class="btn alt" data-act="close">Fechar</button></div>`);return}
  if(a==='rLida'){await wr(()=>db.doc('respostas/'+id).update({lida:true}));return}
  if(a==='rApply'){const r=S.resps.find(z=>z.id===id);const x=r&&S.actions.find(z=>z.id===r.acao);if(!x||!r.status)return;const o=Object.assign({},x,{status:r.status,atualizado:Date.now()});delete o.id;if(await wr(()=>db.doc('actions/'+x.id).set(o))){await wr(()=>db.doc('respostas/'+id).update({lida:true}));toast('Status do plano atualizado ✅')}return}
  if(a==='login')return fbLogin();if(a==='logout')return fbLogout();if(a==='cyc'){const x=S.actions.find(z=>z.id===id);if(!x)return;const ns=CYC[effStatus(x)]||'Em andamento';wipWarn(x,ns);const o=Object.assign({},x,{status:ns,atualizado:Date.now()});delete o.id;await wr(()=>db.doc('actions/'+id).set(o));return}
@@ -716,7 +726,8 @@ document.addEventListener('input',e=>{const k=e.target.dataset.in;if(k==='fq'){S
 document.addEventListener('focusout',e=>{if(S.pend)setTimeout(()=>{const ae=document.activeElement;if(!(ae&&ae.dataset&&ae.dataset.keep!=null))render()},60)});
 document.addEventListener('change',async e=>{
  const t=e.target;
- if(t.dataset.in==='me'){setMe(t.value);return render()}
+ if(t.dataset.in==='me'){setMe(t.value);RS.foto='';return render()}
+ if(t.matches&&t.matches('[data-foto]')){const f=t.files&&t.files[0];if(!f)return;try{RS.foto=await shrink(f)}catch(err){toast('Não deu para usar essa imagem. Tente outra.')}const b=$('#fotoBox');if(b)b.innerHTML=fotoBox();return}
  if(t.dataset.in==='fstatus'){S.f.status=t.value;return render()}
  if(t.dataset.in==='formSetor'){const s=SK[t.value];$('#fFun').innerHTML=s.f.map(x=>`<option>${esc(x)}</option>`).join('');return}
  if(t.dataset.role!==undefined&&t.dataset.setor){await assignRole(t.value,t.dataset.setor,t.dataset.role);return}
@@ -726,9 +737,9 @@ document.addEventListener('change',async e=>{
 document.addEventListener('submit',async e=>{
  e.preventDefault();const f=e.target;const d=Object.fromEntries(new FormData(f).entries());
   if(f.dataset.form==='resp'){if(!db)return toast('Sem conexão com os dados da turma.');const me=S.alunos.find(a=>a.id===RS.me);if(!me)return toast('Escolha seu nome primeiro.');const feito=String(d.feito||'').trim();if(!feito)return toast('Conte o que você fez.');const ac=S.actions.find(a=>a.id===d.acao);
-   const o={alunoId:me.id,aluno:String(me.nome||'').slice(0,60),setor:String(me.setor||''),funcao:String(me.funcao||''),acao:ac?ac.id:'',acaoTitulo:ac?String(ac.oque||'').slice(0,200):'',feito:feito.slice(0,1500),status:STATUS.includes(d.status)?d.status:'',valor:String(d.valor||'').trim().slice(0,20),duvida:String(d.duvida||'').trim().slice(0,800),quinta:curQ(),criado:Date.now(),lida:false};
+   const o={alunoId:me.id,aluno:String(me.nome||'').slice(0,60),setor:String(me.setor||''),funcao:String(me.funcao||''),acao:ac?ac.id:'',acaoTitulo:ac?String(ac.oque||'').slice(0,200):'',feito:feito.slice(0,1500),status:STATUS.includes(d.status)?d.status:'',valor:String(d.valor||'').trim().slice(0,20),duvida:String(d.duvida||'').trim().slice(0,800),quinta:curQ(),criado:Date.now(),lida:false};if(RS.foto&&/^data:image\/jpeg;base64,/.test(RS.foto))o.foto=RS.foto;
    document.activeElement&&document.activeElement.blur();const b=f.querySelector('button[type=submit]');if(b)b.disabled=true;
-   try{await db.collection('respostas').add(o);f.reset();toast('Resposta enviada! Valeu 🐾')}catch(err){toast('Não foi possível enviar agora. Tente de novo.')}finally{if(b)b.disabled=false}return}
+   try{await db.collection('respostas').add(o);f.reset();RS.foto='';{const fb=$('#fotoBox');if(fb)fb.innerHTML=fotoBox()}toast('Resposta enviada! Valeu 🐾')}catch(err){toast('Não foi possível enviar agora. Tente de novo.')}finally{if(b)b.disabled=false}return}
  if(f.id==='fA'){if(!d.oque||!d.oque.trim())return toast('Preencha o "O quê?"');const o={setor:d.setor,funcao:d.funcao||'',oque:d.oque.trim(),porque:d.porque||'',onde:d.onde||'',quem:d.quem||'',quando:d.quando||'',prazo:d.prazo||'',como:d.como||'',custo:d.custo===''?0:Number(d.custo),indicador:d.indicador||'',status:d.status||'Não iniciado',obs:d.obs||'',atualizado:Date.now()};const id=f.dataset.id;const old=id?S.actions.find(x=>x.id===id):null;o.criado=old&&old.criado||Date.now();wipWarn(Object.assign({id},o),o.status);
   if(await wr(()=>id?db.doc('actions/'+id).set(o):db.collection('actions').add(o))){closeM();toast('Ação salva 🎯')}}
  if(f.id==='fT'){const o={titulo:d.titulo.trim(),descricao:d.descricao||'',setor:d.setor||'todos',responsavel:d.responsavel||'',prazo:d.prazo||'',status:d.status||'A fazer',atualizado:Date.now()};const id=f.dataset.id;const old=id?S.tasks.find(x=>x.id===id):null;o.criado=old&&old.criado||Date.now();

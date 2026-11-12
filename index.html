@@ -186,6 +186,22 @@ body.proj .qnum{font-size:56px}
 .grph small{font-family:Nunito,sans-serif;font-size:12px;font-weight:800;color:var(--muted)}
 tr.grp td{background:var(--cream);padding-top:14px!important}
 tr.grp .grph{margin:0}
+#pres{display:none;position:fixed;inset:0;z-index:200;background:var(--cream);flex-direction:column}
+#presBody{flex:1;overflow:hidden;padding:28px 40px 8px}
+.pwrap{transform-origin:top left}
+#pres .btn,#pres .fab,#pres .hide-p{display:none!important}
+#pres [data-act]:not(.pbar [data-act]){pointer-events:none}
+#pres .qcard.done{cursor:default}
+.ptit{font-family:Fraunces,serif;font-size:34px;margin:0 0 18px}
+.pcover{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:14px;min-height:520px;padding:40px 80px}
+.pcover h1{font-family:Fraunces,serif;font-size:96px;margin:0;line-height:1}
+.pcover p{font-size:28px;color:var(--muted);margin:0;font-weight:700}
+.pbar{display:flex;gap:8px;align-items:center;justify-content:center;padding:10px 16px calc(10px + env(safe-area-inset-bottom));background:var(--dark);flex-wrap:wrap}
+.pbar button{background:transparent;border:1px solid #6a5444;color:var(--cream);border-radius:999px;padding:7px 14px;font:inherit;font-weight:800;font-size:13px;cursor:pointer}
+.pbar button:hover{background:#4a372b}
+.pdots{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
+.pdots button.on{background:var(--car);border-color:var(--car);color:#2a1c13}
+body.presenting{overflow:hidden}
 .sech{font-family:Fraunces,serif;font-size:22px;margin:22px 0 12px}
 .qdate{font-size:18px;color:var(--muted);font-weight:700}
 .qcard{display:flex;flex-direction:column;gap:12px}
@@ -286,6 +302,7 @@ small.req{color:var(--dcar)!important;font-weight:800!important}
 </div>
 <nav class="mobnav" id="mobnav"></nav>
 <button class="fab" id="fab" aria-label="Adicionar">+</button>
+<div id="pres" role="dialog" aria-label="Modo apresentação"></div>
 <div class="timer" id="timer"></div>
 <div class="modal" id="modal"><div class="sheet" id="sheet"></div></div>
 <div class="toast" id="toast"></div>
@@ -358,8 +375,28 @@ function banner(){
 }
 function render(){const ae=document.activeElement;if(ae&&$('#main').contains(ae)&&ae.matches('input,textarea,select')&&ae.dataset.keep!=null){S.pend=true;return}S.pend=false;nav();const r=route();
  const fn={quinta:vQuinta,painel:vPainel,planos:vPlanos,responder:vResponder,tarefas:vTarefas,equipe:vEquipe,empresa:vEmpresa,materiais:vMateriais,historico:vHistorico}[r];
- const keep={};const rf=document.querySelector('form[data-form=resp]');if(rf)[...rf.elements].forEach(e=>{if(e.name)keep[e.name]=e.value});$('#main').innerHTML=banner()+fn();const nf=document.querySelector('form[data-form=resp]');if(nf&&rf)[...nf.elements].forEach(e=>{if(!e.name||keep[e.name]==null)return;if(e.tagName==='SELECT'&&![...e.options].some(o=>o.value===keep[e.name]))return;e.value=keep[e.name]})}
+ const keep={};const rf=document.querySelector('form[data-form=resp]');if(rf)[...rf.elements].forEach(e=>{if(e.name)keep[e.name]=e.value});$('#main').innerHTML=banner()+fn();if(PR.on)presRender();const nf=document.querySelector('form[data-form=resp]');if(nf&&rf)[...nf.elements].forEach(e=>{if(!e.name||keep[e.name]==null)return;if(e.tagName==='SELECT'&&![...e.options].some(o=>o.value===keep[e.name]))return;e.value=keep[e.name]})}
 
+/* ===== MODO APRESENTAÇÃO (projetor) ===== */
+const PR={on:false,i:0,auto:true,h:null,secs:15};
+function presSlides(){const n=Q();const d=document.createElement('div');d.innerHTML=vPainel();const q=document.createElement('div');q.innerHTML=vQuinta();
+ const g4=d.querySelectorAll('.grid.g4');const pick=el=>el?el.outerHTML:'';
+ const resp=S.resps.filter(r=>Number(r.quinta)===n);
+ return [
+  {t:'Capa',h:`<div class="pcover">${LOGO.replace(/SZ/g,'200')}<div class="eyebrow" style="font-size:20px">Projeto Gestores do Futuro • Jovem Aprendiz ESPRO</div><h1>Pet Coffee</h1><p>Painel da empresa • ${esc(qLabel(n))}</p></div>`},
+  {t:'Visão geral',h:`<h2 class="ptit">Como a Pet Coffee está indo</h2>${pick(g4[0])}${pick(d.querySelector('#g21'))}`},
+  {t:'Indicadores',h:`<h2 class="ptit">Indicadores dos setores</h2><div class="grid g3">${g4[1]?g4[1].innerHTML:''}</div>`},
+  {t:'Respostas da turma',h:`<h2 class="ptit">O que a turma fez hoje <span class="pill s-ok" style="vertical-align:middle">${resp.length} respostas</span></h2>${pick(q.querySelector('.qgrid'))}`},
+  {t:'Próximos passos',h:`<h2 class="ptit">Próximas tarefas e atualizações</h2>${pick(d.querySelector('.grid.g2'))}`}]}
+function presFit(){const b=$('#presBody');if(!b)return;const w=b.firstElementChild;if(!w)return;w.style.transform='none';const W2=b.clientWidth,H2=b.clientHeight;const cs=getComputedStyle(b);const W3=W2-parseFloat(cs.paddingLeft)-parseFloat(cs.paddingRight),H3=H2-parseFloat(cs.paddingTop)-parseFloat(cs.paddingBottom);w.style.width=W3+'px';let k=Math.min(H3/w.scrollHeight,1.6);if(k<1){w.style.width=(W3/k)+'px';k=Math.min(H3/w.scrollHeight,1)}w.style.width=(W3/k)+'px';w.style.transform=`scale(${k})`}
+function presRender(){if(!PR.on)return;const L=presSlides();PR.i=(PR.i+L.length)%L.length;const sl=L[PR.i];
+ $('#pres').innerHTML=`<div id="presBody"><div class="pwrap">${sl.h}</div></div><div class="pbar"><button data-act="presPrev" aria-label="Anterior">◀</button><div class="pdots">${L.map((x,i)=>`<button class="${i===PR.i?'on':''}" data-act="presGo" data-v="${i}" title="${esc(x.t)}">${esc(x.t)}</button>`).join('')}</div><button data-act="presNext" aria-label="Próximo">▶</button><button data-act="presAuto">${PR.auto?'⏸ Pausar':'▶ Passar sozinho'}</button><button data-act="presClose">✕ Sair</button></div>`;
+ requestAnimationFrame(presFit)}
+function presTimer(){clearInterval(PR.h);if(PR.auto&&PR.on)PR.h=setInterval(()=>{PR.i++;presRender()},PR.secs*1000)}
+async function presOpen(){PR.on=true;PR.i=0;document.body.classList.add('presenting');$('#pres').style.display='flex';presRender();presTimer();try{if(document.documentElement.requestFullscreen)await document.documentElement.requestFullscreen()}catch(e){}}
+async function presClose(){PR.on=false;clearInterval(PR.h);document.body.classList.remove('presenting');$('#pres').style.display='none';$('#pres').innerHTML='';try{if(document.fullscreenElement)await document.exitFullscreen()}catch(e){}}
+window.addEventListener('resize',()=>{if(PR.on)presFit()});
+document.addEventListener('keydown',e=>{if(!PR.on)return;if(e.key==='Escape'){presClose();return}if(e.key==='ArrowRight'||e.key==='PageDown'){e.preventDefault();e.stopImmediatePropagation();PR.i++;presRender();presTimer()}if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();e.stopImmediatePropagation();PR.i--;presRender();presTimer()}if(e.key===' '){e.preventDefault();e.stopImmediatePropagation();PR.auto=!PR.auto;presTimer();presRender()}},true);
 /* ===== RESPONDER (alunos) ===== */
 const RS={foto:'',me:(()=>{try{return localStorage.getItem('pc_me')||''}catch(e){return ''}})()};
 function fotoBox(){return RS.foto?`<div class="fprev"><img src="${RS.foto}" alt="Foto anexada"><button type="button" class="btn alt sm" data-act="fotoDel">✕ Tirar foto</button></div>`:`<label class="btn alt fbtn">📷 Anexar foto<input type="file" accept="image/*" data-foto hidden></label>`}
@@ -503,7 +540,7 @@ function vPainel(){
  const rec=[...A].sort((a,b)=>(b.atualizado||0)-(a.atualizado||0)).slice(0,6);
  const n=Q(),com=L.filter(s=>{const e=entOf(n,s.k);return e&&e.descricao}).length;
  return `<div class="top"><div><div class="eyebrow">Projeto Gestores do Futuro</div><h1>Painel da Pet Coffee 🐾</h1><p>Como a nossa empresa está indo.</p></div>
- <div class="row">${W()?`<button class="btn car hide-m" data-act="newAction">+ Nova ação</button><button class="btn alt" data-act="kpiForm">Atualizar indicadores</button>`:''}</div></div>
+ <div class="row"><button class="btn car hide-m" data-act="presOpen">📽️ Apresentar no projetor</button>${W()?`<button class="btn alt hide-m" data-act="newAction">+ Nova ação</button><button class="btn alt" data-act="kpiForm">Atualizar indicadores</button>`:''}</div></div>
  <a href="#quinta" class="card" style="display:flex;gap:14px;align-items:center;text-decoration:none;color:inherit;margin-bottom:16px;background:var(--dark);color:var(--cream);border-color:var(--dark)"><span style="font-size:30px">🗓️</span><div style="flex:1"><b style="font-family:Fraunces,serif;font-size:20px">${esc(qLabel(n))}</b><div style="color:#d9c9b4;font-size:13px">${S.resps.filter(r=>Number(r.quinta)===n).length} respostas dos alunos hoje</div></div><span class="btn car sm">Abrir →</span></a>
  <div class="grid g4" style="margin-bottom:16px">
   <div class="card tile"><div class="num">${tot}</div><div class="lbl">ações nos planos</div></div>
@@ -715,6 +752,7 @@ document.addEventListener('click',async e=>{
  if(a==='newMat')return openM(matForm());
  if(a==='editMat')return openM(matForm(S.mats.find(x=>x.id===id)));
  if(a==='kpiForm')return openM(kpiForm());
+ if(a==='presOpen')return presOpen();if(a==='presClose')return presClose();if(a==='presNext'){PR.i++;presRender();return presTimer()}if(a==='presPrev'){PR.i--;presRender();return presTimer()}if(a==='presGo'){PR.i=Number(v);presRender();return presTimer()}if(a==='presAuto'){PR.auto=!PR.auto;presTimer();return presRender()}
  if(a==='qSet'){const n=Q();const k=v;const s=SK[k];const rs=S.resps.filter(r=>Number(r.quinta)===n&&r.setor===k).sort((a,b)=>(b.criado||0)-(a.criado||0));return openM(`<h2>${s.e} ${esc(s.n)} • Quinta ${n}</h2><div class="list">${rs.map(r=>rBox(r,W())).join('')}</div><div class="row acts" style="margin-top:14px"><span class="sp"></span><button class="btn alt" data-act="close">Fechar</button></div>`)}
  if(a==='fotoDel'){RS.foto='';const b=$('#fotoBox');if(b)b.innerHTML=fotoBox();return}
  if(a==='verFoto'){const r=S.resps.find(z=>z.id===id);if(r&&r.foto)openM(`<h2>📷 ${esc(r.aluno)}</h2><img src="${r.foto}" alt="Foto da resposta" style="width:100%;border-radius:12px"><div class="row acts" style="margin-top:14px"><span class="sp"></span><button class="btn alt" data-act="close">Fechar</button></div>`);return}
@@ -817,7 +855,7 @@ $('#logo1').innerHTML=LOGO.replace(/SZ/g,'44');$('#logo2').innerHTML=LOGO.replac
 document.addEventListener('keydown',e=>{const t=e.target;if(t&&t.matches&&t.matches('input,textarea,select'))return;if($('#modal').classList.contains('on'))return;
   if(route()==='quinta'&&(S.tab||BLOCOS()[T.i].k)==='rodada'&&(e.key==='ArrowRight'||e.key==='ArrowLeft')){const L=ACT();S.rod=(S.rod+(e.key==='ArrowRight'?1:-1)+L.length)%L.length;render()}});
 window.addEventListener('hashchange',()=>{if($('#modal').classList.contains('on'))closeM();if(route()==='quinta')document.body.classList.remove('timer-hidden');render();window.scrollTo(0,0)});
-document.addEventListener('fullscreenchange',()=>{if(!document.fullscreenElement&&document.body.classList.contains('proj')){document.body.classList.remove('proj');render()}});
+document.addEventListener('fullscreenchange',()=>{if(!document.fullscreenElement&&PR.on)presClose();if(!document.fullscreenElement&&document.body.classList.contains('proj')){document.body.classList.remove('proj');render()}});
 render();
 const FB_CFG={apiKey:"AIzaSyAw6DQO4qelj8X8rKNRAxasxW-cHoqo1kk",authDomain:"pet-coffee-gestores.firebaseapp.com",projectId:"pet-coffee-gestores",storageBucket:"pet-coffee-gestores.firebasestorage.app",messagingSenderId:"939153868119",appId:"1:939153868119:web:e8a3bac2eb07707c51ea12"};
 const ADMIN='arthurtureck@gmail.com';

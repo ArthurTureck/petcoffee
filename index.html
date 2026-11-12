@@ -380,6 +380,9 @@ function nav(){const r=route();MOB=W()?['quinta','planos','responder','painel']:
  const fa={planos:'newAction',tarefas:'newTask',materiais:'newMat'}[r];const fb=$('#fab');
  if(fa&&W()){fb.style.visibility='visible';fb.dataset.act=fa}else{fb.style.visibility='hidden';delete fb.dataset.act}}
 function banner(){
+ const old=false?`<div class="banner" style="background:#fff4dc;border-color:var(--car);color:#6b4d12">⚠️ <b>Esta versão está desatualizada.</b> Agora tudo fica em <a href="https://petcoffee.arthurtureck.dev.br" target="_blank" rel="noopener" style="color:inherit;font-weight:800">petcoffee.arthurtureck.dev.br</a>, onde a turma responde e os dados se atualizam.</div>`:'';
+ return old+banner0()}
+function banner0(){
  if(S.offline)return `<div class="banner">Não foi possível carregar os dados da turma. Confira a internet e o link da turma.</div>`;
  if(!S.ready&&S.slow)return `<div class="banner">Ainda não foi possível carregar os dados da turma. Verifique a conexão; a página atualiza sozinha quando conectar.</div>`;
  if(!S.ready)return `<div class="banner" style="background:#f3ece2;border-color:var(--line);color:var(--muted)">Carregando dados da turma…</div>`;

@@ -887,7 +887,8 @@ async function fbLogout(){if(!FB)return;await FB.au.signOut(FB.auth);toast('VocÃ
   const mark=s=>{if(!s.metadata.fromCache&&!S.ready){S.ready=true;S.slow=false;clearTimeout(timer)}};
   const err=e=>{clearTimeout(timer);S.ready=true;if(e&&e.code==='permission-denied')S.offline=true;render()};
   const start=()=>{if(subs)return;subs=true;
-   const sub=(path,key)=>db.collection(path).onSnapshot(s=>{S[key]=s.docs.map(d=>Object.assign({id:d.id},d.data()));mark(s);render()},err);
+   const MAPURL={'https://claude.ai/artifact/FzU99a3kX4afZW3vRXc68z':'/slides/?d=turma','https://claude.ai/artifact/Vv4wk36tmSvgvdpCHwXiog':'/slides/?d=grupo'};
+   const sub=(path,key)=>db.collection(path).onSnapshot(s=>{S[key]=s.docs.map(d=>Object.assign({id:d.id},d.data()));if(key==='mats')S.mats=S.mats.map(m=>MAPURL[m.url]?Object.assign({},m,{url:MAPURL[m.url]}):m);mark(s);render()},err);
    sub('respostas','resps');sub('actions','actions');sub('tasks','tasks');sub('alunos','alunos');sub('materiais','mats');sub('entregas','entregas');sub('atas','atas');sub('kpihist','kpihist');
    db.doc('config/empresa').onSnapshot(s=>{S.cfg=s.exists?s.data():null;render()},err);
    db.doc('config/kpis').onSnapshot(s=>{S.kpis=s.exists?s.data():{};render()},err);

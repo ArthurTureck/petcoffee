@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#3b2a20">
+<title>Apresentação • Pet Coffee</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Nunito:wght@600;700;800&display=swap">
+<style>
+:root{--dark:#3b2a20;--cream:#f7f0e6;--car:#c8793a;--muted:#d9c9b4}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--dark);color:var(--cream);font-family:Nunito,system-ui,sans-serif}
+body{display:flex;flex-direction:column;-webkit-user-select:none;user-select:none}
+header{display:flex;align-items:center;gap:12px;padding:12px 16px;padding-top:calc(12px + env(safe-area-inset-top))}
+header a{color:var(--cream);text-decoration:none;font-weight:800;font-size:14px;border:1px solid #6a5444;border-radius:999px;padding:7px 14px;white-space:nowrap}
+header h1{font-family:Fraunces,serif;font-size:18px;margin:0;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+main{flex:1;display:flex;align-items:center;justify-content:center;padding:8px 12px;min-height:0;position:relative}
+#img{max-width:100%;max-height:100%;aspect-ratio:16/9;border-radius:12px;box-shadow:0 10px 40px rgba(0,0,0,.35);background:#000;pointer-events:none;-webkit-user-drag:none}
+.nav{position:absolute;top:50%;transform:translateY(-50%);width:52px;height:52px;border-radius:50%;border:0;background:rgba(59,42,32,.75);color:var(--cream);font-size:22px;cursor:pointer}
+.nav:disabled{opacity:.25;cursor:default}
+#prev{left:18px}#next{right:18px}
+footer{display:flex;align-items:center;justify-content:center;gap:12px;padding:10px 16px calc(14px + env(safe-area-inset-bottom));font-weight:800;color:var(--muted);font-size:14px}
+footer button{background:transparent;color:var(--cream);border:1px solid #6a5444;border-radius:999px;padding:7px 14px;font:inherit;cursor:pointer}
+.bar{flex:1;max-width:420px;height:6px;background:#5a4536;border-radius:9px;overflow:hidden}.bar i{display:block;height:100%;background:var(--car)}
+@media (max-width:700px){.nav{width:42px;height:42px;font-size:18px;top:auto;bottom:-6px;transform:none}#prev{left:12px}#next{right:12px}header h1{font-size:15px}#fs{display:none}}
+</style>
+</head>
+<body oncontextmenu="return false">
+<header><a href="/#materiais">← Voltar</a><h1 id="t">Apresentação</h1></header>
+<main><button class="nav" id="prev" aria-label="Slide anterior">◀</button><img id="img" alt="" draggable="false"><button class="nav" id="next" aria-label="Próximo slide">▶</button></main>
+<footer><span id="c">1 / 1</span><div class="bar"><i id="b"></i></div><button id="fs">⛶ Tela cheia</button></footer>
+<script>
+const DECKS={turma:{t:'Empresa, Setores e Planos de Ação',n:21},grupo:{t:'Processo de Atendimento e Gestão da Qualidade',n:10}};
+const k=new URLSearchParams(location.search).get('d');const D=DECKS[k]||DECKS.turma;const dir=DECKS[k]?k:'turma';
+let i=0;const img=document.getElementById('img');
+document.getElementById('t').textContent=D.t;document.title=D.t+' • Pet Coffee';
+function src(n){return dir+'/'+String(n+1).padStart(2,'0')+'.jpg'}
+function show(){img.src=src(i);img.alt='Slide '+(i+1)+' de '+D.n;document.getElementById('c').textContent=(i+1)+' / '+D.n;document.getElementById('b').style.width=((i+1)/D.n*100)+'%';document.getElementById('prev').disabled=i===0;document.getElementById('next').disabled=i===D.n-1;if(i+1<D.n){const p=new Image();p.src=src(i+1)}}
+function go(d){i=Math.max(0,Math.min(D.n-1,i+d));show()}
+document.getElementById('prev').onclick=()=>go(-1);document.getElementById('next').onclick=()=>go(1);
+document.getElementById('fs').onclick=()=>{try{document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen()}catch(e){}};
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){e.preventDefault();go(1)}if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();go(-1)}});
+let x0=null;document.addEventListener('touchstart',e=>{x0=e.touches[0].clientX},{passive:true});document.addEventListener('touchend',e=>{if(x0==null)return;const dx=e.changedTouches[0].clientX-x0;if(Math.abs(dx)>40)go(dx<0?1:-1);x0=null});
+show();
+</script>
+</body>
+</html>

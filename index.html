@@ -297,6 +297,27 @@ small.req{color:var(--dcar)!important;font-weight:800!important}
  .rodnav>.btn{flex:1}
  .eqh{flex-wrap:wrap}
 }
+/* áreas por setor */
+.spick{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.spick button{display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 8px;border-radius:14px;border:2px solid var(--line);background:var(--white);cursor:pointer;font:inherit;font-weight:800;color:var(--dark);text-align:center;font-size:13px;line-height:1.2}
+.spick button i{font-style:normal;font-size:28px}
+.spick button:hover{border-color:var(--ac,var(--car));background:var(--acl,var(--beige))}
+.ahead{border-radius:var(--r);padding:18px 20px;margin-bottom:14px;background:var(--ac);color:#fff;display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.ahead .emo{width:56px;height:56px;font-size:30px;background:rgba(255,255,255,.25)}
+.ahead h1{margin:0;font-size:26px;color:#fff}.ahead .eyebrow{color:rgba(255,255,255,.85)}
+.ahead .btn{background:rgba(255,255,255,.22);color:#fff}
+.area .card.acc{border-top:5px solid var(--ac)}
+.area .btn.car{background:var(--ac);color:#fff}
+.area .stp i{background:var(--ac)!important;color:#fff!important}
+.anim{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px}
+.anim .a{border:1px solid var(--line);border-radius:14px;padding:10px 12px;background:var(--white);font-size:13px}
+.anim .a b{font-size:15px}.anim .a.al{border-color:var(--red);background:#fdf0ec}
+.anim .tg{display:inline-block;font-size:11px;font-weight:800;border-radius:999px;padding:2px 8px;margin-top:6px;background:var(--sage2);color:var(--sage)}
+.anim .a.al .tg{background:#f7d9d0;color:var(--red)}
+.rot{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;font-size:13px}
+.rot div{background:var(--acl);border-radius:12px;padding:10px 12px}.rot b{display:block;margin-bottom:4px}
+@media (max-width:900px){.spick{grid-template-columns:1fr 1fr}.rot{grid-template-columns:1fr 1fr}}
+@media (max-width:600px){.anim{grid-template-columns:1fr 1fr;gap:8px}.anim .a{padding:8px 10px;font-size:12px}.ahead h1{font-size:21px}.ahead .btn{width:100%}}
 </style>
 </head>
 <body>
@@ -342,6 +363,25 @@ const DEF_CFG={clientes:120,ticket:32,dias:26,custos:{'Ingredientes e insumos':3
 const DEF_BLOCOS=[{k:'abertura',n:'Abertura com o Painel',min:5},{k:'duplas',n:'Trabalho das duplas',min:25},{k:'rodada',n:'Rodada relâmpago',min:15},{k:'fechamento',n:'Fechamento',min:5}];
 const BDESC={abertura:'Painel na tela: o que foi entregue desde a última quinta.',duplas:'Todas as duplas trabalham ao mesmo tempo na entrega de hoje.',rodada:'1 minuto por setor: entrega, ação em andamento e onde travou.',fechamento:'Registrar decisões e combinar a entrega da próxima quinta.'};
 const LOGO='<svg viewBox="0 0 120 120" width="SZ" height="SZ" aria-label="Logo Pet Coffee"><circle cx="60" cy="60" r="58" fill="#c8793a"/><path d="M48 32 C44 26 52 22 48 15 M66 32 C62 26 70 22 66 15" stroke="#fff4e4" stroke-width="4" fill="none" stroke-linecap="round"/><ellipse cx="58" cy="96" rx="36" ry="6" fill="#9a4f1e"/><path d="M84 56 C99 56 99 80 84 80" stroke="#fff4e4" stroke-width="7" fill="none"/><polygon points="31,52 37,35 49,49" fill="#fff4e4"/><polygon points="67,49 79,35 85,52" fill="#fff4e4"/><polygon points="36,48 39,40 45,47" fill="#f2b8b5"/><polygon points="71,47 77,40 80,48" fill="#f2b8b5"/><path d="M30 48 H86 V72 C86 87 76 94 58 94 C40 94 30 87 30 72 Z" fill="#fff4e4"/><g fill="#3b2a20"><ellipse cx="58" cy="78" rx="8" ry="6.5"/><circle cx="49" cy="69" r="3.2"/><circle cx="54.5" cy="64.5" r="3.2"/><circle cx="61.5" cy="64.5" r="3.2"/><circle cx="67" cy="69" r="3.2"/></g></svg>';
+
+/* ===== áreas por setor ===== */
+const AC={diretoria:['#6b4f9e','#efe9f7'],financeiro:['#3d7a57','#e3f1e8'],rh:['#c0612f','#fbe8dd'],marketing:['#c23b6d','#fbe3ec'],atendimento:['#9a4f1e','#f6e7d6'],cozinha:['#b5832a','#f8eed8'],qualidade:['#2f7f8f','#dff0f2'],bemestar:['#4f6e54','#e3ecd9'],tecnologia:['#34589a','#e2e9f6']};
+const ANIMAIS=[
+['Paçoca','🐶','Macho, 2 anos','Brincalhão, adora crianças',''],['Mel','🐶','Fêmea, 4 anos','Calma, adora colo',''],['Thor','🐶','Macho, 1 ano','Muita energia, 2 passeios por dia','V10 atrasada'],['Pipoca','🐶','Fêmea, 8 meses','Curiosa e comilona','Castração agendada'],['Biscoito','🐶','Macho, 6 anos','Tranquilo, dorme muito','Voltou em outubro'],['Luna','🐶','Fêmea, 3 anos','Tímida, precisa de paciência',''],
+['Frajola','🐱','Macho, 3 anos','O dono do salão',''],['Nina','🐱','Fêmea, 2 anos','Carinhosa, ronrona no colo',''],['Tigrinho','🐱','Macho, 7 meses','Não para quieto','Antirrábica atrasada'],['Mia','🐱','Fêmea, 5 anos','Gosta de ficar no alto',''],['Bolinha','🐱','Macho, 1 ano','Acima do peso, porção controlada',''],['Amora','🐱','Fêmea, 4 meses','Filhote, 2ª dose em dezembro','Vacinas em andamento'],['Café','🐱','Macho, 2 anos','Tímido no começo',''],['Pérola','🐱','Fêmea, 9 anos','Surda, não assustar por trás','']];
+const ALERTA=a=>/atrasad|Voltou/.test(a[4]);
+const AREAS={
+ bemestar:{
+  ola:'Aqui é o canto de quem cuida dos 14 bichos da casa e faz cada um achar um lar.',
+  painel(){const al=ANIMAIS.filter(ALERTA);return `<div class="card acc" style="margin-bottom:14px"><h2 style="margin:0 0 4px">Os animais da casa 🐾</h2><p style="margin:0 0 12px;color:var(--muted);font-size:14px">6 cães e 8 gatos da ONG parceira Lar Feliz Pet. ${al.length?`<b style="color:var(--red)">${al.length} pedem atenção agora.</b>`:''}</p>
+   <div class="anim">${[...ANIMAIS].sort((a,b)=>ALERTA(b)-ALERTA(a)).map(a=>`<div class="a ${ALERTA(a)?'al':''}"><b>${a[1]} ${esc(a[0])}</b><div style="color:var(--muted)">${esc(a[2])}</div><div>${esc(a[3])}</div><span class="tg">${esc(a[4]||'Tudo em dia')}</span></div>`).join('')}</div></div>
+   <div class="card acc" style="margin-bottom:14px"><h2 style="margin:0 0 10px">Rotina dos cuidados</h2><div class="rot"><div><b>☀️ Antes de abrir</b>Saúde, água e comida, caixas de areia limpas.</div><div><b>🕑 Durante o dia</b>Repor água, limpar na hora, deixar dormir quem dorme.</div><div><b>🌙 Fim do dia</b>Última limpeza, trocar a água, organizar o espaço.</div><div><b>📅 Toda semana</b>Pesar filhotes e o Bolinha, conferir vacinas.</div></div></div>`},
+  campos(){return `<div class="grid g2"><label class="f">Sobre qual animal? <small>opcional</small><select class="in" name="x_animal"><option value="">Nenhum em especial</option>${ANIMAIS.map(a=>`<option>${esc(a[0])}</option>`).join('')}<option>Vários animais</option></select></label>
+   <label class="f">Que tipo de registro? <small>opcional</small><select class="in" name="x_tipo"><option value="">Escolha</option>${['💉 Vacina ou saúde','🧹 Rotina de cuidados','🏠 Visita de interessado','🎉 Adoção concluída','🧠 Comportamento','📋 Outro'].map(x=>`<option>${x}</option>`).join('')}</select></label></div>`},
+  prefixo(d){const p=[d.x_tipo,d.x_animal&&('Animal: '+d.x_animal)].filter(Boolean);return p.length?'['+p.join(' • ')+'] ':''}
+ }};
+function setorHoje(){try{const o=JSON.parse(localStorage.getItem('pc_setor')||'null');return o&&o.d===today()&&SK[o.k]?o.k:''}catch(e){return ''}}
+function setSetor(k){RS.setor=k;try{k?localStorage.setItem('pc_setor',JSON.stringify({k,d:today()})):localStorage.removeItem('pc_setor')}catch(e){}}
 
 /* ===== estado ===== */
 const S={resps:[],actions:[],tasks:[],team:[],alunos:[],sorteio:null,mats:[],entregas:[],atas:[],kpihist:[],cfg:null,kpis:{},geral:null,ready:false,slow:false,offline:false,canWrite:true,q:null,qTouched:false,tab:null,rod:0,f:{setor:'todos',status:'todos',q:'',tset:'todos'}};
@@ -414,34 +454,39 @@ async function presClose(){PR.on=false;clearInterval(PR.h);document.body.classLi
 window.addEventListener('resize',()=>{if(PR.on)presFit()});
 document.addEventListener('keydown',e=>{if(!PR.on)return;if(e.key==='Escape'){presClose();return}if(e.key==='ArrowRight'||e.key==='PageDown'){e.preventDefault();e.stopImmediatePropagation();PR.i++;presRender();presTimer()}if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();e.stopImmediatePropagation();PR.i--;presRender();presTimer()}if(e.key===' '){e.preventDefault();e.stopImmediatePropagation();PR.auto=!PR.auto;presTimer();presRender()}},true);
 /* ===== RESPONDER (alunos) ===== */
-const RS={foto:'',me:(()=>{try{return localStorage.getItem('pc_me')||''}catch(e){return ''}})()};
+const RS={foto:'',setor:setorHoje(),me:(()=>{try{return localStorage.getItem('pc_me')||''}catch(e){return ''}})()};
 function fotoBox(){return RS.foto?`<div class="fprev"><img src="${RS.foto}" alt="Foto anexada"><button type="button" class="btn alt sm" data-act="fotoDel">✕ Tirar foto</button></div>`:`<label class="btn alt fbtn">📷 Anexar foto<input type="file" accept="image/*" data-foto hidden></label>`}
 function shrink(file){return new Promise((ok,no)=>{const u=URL.createObjectURL(file);const im=new Image();im.onload=()=>{let w=im.naturalWidth,h=im.naturalHeight;const M=1000;if(w>M||h>M){const k=M/Math.max(w,h);w=Math.round(w*k);h=Math.round(h*k)}const c=document.createElement('canvas');c.width=w;c.height=h;const g=c.getContext('2d');g.fillStyle='#fff';g.fillRect(0,0,w,h);g.drawImage(im,0,0,w,h);URL.revokeObjectURL(u);let q=.7,d=c.toDataURL('image/jpeg',q);while(d.length>420000&&q>.3){q-=.1;d=c.toDataURL('image/jpeg',q)}d.length>420000?no(new Error('big')):ok(d)};im.onerror=()=>{URL.revokeObjectURL(u);no(new Error('img'))};im.src=u})}
 function setMe(id){RS.me=id;try{localStorage.setItem('pc_me',id)}catch(e){}}
 function vResponder(){
- const me=S.alunos.find(a=>a.id===RS.me);const al=[...S.alunos].sort((a,b)=>String(a.nome).localeCompare(String(b.nome),'pt-BR'));
- let h=`<div class="top"><div><div class="eyebrow">Para cada aluno</div><h1>Responder 📝</h1><p>Escolha seu nome, veja o que o seu setor precisa fazer e mande o que você fez hoje.</p></div></div>
- <div class="card" style="margin-bottom:14px"><label class="f"><span class="stp"><i>1</i> Quem é você?</span><select class="in" data-in="me"><option value="">Toque para escolher seu nome</option>${al.map(a=>{const s=SK[a.setor];return `<option value="${esc(a.id)}" ${a.id===RS.me?'selected':''}>${esc(a.nome)}${s?' • '+s.e+' '+esc(s.n):''}</option>`}).join('')}</select></label></div>`;
- if(me){const s=SK[me.setor];
-  if(!s)h+=`<div class="empty" style="margin-bottom:14px">Você ainda não está em um setor. Fale com a organização.</div>`;
-  else{const acts=S.actions.filter(a=>a.setor===s.k).sort((a,b)=>(a.funcao===me.funcao?0:1)-(b.funcao===me.funcao?0:1)||(a.prazo||'9').localeCompare(b.prazo||'9'));
-   const dupla=S.alunos.filter(a=>a.setor===s.k&&a.id!==me.id).map(a=>a.nome).join(', ');
-   h+=`<div class="card" style="margin-bottom:14px;display:flex;gap:14px;align-items:flex-start;flex-wrap:wrap"><div class="emo" style="width:52px;height:52px;font-size:26px">${s.e}</div><div style="flex:1;min-width:0"><div class="eyebrow">Seu setor</div><h2 style="margin:2px 0">${esc(s.n)}</h2><div style="font-size:14px">Sua função: <b>${esc(me.funcao||'—')}</b>${dupla?` • Dupla: <b>${esc(dupla)}</b>`:''}</div>
-    <div style="font-size:13px;margin-top:8px;background:#fff4dc;border-radius:10px;padding:8px 10px;color:#6b4d12"><b>Situação atual:</b> ${esc(s.diag)}</div><div style="font-size:13px;margin-top:6px"><b>Indicador:</b> ${esc(s.ind)} • meta ${metaTxt(s)}</div></div></div>
-   <h2 class="sech"><span class="stp big"><i>2</i> Veja o que o seu setor precisa fazer</span></h2><p style="margin:-6px 0 12px;color:var(--muted)">Toque num plano para ver os detalhes. Os marcados com <span class="mine" style="margin:0">sua função</span> são seus.</p><div class="list" style="margin-bottom:18px">${acts.length?acts.map((a,i)=>`<details class="rplan" ${i===0?'open':''}><summary><span class="t">${esc(a.oque)}${a.funcao===me.funcao?'<span class="mine">sua função</span>':''}</span>${stPill(a,false)}<span class="chev">›</span></summary><div class="b">
+ const k=RS.setor,s=SK[k];
+ if(!s){let h=`<div class="top"><div><div class="eyebrow">Para cada aluno</div><h1>Responder 📝</h1><p>Escolha o setor em que você está trabalhando hoje. O site abre a área dele.</p></div></div>
+  <div class="card" style="margin-bottom:18px"><span class="stp big" style="display:block;margin-bottom:12px"><i>1</i> Qual é o seu setor hoje?</span><div class="spick">${ACT().map(x=>`<button data-act="pickSetor" data-v="${x.k}" style="--ac:${AC[x.k][0]};--acl:${AC[x.k][1]}"><i>${x.e}</i>${esc(x.n)}</button>`).join('')}</div></div>`;
+  return h+admResps()}
+ const me=S.alunos.find(a=>a.id===RS.me);const A=AREAS[k]||{};
+ const al=[...S.alunos].sort((a,b)=>(a.setor===k?0:1)-(b.setor===k?0:1)||String(a.nome).localeCompare(String(b.nome),'pt-BR'));
+ const fun=RS.fun&&s.f.includes(RS.fun)?RS.fun:(me&&s.f.includes(me.funcao)?me.funcao:'');
+ const acts=S.actions.filter(a=>a.setor===k).sort((a,b)=>(a.funcao===fun?0:1)-(b.funcao===fun?0:1)||(a.prazo||'9').localeCompare(b.prazo||'9'));
+ let h=`<div class="area" style="--ac:${AC[k][0]};--acl:${AC[k][1]}"><div class="ahead"><div class="emo">${s.e}</div><div style="flex:1;min-width:0"><div class="eyebrow">Área do setor</div><h1>${esc(s.n)}</h1><div style="font-size:14px;opacity:.92">${esc(A.ola||s.cuida)}</div></div><button class="btn sm" data-act="pickSetor" data-v="">↺ Trocar setor</button></div>
+ <div class="card acc" style="margin-bottom:14px"><div style="font-size:13px;background:#fff4dc;border-radius:10px;padding:8px 10px;color:#6b4d12"><b>Situação atual:</b> ${esc(s.diag)}</div><div style="font-size:13px;margin-top:8px"><b>Indicador:</b> ${esc(s.ind)} • meta ${metaTxt(s)}</div></div>
+ ${A.painel?A.painel():''}
+ <h2 class="sech"><span class="stp big"><i>1</i> O que o setor precisa fazer</span></h2><p style="margin:-6px 0 12px;color:var(--muted)">Toque num plano para ver os detalhes.${fun?` Os marcados com <span class="mine" style="margin:0">sua função</span> são seus.`:''}</p><div class="list" style="margin-bottom:18px">${acts.length?acts.map((a,i)=>`<details class="rplan" ${i===0?'open':''}><summary><span class="t">${esc(a.oque)}${fun&&a.funcao===fun?'<span class="mine">sua função</span>':''}</span>${stPill(a,false)}<span class="chev">›</span></summary><div class="b">
     <div><b>Por quê?</b>${esc(a.porque)||'—'}</div><div><b>Como?</b>${esc(a.como)||'—'}</div><div><b>Onde?</b>${esc(a.onde)||'—'}</div><div><b>Quando?</b>${a.prazo?esc(qName(a.prazo)):esc(a.quando)||'—'}</div><div><b>Quem?</b>${esc(pessoa(a.setor,a.funcao)||a.quem)||'—'}</div><div><b>Indicador</b>${esc(a.indicador)||'—'}</div>${a.custo?`<div><b>Custo</b>${brl(a.custo)}</div>`:''}</div></details>`).join(''):'<div class="empty">Ainda não há planos para este setor.</div>'}</div>
-   <form data-form="resp" class="card rform" style="margin-bottom:18px">${RS.sent&&Date.now()-RS.sent<600000?`<div class="okbox">✅ <b>Resposta enviada!</b> O status do plano, o indicador e a Quinta de hoje já foram atualizados no site. Se fez mais alguma coisa, pode mandar outra.</div>`:''}<h2 style="margin:0 0 12px"><span class="stp big"><i>3</i> Mande o que você fez</span></h2><div style="display:flex;flex-direction:column;gap:12px">
+ <form data-form="resp" class="card acc rform" style="margin-bottom:18px">${RS.sent&&Date.now()-RS.sent<600000?`<div class="okbox">✅ <b>Resposta enviada!</b> O status do plano, o indicador e a Quinta de hoje já foram atualizados no site. Se fez mais alguma coisa, pode mandar outra.</div>`:''}<h2 style="margin:0 0 12px"><span class="stp big"><i>2</i> Mande o que você fez</span></h2><div style="display:flex;flex-direction:column;gap:12px">
+    <div class="grid g2"><label class="f">Quem é você? <small class="req">obrigatório</small><select class="in" data-in="me"><option value="">Toque para escolher seu nome</option>${al.map(a=>`<option value="${esc(a.id)}" ${a.id===RS.me?'selected':''}>${esc(a.nome)}</option>`).join('')}</select></label>
+    <label class="f">Sua função hoje<select class="in" data-in="fun"><option value="">Toque para escolher</option>${s.f.map(x=>`<option ${x===fun?'selected':''}>${esc(x)}</option>`).join('')}</select></label></div>
     <label class="f">Sobre qual plano? <small class="req">obrigatório</small><select class="in" name="acao" required><option value="" disabled selected>Toque para escolher o plano</option>${acts.map(a=>`<option value="${esc(a.id)}">${esc(a.oque)}</option>`).join('')}<option value="outro">Outro assunto</option></select></label>
-    <label class="f">O que você fez hoje? <small class="req">obrigatório</small><textarea class="in" data-keep name="feito" maxlength="1500" required placeholder="Ex.: fiz a lista dos itens do estoque e combinei com a dupla…"></textarea></label>
+    ${A.campos?A.campos():''}
+    <label class="f">O que você fez hoje? <small class="req">obrigatório</small><textarea class="in" data-keep name="feito" maxlength="1400" required placeholder="Ex.: conferi as vacinas e combinei com a dupla…"></textarea></label>
     <div class="grid g2"><label class="f">Como está o plano?<select class="in" name="status">${STATUS.filter(x=>x!=='Atrasado').map(x=>`<option ${x==='Em andamento'?'selected':''}>${x}</option>`).join('')}</select></label><label class="f">Valor de hoje do indicador <small>se souber: ${esc(s.ind)} (meta ${metaTxt(s)})</small><input class="in" data-keep name="valor" maxlength="20" inputmode="decimal" placeholder="Ex.: ${esc(String(s.meta).replace('.',','))}"></label></div>
     <div class="ff"><div>Foto <small>opcional: print, foto do cartaz, do caderno…</small></div><div id="fotoBox">${fotoBox()}</div></div>
     <label class="f">Alguma dúvida ou dificuldade? <small>opcional</small><textarea class="in" data-keep name="duvida" maxlength="800" style="min-height:64px"></textarea></label>
     <button type="submit" class="btn car">Enviar resposta</button></div></form>`;
-   const mine=S.resps.filter(r=>r.alunoId===me.id).sort((a,b)=>(b.criado||0)-(a.criado||0)).slice(0,5);
-   if(mine.length)h+=`<h2 style="margin:0 0 10px">Suas últimas respostas</h2><div class="list" style="margin-bottom:18px">${mine.map(r=>rBox(r,false)).join('')}</div>`}}
- if(W()){const L=[...S.resps].sort((a,b)=>(b.criado||0)-(a.criado||0));const nv=L.filter(r=>!r.lida).length;
-  h+=`<h2 style="margin:8px 0 10px">Respostas recebidas ${nv?`<span class="pill s-and">${nv} novas</span>`:''}</h2>${L.length?`<div class="list">${L.map(r=>rBox(r,true)).join('')}</div>`:'<div class="empty">Ainda não chegou nenhuma resposta. Mande o link desta página para a turma.</div>'}`}
- return h}
+ const mine=S.resps.filter(r=>r.setor===k).sort((a,b)=>(b.criado||0)-(a.criado||0)).slice(0,5);
+ if(mine.length)h+=`<h2 style="margin:0 0 10px">Últimas respostas do setor</h2><div class="list" style="margin-bottom:18px">${mine.map(r=>rBox(r,false)).join('')}</div>`;
+ return h+'</div>'+admResps()}
+function admResps(){if(!W())return '';const L=[...S.resps].sort((a,b)=>(b.criado||0)-(a.criado||0));const nv=L.filter(r=>!r.lida).length;
+ return `<h2 style="margin:8px 0 10px">Respostas recebidas ${nv?`<span class="pill s-and">${nv} novas</span>`:''}</h2>${L.length?`<div class="list">${L.map(r=>rBox(r,true)).join('')}</div>`:'<div class="empty">Ainda não chegou nenhuma resposta. Mande o link desta página para a turma.</div>'}`}
 function rBox(r,adm){const s=SK[r.setor];const x=S.actions.find(a=>a.id===r.acao);const can=adm&&x&&r.status&&effStatus(x)!==r.status;
  return `<div class="rbox ${adm&&!r.lida?'new':''}"><div class="row" style="gap:8px;align-items:flex-start"><b style="flex:1;min-width:0">${adm?esc(r.aluno)+' • ':''}${esc(r.acaoTitulo||'Outro assunto')}</b>${r.status?`<span class="pill ${SCLS[r.status]||'s-nao'}">${esc(r.status)}</span>`:''}</div>
  <div class="m">${s?`<span>${s.e} ${esc(s.n)}</span>`:''}<span>🗓️ Quinta ${esc(r.quinta)}</span><span>${new Date(r.criado||0).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})}</span>${r.valor?`<span>📈 ${esc(r.valor)}</span>`:''}${!adm?`<span>${r.lida?'✔ lida':'enviada'}</span>`:''}</div>
@@ -764,6 +809,7 @@ document.addEventListener('click',async e=>{
  if(el.tagName!=='A'||a==='more')e.preventDefault();
  if(a==='close'){closeM();if(el.tagName==='A')location.hash=el.getAttribute('href');return}
  if(a==='more')return openM(moreMenu());
+ if(a==='pickSetor'){setSetor(v||'');RS.fun='';RS.foto='';render();window.scrollTo(0,0);return}
  if(a==='fset'){S.f.setor=v;return render()}
  if(a==='ftset'){S.f.tset=v;return render()}
  if(a==='goSet'){S.f.setor=v;location.hash='planos';return}
@@ -823,7 +869,8 @@ document.addEventListener('input',e=>{const k=e.target.dataset.in;if(k==='fq'){S
 document.addEventListener('focusout',e=>{if(S.pend)setTimeout(()=>{const ae=document.activeElement;if(!(ae&&ae.dataset&&ae.dataset.keep!=null))render()},60)});
 document.addEventListener('change',async e=>{
  const t=e.target;
- if(t.dataset.in==='me'){setMe(t.value);RS.foto='';return render()}
+ if(t.dataset.in==='me'){setMe(t.value);return render()}
+ if(t.dataset.in==='fun'){RS.fun=t.value;return render()}
  if(t.matches&&t.matches('[data-foto]')){const f=t.files&&t.files[0];if(!f)return;try{RS.foto=await shrink(f)}catch(err){toast('Não deu para usar essa imagem. Tente outra.')}const b=$('#fotoBox');if(b)b.innerHTML=fotoBox();return}
  if(t.dataset.in==='fstatus'){S.f.status=t.value;return render()}
  if(t.dataset.in==='formSetor'){const s=SK[t.value];$('#fFun').innerHTML=s.f.map(x=>`<option>${esc(x)}</option>`).join('');return}
@@ -833,8 +880,8 @@ document.addEventListener('change',async e=>{
 });
 document.addEventListener('submit',async e=>{
  e.preventDefault();const f=e.target;const d=Object.fromEntries(new FormData(f).entries());
-  if(f.dataset.form==='resp'){if(!db)return toast('Sem conexão com os dados da turma.');const me=S.alunos.find(a=>a.id===RS.me);if(!me)return toast('Escolha seu nome primeiro.');const feito=String(d.feito||'').trim();if(!d.acao)return toast('Escolha sobre qual plano é a resposta.');if(!feito)return toast('Conte o que você fez.');const ac=S.actions.find(a=>a.id===d.acao);
-   const o={alunoId:me.id,aluno:String(me.nome||'').slice(0,60),setor:String(me.setor||''),funcao:String(me.funcao||''),acao:ac?ac.id:'',acaoTitulo:ac?String(ac.oque||'').slice(0,200):'',feito:feito.slice(0,1500),status:STATUS.includes(d.status)?d.status:'',valor:String(d.valor||'').trim().slice(0,20),duvida:String(d.duvida||'').trim().slice(0,800),quinta:curQ(),criado:Date.now(),lida:false};if(RS.foto&&/^data:image\/jpeg;base64,/.test(RS.foto))o.foto=RS.foto;
+  if(f.dataset.form==='resp'){if(!db)return toast('Sem conexão com os dados da turma.');const me=S.alunos.find(a=>a.id===RS.me);if(!me)return toast('Escolha seu nome primeiro.');const sk=SK[RS.setor]?RS.setor:String(me.setor||'');const AR=AREAS[sk]||{};const feito=((AR.prefixo?AR.prefixo(d):'')+String(d.feito||'').trim()).trim();if(!d.acao)return toast('Escolha sobre qual plano é a resposta.');if(!feito)return toast('Conte o que você fez.');const ac=S.actions.find(a=>a.id===d.acao);
+   const o={alunoId:me.id,aluno:String(me.nome||'').slice(0,60),setor:sk,funcao:String(RS.fun||me.funcao||'').slice(0,60),acao:ac?ac.id:'',acaoTitulo:ac?String(ac.oque||'').slice(0,200):'',feito:feito.slice(0,1500),status:STATUS.includes(d.status)?d.status:'',valor:String(d.valor||'').trim().slice(0,20),duvida:String(d.duvida||'').trim().slice(0,800),quinta:curQ(),criado:Date.now(),lida:false};if(RS.foto&&/^data:image\/jpeg;base64,/.test(RS.foto))o.foto=RS.foto;
    document.activeElement&&document.activeElement.blur();const b=f.querySelector('button[type=submit]');if(b)b.disabled=true;
    try{await db.collection('respostas').add(o);f.reset();RS.foto='';RS.sent=Date.now();render();{const fb=$('#fotoBox');if(fb)fb.innerHTML=fotoBox()}toast('Resposta enviada! Valeu 🐾')}catch(err){toast('Não foi possível enviar agora. Tente de novo.')}finally{if(b)b.disabled=false}return}
  if(f.id==='fA'){if(!d.oque||!d.oque.trim())return toast('Preencha o "O quê?"');const o={setor:d.setor,funcao:d.funcao||'',oque:d.oque.trim(),porque:d.porque||'',onde:d.onde||'',quem:d.quem||'',quando:d.quando||'',prazo:d.prazo||'',como:d.como||'',custo:d.custo===''?0:Number(d.custo),indicador:d.indicador||'',status:d.status||'Não iniciado',obs:d.obs||'',atualizado:Date.now()};const id=f.dataset.id;const old=id?S.actions.find(x=>x.id===id):null;o.criado=old&&old.criado||Date.now();wipWarn(Object.assign({id},o),o.status);

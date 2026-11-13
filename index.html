@@ -370,16 +370,63 @@ const ANIMAIS=[
 ['Paçoca','🐶','Macho, 2 anos','Brincalhão, adora crianças',''],['Mel','🐶','Fêmea, 4 anos','Calma, adora colo',''],['Thor','🐶','Macho, 1 ano','Muita energia, 2 passeios por dia','V10 atrasada'],['Pipoca','🐶','Fêmea, 8 meses','Curiosa e comilona','Castração agendada'],['Biscoito','🐶','Macho, 6 anos','Tranquilo, dorme muito','Voltou em outubro'],['Luna','🐶','Fêmea, 3 anos','Tímida, precisa de paciência',''],
 ['Frajola','🐱','Macho, 3 anos','O dono do salão',''],['Nina','🐱','Fêmea, 2 anos','Carinhosa, ronrona no colo',''],['Tigrinho','🐱','Macho, 7 meses','Não para quieto','Antirrábica atrasada'],['Mia','🐱','Fêmea, 5 anos','Gosta de ficar no alto',''],['Bolinha','🐱','Macho, 1 ano','Acima do peso, porção controlada',''],['Amora','🐱','Fêmea, 4 meses','Filhote, 2ª dose em dezembro','Vacinas em andamento'],['Café','🐱','Macho, 2 anos','Tímido no começo',''],['Pérola','🐱','Fêmea, 9 anos','Surda, não assustar por trás','']];
 const ALERTA=a=>/atrasad|Voltou/.test(a[4]);
+const BOX=(t,h,sub)=>`<div class="card acc" style="margin-bottom:14px"><h2 style="margin:0 0 ${sub?4:10}px">${t}</h2>${sub?`<p style="margin:0 0 12px;color:var(--muted);font-size:14px">${sub}</p>`:''}${h}</div>`;
+const KV=L=>`<div class="rot">${L.map(([a,b])=>`<div><b>${a}</b>${b}</div>`).join('')}</div>`;
+const MATS2=L=>`<div class="row" style="gap:8px;flex-wrap:wrap;margin-top:12px">${L.map(([n,u])=>`<a class="btn alt sm" href="${u}" target="_blank" rel="noopener">${n}</a>`).join('')}</div>`;
+const NUMS=L=>`<div class="rot">${L.map(([a,b])=>`<div><span style="font-size:12px;font-weight:700;opacity:.8">${a}</span><b style="font-size:18px;margin:2px 0 0">${b}</b></div>`).join('')}</div>`;
+const KPIT=(k,fb)=>{const v=kpiNow(k).v;return v!==undefined&&v!==null&&v!==''&&!isNaN(Number(v))?String(v).replace('.',',')+SK[k].un+' (meta '+metaTxt(SK[k])+')':fb};
 const AREAS={
+ diretoria:{ola:'A visão de cima: como cada setor está indo e onde a empresa precisa de ajuda.',
+  tipos:['🤝 Reunião de alinhamento','✅ Decisão tomada','📊 Acompanhamento de metas','📣 Cobrança a um setor','📋 Outro'],
+  x:{l:'Qual setor?',o:()=>[...ACT().filter(x=>x.k!=='diretoria').map(x=>x.n),'Todos os setores']},
+  painel(){const n=curQ();const L=ACT().filter(x=>x.k!=='diretoria');let ok=0,med=0;
+   const rows=L.map(x=>{const k=kpiNow(x.k);const v=k.v!==undefined&&k.v!==null&&k.v!==''&&!isNaN(Number(k.v))?Number(k.v):null;const bate=v===null?null:(x.op==='>='?v>=x.meta:v<=x.meta);if(v!==null){med++;if(bate)ok++}
+    const r=S.resps.filter(r=>r.setor===x.k&&Number(r.quinta)===n).length;
+    return `<tr><td>${x.e} <b>${esc(x.n)}</b></td><td>${v===null?'<span style="color:var(--muted)">sem medida</span>':String(v).replace('.',',')+x.un}</td><td>${metaTxt(x)}</td><td>${bate===null?'—':bate?'<span class="pill s-ok">bateu</span>':'<span class="pill s-atr">abaixo</span>'}</td><td>${r?`<b>${r}</b>`:'<span style="color:var(--red);font-weight:700">0</span>'}</td></tr>`}).join('');
+   return BOX('Como estão os setores 👑',`<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:14px"><tr><th>Setor</th><th>Indicador hoje</th><th>Meta</th><th>Situação</th><th>Respostas na ${esc(qLabel(n).split(' •')[0])}</th></tr>${rows}</table></div>`,
+    `Metas batidas agora: <b>${ok} de ${med}</b> setores com medida${med?` (${Math.round(ok/med*100)}%)`:''}. A meta da Diretoria é 80% ou mais. Setor com 0 respostas hoje pede uma visita.`)}},
+ financeiro:{ola:'Aqui é onde o dinheiro da Pet Coffee é contado: custos, preços e lucro.',
+  tipos:['💸 Custo','🏷️ Preço','💵 Venda ou receita','🧾 Orçamento de um plano','📋 Outro'],x:{l:'Valor envolvido',ph:'Ex.: R$ 250,00',p:'Valor'},
+  painel(){const c=cfg();const fat=c.clientes*c.ticket*c.dias;const cs=Object.entries(c.custos||{});const sum=cs.reduce((t,[,v])=>t+Number(v||0),0);const lu=100-sum;
+   return BOX('Os números do mês 💰',NUMS([['Faturamento',brl(Math.round(fat))],['Custos',sum.toFixed(1).replace('.',',')+'%'],['Lucro',lu.toFixed(1).replace('.',',')+'% • '+brl(Math.round(fat*lu/100))],['Gasto médio',brl(c.ticket)]])+
+   `<div style="margin-top:12px;font-size:13px">${cs.map(([k,v])=>`<div style="display:grid;grid-template-columns:150px 1fr 50px;gap:8px;align-items:center;margin-bottom:6px"><span>${esc(k)}</span><div style="height:12px;background:var(--acl);border-radius:6px"><div style="height:100%;width:${Math.min(100,Number(v)/40*100)}%;background:var(--ac);border-radius:6px"></div></div><b style="text-align:right">${Number(v)}%</b></div>`).join('')}</div>`+MATS2([['🍔 Combos e promoções','materiais/combos-e-promocoes.jpg']]),
+   `Faturamento = ${String(c.clientes).replace('.',',')} clientes × ${brl(c.ticket)} × ${c.dias} dias. `+(lu<10?`Para o lucro chegar a 10%, os custos (hoje ${sum.toFixed(1).replace('.',',')}%) precisam cair para 90% ou menos.`:'O lucro já está na meta de 10%. Agora é manter.'))}},
+ rh:{ola:'Quem cuida de quem trabalha: treinamento, escala e um bom clima na equipe.',
+  tipos:['🎓 Treinamento','🗓️ Escala','👋 Integração e padrinho','😊 Clima da equipe','📋 Outro'],x:{l:'Quantas pessoas envolvidas?',ph:'Ex.: 3',p:'Pessoas'},
+  painel(){return BOX('A equipe agora 🤝',NUMS([['Equipe treinada',KPIT('rh','60% (meta 100%)')],['Novos sem treinamento','3, desde outubro'],['Horário apertado','Almoço, 12h às 14h'],['Programa','Padrinhos para os novos']])+
+   MATS2([['📄 Plano de integração','materiais/plano-integracao-rh.pdf']]),'Cada funcionário novo ganha um padrinho que já conhece a casa. Treinar quem atende no almoço ajuda o Atendimento a bater a meta.')}},
+ marketing:{ola:'Quem faz a Pet Coffee ser vista: redes sociais, campanhas e eventos.',
+  tipos:['📸 Post','🐾 Campanha "Me adota?"','🎄 Evento (Natal Pet)','🎨 Material visual','📋 Outro'],x:{l:'Onde foi publicado?',o:()=>['Instagram','TikTok','WhatsApp','Cartaz na loja','Outro lugar']},
+  painel(){const ad=ANIMAIS.filter(a=>!ALERTA(a)).slice(0,4).map(a=>a[1]+' '+a[0]).join(', ');
+   return BOX('Redes e campanhas 📣',NUMS([['Seguidores','2.400'],['Novos por mês',KPIT('marketing','180 (meta 300)')],['Posts','Irregulares, quase sem bichos'],['Próximo evento','Natal Pet, em dezembro']])+
+   `<div style="margin-top:12px">${KV([['Seg • Me adota?','Um animal da casa, com foto e jeito dele.'],['Qua • Bastidores','A equipe e a rotina com os bichos.'],['Sex • Cardápio','Combos e promoções da semana.'],['Sáb • Chamada','Convite para visitar e adotar.']])}</div>`,
+   `Sugestão de semana com post fixo. Animais prontos para o "Me adota?": ${esc(ad)}.`)}},
+ atendimento:{ola:'A linha de frente: recepção, pedidos, pagamento e cliente satisfeito.',
+  tipos:['🙋 Atendimento','⏱️ Fila e espera','😕 Reclamação','⭐ Elogio','🍔 Venda de combo','📋 Outro'],x:{l:'Tempo de espera (min)',ph:'Ex.: 10',p:'Espera'},
+  painel(){return BOX('O salão agora ☕',NUMS([['Nota de satisfação',KPIT('atendimento','4,3 (meta 4,7)')],['Espera no almoço','15 min'],['Horário crítico','12h às 14h'],['Combos','R$ 38, 42 e 45']])+
+   MATS2([['📋 Os 10 passos do atendimento','materiais/atendimento-e-vendas.jpg'],['🍔 Combos e promoções','materiais/combos-e-promocoes.jpg']]),'Pedido errado e fila são os dois motivos da nota ter caído. Anote a espera quando medir.')}},
+ cozinha:{ola:'Onde tudo é preparado: cardápio, estoque, tempo de preparo e desperdício.',
+  tipos:['📒 Ficha técnica','📦 Estoque','🗑️ Desperdício','⏱️ Tempo de preparo','🍽️ Cardápio','📋 Outro'],x:{l:'Qual item do cardápio?',ph:'Ex.: Cappuccino',p:'Item'},
+  painel(){return BOX('A cozinha agora 🧁',NUMS([['Tempo de preparo',KPIT('cozinha','16 min (meta 12)')],['Desperdício','9% dos ingredientes'],['Itens no catálogo','21'],['Ingredientes','35% do faturamento']])+
+   MATS2([['📖 Catálogo de modo de preparo','materiais/catalogo-modo-de-preparo.pdf'],['🍔 Combos e promoções','materiais/combos-e-promocoes.jpg']]),'Ficha técnica igual para todo mundo deixa o preparo mais rápido e corta o desperdício, o que ajuda o Financeiro.')}},
+ qualidade:{ola:'Higiene, checklists e prevenção de acidentes. A vigilância sanitária vem em dezembro.',
+  tipos:['✅ Checklist do dia','⚠️ Quase acidente','❌ Não conformidade','🦺 Treinamento de segurança','🏛️ Preparação para a vigilância','📋 Outro'],x:{l:'Onde?',o:()=>['Cozinha','Salão','Banheiros','Espaço dos animais','Estoque','Caixa']},
+  painel(){return BOX('Checklist e riscos 🧼',NUMS([['Checklist feito',KPIT('qualidade','70% dos dias (meta 100%)')],['Quase acidentes','2, com piso molhado'],['Vigilância sanitária','Visita em dezembro'],['Procedimento','Limpeza diária pronta']])+
+   `<div style="margin-top:12px">${KV([['🚧 Piso','Molhou? Placa de aviso na hora e secar.'],['🧼 Mãos','Lavar antes de preparar e depois de mexer nos bichos.'],['🐾 Separação','Animal não entra na cozinha nem no estoque.'],['📅 Validade','Conferir datas e etiquetar o que foi aberto.']])}</div>`,
+   'Pontos do dia a dia que a vigilância costuma olhar.')}},
+ tecnologia:{ola:'Cardápio digital, dados do painel e novas ideias com tecnologia.',
+  tipos:['📱 Cardápio digital e QR code','⚙️ Sistema','📊 Dados','💡 Ideia nova','📋 Outro'],x:{l:'Ferramenta usada',ph:'Ex.: Canva, Google Forms…',p:'Ferramenta'},
+  painel(){return BOX('Tecnologia agora 💻',NUMS([['Pedidos digitais',KPIT('tecnologia','0% (meta 30%)')],['Pedidos hoje','Anotados em papel'],['Em andamento','Cardápio em QR code'],['Próxima ideia','Mural QR dos animais']]),'O cardápio de combos já está com vocês para virar QR code. O mural com QR dos animais ajuda o Bem-estar e o Marketing.')}},
  bemestar:{
   ola:'Aqui é o canto de quem cuida dos 14 bichos da casa e faz cada um achar um lar.',
+  tipos:['💉 Vacina ou saúde','🧹 Rotina de cuidados','🏠 Visita de interessado','🎉 Adoção concluída','🧠 Comportamento','📋 Outro'],x:{l:'Sobre qual animal?',o:()=>[...ANIMAIS.map(a=>a[0]),'Vários animais'],p:'Animal'},
   painel(){const al=ANIMAIS.filter(ALERTA);return `<div class="card acc" style="margin-bottom:14px"><h2 style="margin:0 0 4px">Os animais da casa 🐾</h2><p style="margin:0 0 12px;color:var(--muted);font-size:14px">6 cães e 8 gatos da ONG parceira Lar Feliz Pet. ${al.length?`<b style="color:var(--red)">${al.length} pedem atenção agora.</b>`:''}</p>
    <div class="anim">${[...ANIMAIS].sort((a,b)=>ALERTA(b)-ALERTA(a)).map(a=>`<div class="a ${ALERTA(a)?'al':''}"><b>${a[1]} ${esc(a[0])}</b><div style="color:var(--muted)">${esc(a[2])}</div><div>${esc(a[3])}</div><span class="tg">${esc(a[4]||'Tudo em dia')}</span></div>`).join('')}</div></div>
-   <div class="card acc" style="margin-bottom:14px"><h2 style="margin:0 0 10px">Rotina dos cuidados</h2><div class="rot"><div><b>☀️ Antes de abrir</b>Saúde, água e comida, caixas de areia limpas.</div><div><b>🕑 Durante o dia</b>Repor água, limpar na hora, deixar dormir quem dorme.</div><div><b>🌙 Fim do dia</b>Última limpeza, trocar a água, organizar o espaço.</div><div><b>📅 Toda semana</b>Pesar filhotes e o Bolinha, conferir vacinas.</div></div></div>`},
-  campos(){return `<div class="grid g2"><label class="f">Sobre qual animal? <small>opcional</small><select class="in" name="x_animal"><option value="">Nenhum em especial</option>${ANIMAIS.map(a=>`<option>${esc(a[0])}</option>`).join('')}<option>Vários animais</option></select></label>
-   <label class="f">Que tipo de registro? <small>opcional</small><select class="in" name="x_tipo"><option value="">Escolha</option>${['💉 Vacina ou saúde','🧹 Rotina de cuidados','🏠 Visita de interessado','🎉 Adoção concluída','🧠 Comportamento','📋 Outro'].map(x=>`<option>${x}</option>`).join('')}</select></label></div>`},
-  prefixo(d){const p=[d.x_tipo,d.x_animal&&('Animal: '+d.x_animal)].filter(Boolean);return p.length?'['+p.join(' • ')+'] ':''}
+   <div class="card acc" style="margin-bottom:14px"><h2 style="margin:0 0 10px">Rotina dos cuidados</h2><div class="rot"><div><b>☀️ Antes de abrir</b>Saúde, água e comida, caixas de areia limpas.</div><div><b>🕑 Durante o dia</b>Repor água, limpar na hora, deixar dormir quem dorme.</div><div><b>🌙 Fim do dia</b>Última limpeza, trocar a água, organizar o espaço.</div><div><b>📅 Toda semana</b>Pesar filhotes e o Bolinha, conferir vacinas.</div></div></div>`}
  }};
+function areaCampos(A){if(!A.tipos)return '';const x=A.x;
+ return `<div class="grid g2"><label class="f">Que tipo de registro? <small>opcional</small><select class="in" name="x_tipo"><option value="">Escolha</option>${A.tipos.map(t=>`<option>${esc(t)}</option>`).join('')}</select></label>${x?`<label class="f">${esc(x.l)} <small>opcional</small>${x.o?`<select class="in" name="x_info"><option value="">Escolha</option>${x.o().map(o=>`<option>${esc(o)}</option>`).join('')}</select>`:`<input class="in" data-keep name="x_info" maxlength="60" placeholder="${esc(x.ph||'')}">`}</label>`:''}</div>`}
+function areaPrefixo(A,d){const p=[String(d.x_tipo||'').slice(0,60),d.x_info&&A.x?((A.x.p||A.x.l.replace('?',''))+': '+String(d.x_info).slice(0,60)):''].filter(Boolean);return p.length?'['+p.join(' • ')+'] ':''}
 function setorHoje(){try{const o=JSON.parse(localStorage.getItem('pc_setor')||'null');return o&&o.d===today()&&SK[o.k]?o.k:''}catch(e){return ''}}
 function setSetor(k){RS.setor=k;try{k?localStorage.setItem('pc_setor',JSON.stringify({k,d:today()})):localStorage.removeItem('pc_setor')}catch(e){}}
 
@@ -476,7 +523,7 @@ function vResponder(){
     <div class="grid g2"><label class="f">Quem é você? <small class="req">obrigatório</small><select class="in" data-in="me"><option value="">Toque para escolher seu nome</option>${al.map(a=>`<option value="${esc(a.id)}" ${a.id===RS.me?'selected':''}>${esc(a.nome)}</option>`).join('')}</select></label>
     <label class="f">Sua função hoje<select class="in" data-in="fun"><option value="">Toque para escolher</option>${s.f.map(x=>`<option ${x===fun?'selected':''}>${esc(x)}</option>`).join('')}</select></label></div>
     <label class="f">Sobre qual plano? <small class="req">obrigatório</small><select class="in" name="acao" required><option value="" disabled selected>Toque para escolher o plano</option>${acts.map(a=>`<option value="${esc(a.id)}">${esc(a.oque)}</option>`).join('')}<option value="outro">Outro assunto</option></select></label>
-    ${A.campos?A.campos():''}
+    ${areaCampos(A)}
     <label class="f">O que você fez hoje? <small class="req">obrigatório</small><textarea class="in" data-keep name="feito" maxlength="1400" required placeholder="Ex.: conferi as vacinas e combinei com a dupla…"></textarea></label>
     <div class="grid g2"><label class="f">Como está o plano?<select class="in" name="status">${STATUS.filter(x=>x!=='Atrasado').map(x=>`<option ${x==='Em andamento'?'selected':''}>${x}</option>`).join('')}</select></label><label class="f">Valor de hoje do indicador <small>se souber: ${esc(s.ind)} (meta ${metaTxt(s)})</small><input class="in" data-keep name="valor" maxlength="20" inputmode="decimal" placeholder="Ex.: ${esc(String(s.meta).replace('.',','))}"></label></div>
     <div class="ff"><div>Foto <small>opcional: print, foto do cartaz, do caderno…</small></div><div id="fotoBox">${fotoBox()}</div></div>
@@ -880,7 +927,7 @@ document.addEventListener('change',async e=>{
 });
 document.addEventListener('submit',async e=>{
  e.preventDefault();const f=e.target;const d=Object.fromEntries(new FormData(f).entries());
-  if(f.dataset.form==='resp'){if(!db)return toast('Sem conexão com os dados da turma.');const me=S.alunos.find(a=>a.id===RS.me);if(!me)return toast('Escolha seu nome primeiro.');const sk=SK[RS.setor]?RS.setor:String(me.setor||'');const AR=AREAS[sk]||{};const feito=((AR.prefixo?AR.prefixo(d):'')+String(d.feito||'').trim()).trim();if(!d.acao)return toast('Escolha sobre qual plano é a resposta.');if(!feito)return toast('Conte o que você fez.');const ac=S.actions.find(a=>a.id===d.acao);
+  if(f.dataset.form==='resp'){if(!db)return toast('Sem conexão com os dados da turma.');const me=S.alunos.find(a=>a.id===RS.me);if(!me)return toast('Escolha seu nome primeiro.');const sk=SK[RS.setor]?RS.setor:String(me.setor||'');const AR=AREAS[sk]||{};const feito=(areaPrefixo(AR,d)+String(d.feito||'').trim()).trim();if(!d.acao)return toast('Escolha sobre qual plano é a resposta.');if(!feito)return toast('Conte o que você fez.');const ac=S.actions.find(a=>a.id===d.acao);
    const o={alunoId:me.id,aluno:String(me.nome||'').slice(0,60),setor:sk,funcao:String(RS.fun||me.funcao||'').slice(0,60),acao:ac?ac.id:'',acaoTitulo:ac?String(ac.oque||'').slice(0,200):'',feito:feito.slice(0,1500),status:STATUS.includes(d.status)?d.status:'',valor:String(d.valor||'').trim().slice(0,20),duvida:String(d.duvida||'').trim().slice(0,800),quinta:curQ(),criado:Date.now(),lida:false};if(RS.foto&&/^data:image\/jpeg;base64,/.test(RS.foto))o.foto=RS.foto;
    document.activeElement&&document.activeElement.blur();const b=f.querySelector('button[type=submit]');if(b)b.disabled=true;
    try{await db.collection('respostas').add(o);f.reset();RS.foto='';RS.sent=Date.now();render();{const fb=$('#fotoBox');if(fb)fb.innerHTML=fotoBox()}toast('Resposta enviada! Valeu 🐾')}catch(err){toast('Não foi possível enviar agora. Tente de novo.')}finally{if(b)b.disabled=false}return}

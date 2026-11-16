@@ -345,7 +345,8 @@ small.req{color:var(--dcar)!important;font-weight:800!important}
 <aside class="side">
  <div class="brand"><span id="logo1"></span><div><b>Pet Coffee</b><small>Central da Turma • Gestores do Futuro</small></div></div>
  <nav class="nav" id="nav"></nav>
- <div class="foot">Jovem Aprendiz ESPRO ✨<br>Projeto às quintas-feiras</div>
+ <a href="/loja/" target="_blank" rel="noopener" style="display:block;margin:auto 0 10px;padding:10px 12px;border-radius:12px;background:#c8793a;color:#fff;text-decoration:none;font-weight:800;text-align:center">🌐 Site da Pet Coffee</a>
+ <div class="foot" style="margin-top:0">Jovem Aprendiz ESPRO ✨<br>Projeto às quintas-feiras</div>
 </aside>
 <div>
  <header class="mhead"><span id="logo2"></span><div><b>Pet Coffee</b><small>Central da Turma • Gestores do Futuro</small></div></header>
@@ -433,7 +434,7 @@ const AREAS={
    'Pontos do dia a dia que a vigilância costuma olhar.')}},
  tecnologia:{ola:'Cardápio digital, dados do painel e novas ideias com tecnologia.',
   tipos:['📱 Cardápio digital e QR code','⚙️ Sistema','📊 Dados','💡 Ideia nova','📋 Outro'],x:{l:'Ferramenta usada',ph:'Ex.: Canva, Google Forms…',p:'Ferramenta'},
-  painel(){return BOX('Tecnologia agora 💻',NUMS([['Pedidos digitais',KPIT('tecnologia','0% (meta 30%)')],['Pedidos hoje','Anotados em papel'],['Em andamento','Cardápio em QR code'],['Próxima ideia','Mural QR dos animais']]),'O cardápio de combos já está com vocês para virar QR code. O mural com QR dos animais ajuda o Bem-estar e o Marketing.')}},
+  painel(){return BOX('Tecnologia agora 💻',NUMS([['Pedidos digitais',KPIT('tecnologia','0% (meta 30%)')],['Pedidos hoje','Anotados em papel'],['No ar','<a href="/loja/" target="_blank" rel="noopener">Site da Pet Coffee</a>'],['Indicadores','<a href="/loja/#painel" target="_blank" rel="noopener">Painel do site</a>']]),'O site da Pet Coffee já tem vitrine Me adota?, cardápio com QR code, reservas e fila online, avaliação, novidades e Trabalhe Conosco. Cada parte ajuda outro setor, e os números aparecem no Painel do site.')}},
  bemestar:{
   ola:'Aqui é o canto de quem cuida dos 14 bichos da casa e faz cada um achar um lar.',
   tipos:['💉 Vacina ou saúde','🧹 Rotina de cuidados','🏠 Visita de interessado','🎉 Adoção concluída','🧠 Comportamento','📋 Outro'],x:{l:'Sobre qual animal?',o:()=>[...ANIMAIS.map(a=>a[0]),'Vários animais'],p:'Animal'},

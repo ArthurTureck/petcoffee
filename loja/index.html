@@ -54,7 +54,7 @@ section{padding:46px 0 10px}
 .chip.on{background:var(--dark);color:#fff;border-color:var(--dark)}
 .pets{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px}
 .pet{background:var(--white);border:1px solid var(--line);border-radius:var(--r);padding:16px;display:flex;flex-direction:column;gap:4px}
-.pet .em{font-size:40px;line-height:1;width:64px;height:64px;border-radius:50%;background:var(--beige);display:flex;align-items:center;justify-content:center;margin-bottom:6px}
+.pet .em{font-size:40px;line-height:1;width:84px;height:84px;border-radius:50%;background:var(--beige);display:flex;align-items:center;justify-content:center;margin-bottom:6px}
 .pet h3{font-size:21px}
 .pet .sub{color:var(--muted);font-size:13px;font-weight:700}
 .pet .st{display:inline-block;font-size:12px;font-weight:800;border-radius:999px;padding:3px 10px;margin:6px 0 8px;background:var(--sage2);color:var(--sage);align-self:flex-start}
@@ -277,10 +277,49 @@ function toast(t){const e=$('#toast');e.textContent=t;e.classList.add('on');clea
 function modal(h){$('#mbody').innerHTML=h;$('#modal').classList.add('on')}
 function closeM(){$('#modal').classList.remove('on')}
 
+
+/* ===== desenho de cada animal (cor e pelagem próprias) ===== */
+const PEL={
+ 'Paçoca':{c:'#c98a4b',o:'#8a5528',f:'#f3dcc0',e:'cai'},
+ 'Mel':{c:'#e8b95e',o:'#c98f35',f:'#fbeccc',e:'cai'},
+ 'Thor':{c:'#2e2622',o:'#1c1714',f:'#b5793f',e:'pe',sob:'#b5793f'},
+ 'Pipoca':{c:'#f6efe4',o:'#8a5a35',f:'#ffffff',e:'cai',manchaOlho:'#8a5a35'},
+ 'Biscoito':{c:'#a87a52',o:'#7a5233',f:'#d9d3cc',e:'cai'},
+ 'Luna':{c:'#8e8e98',o:'#6b6b75',f:'#f4f1ec',e:'pe'},
+ 'Frajola':{c:'#2b2628',f:'#ffffff',smoking:1},
+ 'Nina':{c:'#fbf6ee',manchas:['#e08a3c','#3a3236']},
+ 'Tigrinho':{c:'#e8913f',listra:'#b35f1d',f:'#fbe3c8'},
+ 'Mia':{c:'#9ea4ad',listra:'#6c727b',f:'#e9ecef'},
+ 'Bolinha':{c:'#f0b26b',f:'#fcebd3',gordo:1},
+ 'Amora':{c:'#3b3338',f:'#5a5057',filhote:1},
+ 'Café':{c:'#6b4a35',f:'#a9826a'},
+ 'Pérola':{c:'#fdfaf4',f:'#ffffff',olho:'#5b9bd5'}};
+function petSVG(a){const p=PEL[a[0]]||{c:'#c98a4b',f:'#f3dcc0'};const cao=a[1]==='🐶';const sz=p.filhote?0.85:1;
+ const olhos=(y,c)=>`<circle cx="23" cy="${y}" r="3.2" fill="${c||'#2a1d16'}"/><circle cx="41" cy="${y}" r="3.2" fill="${c||'#2a1d16'}"/><circle cx="24" cy="${y-1}" r="1" fill="#fff"/><circle cx="42" cy="${y-1}" r="1" fill="#fff"/>`;
+ let g='';
+ if(cao){
+  const or=p.e==='pe'?`<path d="M12 26 L16 6 L28 18 Z" fill="${p.o}"/><path d="M52 26 L48 6 L36 18 Z" fill="${p.o}"/>`:`<ellipse cx="11" cy="28" rx="7" ry="14" fill="${p.o}" transform="rotate(15 11 28)"/><ellipse cx="53" cy="28" rx="7" ry="14" fill="${p.o}" transform="rotate(-15 53 28)"/>`;
+  g=or+`<ellipse cx="32" cy="34" rx="20" ry="21" fill="${p.c}"/>`+
+   (p.sob?`<circle cx="23" cy="26" r="3" fill="${p.sob}"/><circle cx="41" cy="26" r="3" fill="${p.sob}"/>`:'')+
+   (p.manchaOlho?`<ellipse cx="41" cy="31" rx="8" ry="7" fill="${p.manchaOlho}"/>`:'')+
+   `<ellipse cx="32" cy="45" rx="11" ry="9" fill="${p.f}"/>`+olhos(31)+
+   `<ellipse cx="32" cy="41" rx="4.5" ry="3.2" fill="#2a1d16"/><path d="M32 44 V47 M28 48 Q32 51 36 48" stroke="#2a1d16" stroke-width="1.6" fill="none" stroke-linecap="round"/>`;
+ }else{
+  const w=p.gordo?23:19;
+  g=`<path d="M${32-w+1} 26 L14 6 L28 18 Z" fill="${p.c}"/><path d="M${32+w-1} 26 L50 6 L36 18 Z" fill="${p.c}"/><path d="M17 20 L16 11 L24 18 Z" fill="#f2b8b5"/><path d="M47 20 L48 11 L40 18 Z" fill="#f2b8b5"/>`+
+   `<ellipse cx="32" cy="36" rx="${w}" ry="19" fill="${p.c}"/>`+
+   (p.listra?`<path d="M32 18 V26 M26 19 L27 25 M38 19 L37 25 M${32-w+1} 34 H${32-w+7} M${32-w+2} 40 H${32-w+8} M${32+w-1} 34 H${32+w-7} M${32+w-2} 40 H${32+w-8}" stroke="${p.listra}" stroke-width="2.4" stroke-linecap="round"/>`:'')+
+   (p.manchas?`<ellipse cx="22" cy="26" rx="9" ry="8" fill="${p.manchas[0]}"/><ellipse cx="44" cy="45" rx="7" ry="6" fill="${p.manchas[1]}"/><path d="M14 20 L14 9 L24 18 Z" fill="${p.manchas[0]}"/>`:'')+
+   (p.smoking?`<path d="M22 37 Q32 33 42 37 L40 55 Q32 57 24 55 Z" fill="${p.f}"/>`:`<ellipse cx="32" cy="44" rx="9" ry="7" fill="${p.f}"/>`)+
+   olhos(33,p.olho)+`<path d="M29.5 41 H34.5 L32 43.5 Z" fill="#e58a8a"/><path d="M32 43.5 Q29 46.5 27 45 M32 43.5 Q35 46.5 37 45" stroke="#2a1d16" stroke-width="1.3" fill="none" stroke-linecap="round"/>`+
+   `<path d="M8 40 L22 42 M8 45 L22 44 M56 40 L42 42 M56 45 L42 44" stroke="${p.smoking||p.c==='#3b3338'?'#ddd':'#5a463a'}" stroke-width="1" opacity=".7"/>`;
+ }
+ return `<svg viewBox="0 0 64 64" width="${Math.round(64*sz)}" height="${Math.round(64*sz)}" aria-hidden="true">${g}</svg>`}
+const corFundo=a=>{const p=PEL[a[0]];if(!p)return 'var(--beige)';return /^#f[a-f0-9]/i.test(p.c)?'#e3d2bd':p.c+'33'};
 /* ===== animais ===== */
 function rPets(){const L=ANIMAIS.filter(a=>fAnim==='todos'||(fAnim==='pronto'?!ESPERA(a)&&!/Voltou/.test(a[4]):a[1]===fAnim));
  $('#pets').innerHTML=L.map(a=>{const esp=ESPERA(a);const st=esp?'Ainda em cuidados: '+a[4].toLowerCase():/Voltou/.test(a[4])?'Procurando um lar de novo':'Pronto(a) pra adoção';
-  return `<div class="pet"><div class="em">${a[1]}</div><h3>${esc(a[0])}</h3><div class="sub">${esc(a[2])}</div><div>${esc(a[3])}</div><span class="st ${esp?'esp':''}">${esc(st)}</span><button class="btn sm" data-a="visita" data-v="${esc(a[0])}">Quero conhecer</button></div>`}).join('')}
+  return `<div class="pet"><div class="em" style="background:${corFundo(a)}">${petSVG(a)}</div><h3>${esc(a[0])}</h3><div class="sub">${esc(a[2])}</div><div>${esc(a[3])}</div><span class="st ${esp?'esp':''}">${esc(st)}</span><button class="btn sm" data-a="visita" data-v="${esc(a[0])}">Quero conhecer</button></div>`}).join('')}
 
 /* ===== cardápio ===== */
 function rMenu(){$('#hora').textContent='Das '+COMBOS.hora;
